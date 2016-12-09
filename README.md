@@ -46,3 +46,27 @@ observable.subscribe { event in
     }
 }
 ```
+
+## Creating Observables Variables
+
+```swift
+let variable = Variable<whatever>(some initial value)
+```
+
+```swift
+let optionalString = Variable<String?>(nil)
+optionalString.asObservable().subscribe(
+    onNext: { string in ... } // do something with value changes
+)
+
+optionalString.value = "something"
+```
+
+```swift
+let int = Variable<Int>(12)
+int.asObservable().subscribe(
+    onNext: { int in ... } // do something with value changes
+)
+
+int.value = 42
+```

@@ -14,6 +14,7 @@
 		CBE54E621DFB39510008DD64 /* ObservableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5E1DFB39510008DD64 /* ObservableType.swift */; };
 		CBE54E631DFB39510008DD64 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5F1DFB39510008DD64 /* Variable.swift */; };
 		CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E641DFB395A0008DD64 /* ObservableTests.swift */; };
+		CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		CBE54E5E1DFB39510008DD64 /* ObservableType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableType.swift; sourceTree = "<group>"; };
 		CBE54E5F1DFB39510008DD64 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		CBE54E641DFB395A0008DD64 /* ObservableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableTests.swift; sourceTree = "<group>"; };
+		CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,13 +81,13 @@
 		CBE54E431DFB36DF0008DD64 /* Snail */ = {
 			isa = PBXGroup;
 			children = (
+				CBE54E441DFB36DF0008DD64 /* Snail.h */,
+				CBE54E451DFB36DF0008DD64 /* Info.plist */,
 				CBE54E5B1DFB39510008DD64 /* Event.swift */,
-				CBE54E5C1DFB39510008DD64 /* Extensions */,
 				CBE54E5D1DFB39510008DD64 /* Observable.swift */,
 				CBE54E5E1DFB39510008DD64 /* ObservableType.swift */,
 				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
-				CBE54E441DFB36DF0008DD64 /* Snail.h */,
-				CBE54E451DFB36DF0008DD64 /* Info.plist */,
+				CBE54E5C1DFB39510008DD64 /* Extensions */,
 			);
 			path = Snail;
 			sourceTree = "<group>";
@@ -93,8 +95,9 @@
 		CBE54E4E1DFB36DF0008DD64 /* SnailTests */ = {
 			isa = PBXGroup;
 			children = (
-				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
 				CBE54E511DFB36DF0008DD64 /* Info.plist */,
+				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
+				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
 			);
 			path = SnailTests;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */,
+				CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
