@@ -3,4 +3,4 @@ machine:
     version: 8.1
 test:
   post:
-    - bash <(curl -s https://codecov.io/bash)  -f Snail/*
+    - bash <(curl -s https://codecov.io/bash)
