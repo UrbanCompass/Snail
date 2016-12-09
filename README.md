@@ -23,7 +23,13 @@ Closures are optional too...
 
 ```swift
 observable.subscribe(
-    onNext: { thing in ... }, // do something with thing
+    onNext: { thing in ... } // do something with thing
+)
+```
+
+```swift
+observable.subscribe(
+    onError: { error in ... } // do something with error
 )
 ```
 
