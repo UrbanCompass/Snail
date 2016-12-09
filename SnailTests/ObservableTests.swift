@@ -32,13 +32,13 @@ class ObservableTests: XCTestCase {
 
     func testEvent() {
         var more: [String] = []
-        subject?.subscribe(handler: { event in
+        subject?.subscribe { event in
             switch event {
             case .next(let string):
                 more.append(string)
             default: break
             }
-        })
+        }
 
         subject?.on(.next("1"))
         XCTAssert(more.first == "1")
