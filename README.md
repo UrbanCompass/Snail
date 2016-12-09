@@ -1,4 +1,4 @@
-# 🐌 snail ![CircleCI](https://circleci.com/gh/UrbanCompass/snail/tree/master.svg?style=shield&circle-token=02af7805c3430ec7945e0895b2108b4d9b348e85) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+# 🐌 snail ![CircleCI](https://circleci.com/gh/UrbanCompass/snail/tree/master.svg?style=shield&circle-token=02af7805c3430ec7945e0895b2108b4d9b348e85) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![Coverage Status](https://coveralls.io/repos/github/UrbanCompass/snail/badge.svg?branch=master)](https://coveralls.io/github/UrbanCompass/snail?branch=master)
 
 [![SNAIL](https://img.youtube.com/vi/u4QAnCFd4iw/0.jpg)](https://www.youtube.com/watch?v=u4QAnCFd4iw)
 
