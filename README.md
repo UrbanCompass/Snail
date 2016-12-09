@@ -1,4 +1,4 @@
-# 🐌
+# 🐌 snail ![CircleCI](https://circleci.com/gh/UrbanCompass/snail/tree/master.svg?style=shield&circle-token=02af7805c3430ec7945e0895b2108b4d9b348e85)
 
 [![SNAIL](https://img.youtube.com/vi/u4QAnCFd4iw/0.jpg)](https://www.youtube.com/watch?v=u4QAnCFd4iw)
 
