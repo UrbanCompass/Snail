@@ -19,6 +19,14 @@ observable.subscribe(
 )
 ```
 
+Closures are optional too...
+
+```swift
+observable.subscribe(
+    onNext: { thing in ... }, // do something with thing
+)
+```
+
 ### Using raw event
 ```swift
 observable.subscribe { event in
