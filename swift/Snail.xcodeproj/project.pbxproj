@@ -8,8 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		CBE54E4B1DFB36DF0008DD64 /* Snail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBE54E411DFB36DF0008DD64 /* Snail.framework */; };
-		CBE54E501DFB36DF0008DD64 /* SnailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E4F1DFB36DF0008DD64 /* SnailTests.swift */; };
 		CBE54E521DFB36DF0008DD64 /* Snail.h in Headers */ = {isa = PBXBuildFile; fileRef = CBE54E441DFB36DF0008DD64 /* Snail.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CBE54E601DFB39510008DD64 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5B1DFB39510008DD64 /* Event.swift */; };
+		CBE54E611DFB39510008DD64 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5D1DFB39510008DD64 /* Observable.swift */; };
+		CBE54E621DFB39510008DD64 /* ObservableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5E1DFB39510008DD64 /* ObservableType.swift */; };
+		CBE54E631DFB39510008DD64 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5F1DFB39510008DD64 /* Variable.swift */; };
+		CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E641DFB395A0008DD64 /* ObservableTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,8 +31,12 @@
 		CBE54E441DFB36DF0008DD64 /* Snail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snail.h; sourceTree = "<group>"; };
 		CBE54E451DFB36DF0008DD64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBE54E4A1DFB36DF0008DD64 /* SnailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CBE54E4F1DFB36DF0008DD64 /* SnailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnailTests.swift; sourceTree = "<group>"; };
 		CBE54E511DFB36DF0008DD64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CBE54E5B1DFB39510008DD64 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		CBE54E5D1DFB39510008DD64 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		CBE54E5E1DFB39510008DD64 /* ObservableType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableType.swift; sourceTree = "<group>"; };
+		CBE54E5F1DFB39510008DD64 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
+		CBE54E641DFB395A0008DD64 /* ObservableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,11 @@
 		CBE54E431DFB36DF0008DD64 /* Snail */ = {
 			isa = PBXGroup;
 			children = (
+				CBE54E5B1DFB39510008DD64 /* Event.swift */,
+				CBE54E5C1DFB39510008DD64 /* Extensions */,
+				CBE54E5D1DFB39510008DD64 /* Observable.swift */,
+				CBE54E5E1DFB39510008DD64 /* ObservableType.swift */,
+				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
 				CBE54E441DFB36DF0008DD64 /* Snail.h */,
 				CBE54E451DFB36DF0008DD64 /* Info.plist */,
 			);
@@ -80,10 +93,17 @@
 		CBE54E4E1DFB36DF0008DD64 /* SnailTests */ = {
 			isa = PBXGroup;
 			children = (
-				CBE54E4F1DFB36DF0008DD64 /* SnailTests.swift */,
+				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
 				CBE54E511DFB36DF0008DD64 /* Info.plist */,
 			);
 			path = SnailTests;
+			sourceTree = "<group>";
+		};
+		CBE54E5C1DFB39510008DD64 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +168,7 @@
 				TargetAttributes = {
 					CBE54E401DFB36DF0008DD64 = {
 						CreatedOnToolsVersion = 8.1;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 					CBE54E491DFB36DF0008DD64 = {
@@ -196,6 +217,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBE54E621DFB39510008DD64 /* ObservableType.swift in Sources */,
+				CBE54E611DFB39510008DD64 /* Observable.swift in Sources */,
+				CBE54E601DFB39510008DD64 /* Event.swift in Sources */,
+				CBE54E631DFB39510008DD64 /* Variable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,7 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBE54E501DFB36DF0008DD64 /* SnailTests.swift in Sources */,
+				CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +345,7 @@
 		CBE54E561DFB36DF0008DD64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -331,6 +357,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.compass.Snail;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -338,6 +365,7 @@
 		CBE54E571DFB36DF0008DD64 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -356,6 +384,7 @@
 		CBE54E591DFB36DF0008DD64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = SnailTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.compass.SnailTests;
@@ -367,6 +396,7 @@
 		CBE54E5A1DFB36DF0008DD64 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = SnailTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.compass.SnailTests;
@@ -394,6 +424,7 @@
 				CBE54E571DFB36DF0008DD64 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CBE54E581DFB36DF0008DD64 /* Build configuration list for PBXNativeTarget "SnailTests" */ = {
 			isa = XCConfigurationList;
@@ -402,6 +433,7 @@
 				CBE54E5A1DFB36DF0008DD64 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
