@@ -6,7 +6,7 @@ public class Observable<T> : ObservableType {
     private var eventHandlers: [(Event<E>) -> Void] = []
     private var test: [(next: ((T) -> Void)?, done: (() -> Void)?, error: ((Error) -> Void)?)] = []
 
-    public func subscribe(handler: @escaping (Event<E>) -> Void) {
+    public func subscribe(_ handler: @escaping (Event<E>) -> Void) {
         eventHandlers.append(handler)
     }
 
