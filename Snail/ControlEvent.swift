@@ -1,10 +1,4 @@
-//
-//  ControlEvent.swift
-//  Snail
-//
-//  Created by Wes Billman on 12/9/16.
 //  Copyright © 2016 Compass. All rights reserved.
-//
 
 import Foundation
 
@@ -15,7 +9,7 @@ public class ControlEvent: NSObject {
     let controlEvents: UIControlEvents
     let observable: Observable<Void>
 
-    func eventHandler(_ sender: UIControl!) {
+    public func eventHandler(_ sender: UIControl!) {
         observable.on(.next())
     }
 
@@ -26,11 +20,6 @@ public class ControlEvent: NSObject {
         super.init()
 
         control.addTarget(self, action: selector, for: controlEvents)
-
-        let method = self.method(for: selector)
-        if method == nil {
-            fatalError("Can't find method")
-        }
     }
 
     public func asObservable() -> Observable<Void> {
