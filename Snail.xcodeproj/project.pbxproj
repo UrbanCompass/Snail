@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		24FABD561DFEF670005CF84E /* Fail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD551DFEF670005CF84E /* Fail.swift */; };
 		24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD571DFEF7EC005CF84E /* FailTests.swift */; };
+		CB2936771DFE151B00792E6B /* Just.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2936761DFE151B00792E6B /* Just.swift */; };
 		CBE54E4B1DFB36DF0008DD64 /* Snail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBE54E411DFB36DF0008DD64 /* Snail.framework */; };
 		CBE54E521DFB36DF0008DD64 /* Snail.h in Headers */ = {isa = PBXBuildFile; fileRef = CBE54E441DFB36DF0008DD64 /* Snail.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CBE54E601DFB39510008DD64 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5B1DFB39510008DD64 /* Event.swift */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		24FABD551DFEF670005CF84E /* Fail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fail.swift; sourceTree = "<group>"; };
 		24FABD571DFEF7EC005CF84E /* FailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailTests.swift; sourceTree = "<group>"; };
+		CB2936761DFE151B00792E6B /* Just.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Just.swift; sourceTree = "<group>"; };
 		CBE54E411DFB36DF0008DD64 /* Snail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE54E441DFB36DF0008DD64 /* Snail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snail.h; sourceTree = "<group>"; };
 		CBE54E451DFB36DF0008DD64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				CBE54E5E1DFB39510008DD64 /* ObservableType.swift */,
 				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
 				CBE54E5C1DFB39510008DD64 /* Extensions */,
+				CB2936761DFE151B00792E6B /* Just.swift */,
 			);
 			path = Snail;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 				CBE54E621DFB39510008DD64 /* ObservableType.swift in Sources */,
 				24FABD561DFEF670005CF84E /* Fail.swift in Sources */,
 				CBE54E611DFB39510008DD64 /* Observable.swift in Sources */,
+				CB2936771DFE151B00792E6B /* Just.swift in Sources */,
 				CBE54E601DFB39510008DD64 /* Event.swift in Sources */,
 				CBE54E631DFB39510008DD64 /* Variable.swift in Sources */,
 				CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */,
