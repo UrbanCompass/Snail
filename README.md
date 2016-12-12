@@ -73,7 +73,14 @@ int.value = 42
 ## Subscribing to Control Events
 
 ```swift
-button.controlEvent(.touchUpInside)
+let control = UIControl()
+control.controlEvent(.touchUpInside)
+  .subscribe(onNext: { _ in
+    ...
+  })
+  
+let button = UIButton()
+button.tap
   .subscribe(onNext: { _ in
     ...
   })
