@@ -7,6 +7,7 @@ public class Just<T>: Observable<T> {
 
     public init(_ value: T) {
         self.value = value
+        super.init()
     }
 
     public override func subscribe(_ handler: @escaping (Event<T>) -> Void) {
@@ -14,7 +15,7 @@ public class Just<T>: Observable<T> {
         handler(.done)
     }
 
-    public override func subscribe(onNext: ((T) -> Void)?, onError: ((Error) -> Void)?, onDone: (() -> Void)?) {
+    public override func subscribe(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
         onNext?(value)
         onDone?()
     }

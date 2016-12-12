@@ -105,12 +105,12 @@
 				CBE54E451DFB36DF0008DD64 /* Info.plist */,
 				CBE54E681DFB65D00008DD64 /* ControlEvent.swift */,
 				CBE54E5B1DFB39510008DD64 /* Event.swift */,
+				CB2936761DFE151B00792E6B /* Just.swift */,
 				CBE54E5D1DFB39510008DD64 /* Observable.swift */,
 				24FABD551DFEF670005CF84E /* Fail.swift */,
 				CBE54E5E1DFB39510008DD64 /* ObservableType.swift */,
 				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
 				CBE54E5C1DFB39510008DD64 /* Extensions */,
-				CB2936761DFE151B00792E6B /* Just.swift */,
 			);
 			path = Snail;
 			sourceTree = "<group>";
@@ -118,13 +118,13 @@
 		CBE54E4E1DFB36DF0008DD64 /* SnailTests */ = {
 			isa = PBXGroup;
 			children = (
-				CBE54E721DFD9B030008DD64 /* Extensions */,
 				CBE54E511DFB36DF0008DD64 /* Info.plist */,
-				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
-				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
 				CBE54E701DFD9A060008DD64 /* ControlEventTests.swift */,
 				24FABD571DFEF7EC005CF84E /* FailTests.swift */,
 				CB2936781DFEF77500792E6B /* JustTests.swift */,
+				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
+				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
+				CBE54E721DFD9B030008DD64 /* Extensions */,
 			);
 			path = SnailTests;
 			sourceTree = "<group>";
