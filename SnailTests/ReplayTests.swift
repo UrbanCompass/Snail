@@ -18,6 +18,7 @@ class ReplayTests: XCTestCase {
 
     func testEvent() {
         var strings: [String] = []
+        subject?.on(.next("1"))
         subject?.subscribe { event in
             switch event {
             case .next(let string):
@@ -25,16 +26,15 @@ class ReplayTests: XCTestCase {
             default: break
             }
         }
-        subject?.on(.next("1"))
         XCTAssert(strings.first == "1")
     }
 
     func testOnNext() {
         var strings: [String] = []
-        subject?
-            .subscribe(onNext: { string in strings.append(string) })
         subject?.on(.next("1"))
         subject?.on(.next("2"))
+        subject?
+            .subscribe(onNext: { string in strings.append(string) })
         XCTAssert(strings[0] == "1")
         XCTAssert(strings[1] == "2")
     }

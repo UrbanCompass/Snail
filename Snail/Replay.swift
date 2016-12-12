@@ -22,14 +22,11 @@ public class Replay<T>: Observable<T> {
 
     public override func on(_ event: Event<E>) {
         events.append(event)
-        if events.count > threshold {
-            events.removeFirst()
-        }
+        events = Array(events.suffix(threshold))
         super.on(event)
     }
 
     private func replay(_ handler: @escaping (Event<E>) -> Void) {
-        events.suffix(threshold)
-            .forEach { event in handler(event) }
+        events.forEach { event in handler(event) }
     }
 }
