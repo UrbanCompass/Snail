@@ -70,3 +70,11 @@ int.asObservable().subscribe(
 
 int.value = 42
 ```
+## Subscribing to Control Events
+
+```swift
+button.controlEvent(.touchUpInside)
+  .subscribe(onNext: { _ in
+    ...
+  })
+```
