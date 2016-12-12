@@ -3,22 +3,25 @@
 public class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0
-    private var eventHandlers: [(Event<E>) -> Void] = []
+    var eventHandlers: [(Event<E>) -> Void] = []
     private var test: [(next: ((T) -> Void)?, done: (() -> Void)?, error: ((Error) -> Void)?)] = []
 
     public func subscribe(_ handler: @escaping (Event<E>) -> Void) {
         eventHandlers.append(handler)
     }
 
-    public func subscribe(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
-        let handler: (Event<E>) -> Void = { event in
+    func createHandler(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> (Event<E>) -> Void {
+        return { event in
             switch event {
             case .next(let t): onNext?(t)
             case .error(let e): onError?(e)
             case .done: onDone?()
             }
         }
-        eventHandlers.append(handler)
+    }
+
+    public func subscribe(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
+        eventHandlers.append(createHandler(onNext: onNext, onError: onError, onDone: onDone))
     }
 
     public func on(_ event: Event<E>) {

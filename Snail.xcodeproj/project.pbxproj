@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		24FABD561DFEF670005CF84E /* Fail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD551DFEF670005CF84E /* Fail.swift */; };
 		24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD571DFEF7EC005CF84E /* FailTests.swift */; };
+		24FABD5A1DFF0B48005CF84E /* Replay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD591DFF0B48005CF84E /* Replay.swift */; };
+		24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */; };
 		CB2936771DFE151B00792E6B /* Just.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2936761DFE151B00792E6B /* Just.swift */; };
 		CB2936791DFEF77500792E6B /* JustTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2936781DFEF77500792E6B /* JustTests.swift */; };
 		CBE54E4B1DFB36DF0008DD64 /* Snail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBE54E411DFB36DF0008DD64 /* Snail.framework */; };
@@ -40,6 +42,8 @@
 /* Begin PBXFileReference section */
 		24FABD551DFEF670005CF84E /* Fail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fail.swift; sourceTree = "<group>"; };
 		24FABD571DFEF7EC005CF84E /* FailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailTests.swift; sourceTree = "<group>"; };
+		24FABD591DFF0B48005CF84E /* Replay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Replay.swift; sourceTree = "<group>"; };
+		24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplayTests.swift; sourceTree = "<group>"; };
 		CB2936761DFE151B00792E6B /* Just.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Just.swift; sourceTree = "<group>"; };
 		CB2936781DFEF77500792E6B /* JustTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JustTests.swift; sourceTree = "<group>"; };
 		CBE54E411DFB36DF0008DD64 /* Snail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,10 +109,11 @@
 				CBE54E451DFB36DF0008DD64 /* Info.plist */,
 				CBE54E681DFB65D00008DD64 /* ControlEvent.swift */,
 				CBE54E5B1DFB39510008DD64 /* Event.swift */,
+				24FABD551DFEF670005CF84E /* Fail.swift */,
 				CB2936761DFE151B00792E6B /* Just.swift */,
 				CBE54E5D1DFB39510008DD64 /* Observable.swift */,
-				24FABD551DFEF670005CF84E /* Fail.swift */,
 				CBE54E5E1DFB39510008DD64 /* ObservableType.swift */,
+				24FABD591DFF0B48005CF84E /* Replay.swift */,
 				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
 				CBE54E5C1DFB39510008DD64 /* Extensions */,
 			);
@@ -123,6 +128,7 @@
 				24FABD571DFEF7EC005CF84E /* FailTests.swift */,
 				CB2936781DFEF77500792E6B /* JustTests.swift */,
 				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
+				24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */,
 				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
 				CBE54E721DFD9B030008DD64 /* Extensions */,
 			);
@@ -266,6 +272,7 @@
 				CBE54E601DFB39510008DD64 /* Event.swift in Sources */,
 				CBE54E631DFB39510008DD64 /* Variable.swift in Sources */,
 				CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */,
+				24FABD5A1DFF0B48005CF84E /* Replay.swift in Sources */,
 				CBE54E6F1DFB797F0008DD64 /* UIButtonExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,6 +285,7 @@
 				CB2936791DFEF77500792E6B /* JustTests.swift in Sources */,
 				CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */,
 				CBE54E761DFD9BDB0008DD64 /* UIButtonExtensionsTests.swift in Sources */,
+				24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */,
 				CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */,
 				24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */,
 				CBE54E741DFD9B120008DD64 /* UIControlExtensionsTests.swift in Sources */,
