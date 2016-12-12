@@ -1,6 +1,6 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
-public class Observable<T> : ObservableType {
+open class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0
     private var eventHandlers: [(Event<E>) -> Void] = []
