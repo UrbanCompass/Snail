@@ -5,7 +5,7 @@ import Foundation
 public class Fail<T>: Observable<T> {
     private let error: Error
 
-    public init(error: Error) {
+    public init(_ error: Error) {
         self.error = error
     }
 
