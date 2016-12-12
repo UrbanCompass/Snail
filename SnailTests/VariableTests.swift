@@ -19,4 +19,16 @@ class VariableTests: XCTestCase {
         XCTAssert(events[2] == "2")
         XCTAssert(subject.value == "2")
     }
+
+    func testVariableNotifiesOnSubscribe() {
+        let subject = Variable("initial")
+        subject.value = "new"
+        var result: String?
+
+        subject.asObservable().subscribe(onNext: { string in
+            result = string
+        })
+
+        XCTAssertEqual("new", result)
+    }
 }

@@ -3,7 +3,7 @@
 import Foundation
 
 public class Variable<T> {
-    private let subject: Observable<T>
+    private let subject: Replay<T>
     private var lock = NSRecursiveLock()
     private var _value: T
 
@@ -23,7 +23,7 @@ public class Variable<T> {
 
     public init(_ value: T) {
         _value = value
-        subject = Observable<T>()
+        subject = Replay<T>(1)
     }
 
     public func asObservable() -> Observable<T> {
