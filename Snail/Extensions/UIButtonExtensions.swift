@@ -3,7 +3,7 @@
 public extension UIButton {
     public var tap: Observable<Void> {
         get {
-            return ControlEvent(control: self, controlEvents: .touchUpInside).asObservable()
+            return  controlEvent(.touchUpInside)
         }
     }
 }

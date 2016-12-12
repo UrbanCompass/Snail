@@ -21,12 +21,8 @@
 		CBE54E631DFB39510008DD64 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E5F1DFB39510008DD64 /* Variable.swift */; };
 		CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E641DFB395A0008DD64 /* ObservableTests.swift */; };
 		CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */; };
-		CBE54E691DFB65D00008DD64 /* ControlEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E681DFB65D00008DD64 /* ControlEvent.swift */; };
 		CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */; };
 		CBE54E6F1DFB797F0008DD64 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6E1DFB797F0008DD64 /* UIButtonExtensions.swift */; };
-		CBE54E711DFD9A060008DD64 /* ControlEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E701DFD9A060008DD64 /* ControlEventTests.swift */; };
-		CBE54E741DFD9B120008DD64 /* UIControlExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E731DFD9B120008DD64 /* UIControlExtensionsTests.swift */; };
-		CBE54E761DFD9BDB0008DD64 /* UIButtonExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E751DFD9BDB0008DD64 /* UIButtonExtensionsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,12 +53,8 @@
 		CBE54E5F1DFB39510008DD64 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		CBE54E641DFB395A0008DD64 /* ObservableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableTests.swift; sourceTree = "<group>"; };
 		CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableTests.swift; sourceTree = "<group>"; };
-		CBE54E681DFB65D00008DD64 /* ControlEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlEvent.swift; sourceTree = "<group>"; };
 		CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControlExtensions.swift; sourceTree = "<group>"; };
 		CBE54E6E1DFB797F0008DD64 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
-		CBE54E701DFD9A060008DD64 /* ControlEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlEventTests.swift; sourceTree = "<group>"; };
-		CBE54E731DFD9B120008DD64 /* UIControlExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControlExtensionsTests.swift; sourceTree = "<group>"; };
-		CBE54E751DFD9BDB0008DD64 /* UIButtonExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonExtensionsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +99,6 @@
 			children = (
 				CBE54E441DFB36DF0008DD64 /* Snail.h */,
 				CBE54E451DFB36DF0008DD64 /* Info.plist */,
-				CBE54E681DFB65D00008DD64 /* ControlEvent.swift */,
 				CBE54E5B1DFB39510008DD64 /* Event.swift */,
 				24FABD551DFEF670005CF84E /* Fail.swift */,
 				CB2936761DFE151B00792E6B /* Just.swift */,
@@ -124,13 +115,11 @@
 			isa = PBXGroup;
 			children = (
 				CBE54E511DFB36DF0008DD64 /* Info.plist */,
-				CBE54E701DFD9A060008DD64 /* ControlEventTests.swift */,
 				24FABD571DFEF7EC005CF84E /* FailTests.swift */,
 				CB2936781DFEF77500792E6B /* JustTests.swift */,
 				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
 				24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */,
 				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
-				CBE54E721DFD9B030008DD64 /* Extensions */,
 			);
 			path = SnailTests;
 			sourceTree = "<group>";
@@ -140,15 +129,6 @@
 			children = (
 				CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */,
 				CBE54E6E1DFB797F0008DD64 /* UIButtonExtensions.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		CBE54E721DFD9B030008DD64 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				CBE54E731DFD9B120008DD64 /* UIControlExtensionsTests.swift */,
-				CBE54E751DFD9BDB0008DD64 /* UIButtonExtensionsTests.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -264,7 +244,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBE54E691DFB65D00008DD64 /* ControlEvent.swift in Sources */,
 				CBE54E621DFB39510008DD64 /* ObservableType.swift in Sources */,
 				24FABD561DFEF670005CF84E /* Fail.swift in Sources */,
 				CBE54E611DFB39510008DD64 /* Observable.swift in Sources */,
@@ -281,14 +260,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBE54E711DFD9A060008DD64 /* ControlEventTests.swift in Sources */,
 				CB2936791DFEF77500792E6B /* JustTests.swift in Sources */,
 				CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */,
-				CBE54E761DFD9BDB0008DD64 /* UIButtonExtensionsTests.swift in Sources */,
 				24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */,
 				CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */,
 				24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */,
-				CBE54E741DFD9B120008DD64 /* UIControlExtensionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
