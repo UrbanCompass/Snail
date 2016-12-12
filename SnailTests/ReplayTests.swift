@@ -9,7 +9,7 @@ class ReplayTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        subject = Replay<String>(2)
+        subject = Replay(2)
     }
 
     override func tearDown() {

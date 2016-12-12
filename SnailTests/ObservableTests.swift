@@ -16,7 +16,7 @@ class ObservableTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        subject = Observable<String>()
+        subject = Observable()
         strings = []
         error = nil
         done = nil

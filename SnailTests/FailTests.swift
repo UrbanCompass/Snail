@@ -16,7 +16,7 @@ class FailTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        subject = Fail<String>(TestError.test)
+        subject = Fail(TestError.test)
         strings = []
     }
 
