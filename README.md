@@ -74,14 +74,12 @@ int.value = 42
 
 ```swift
 let control = UIControl()
-control.controlEvent(.touchUpInside)
-  .subscribe(onNext: {
-    ...
-  })
+control.controlEvent(.touchUpInside).subscribe(
+  onNext: { ... }
+)
   
 let button = UIButton()
-button.tap
-  .subscribe(onNext: {
-    ...
-  })
+button.tap.subscribe(
+  onNext: { ... }
+)
 ```
