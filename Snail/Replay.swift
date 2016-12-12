@@ -22,9 +22,6 @@ public class Replay<T>: Observable<T> {
 
     public override func on(_ event: Event<E>) {
         events.append(event)
-        guard eventHandlers.count > 0 else {
-            return
-        }
         super.on(event)
     }
 
