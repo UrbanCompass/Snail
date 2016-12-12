@@ -5,7 +5,7 @@ public extension UIControl {
 
     public func controlEvent(_ controlEvents: UIControlEvents) -> Observable<Void> {
         let observable = Observable<Void>()
-        objc_setAssociatedObject(self, &UIControl.observableKey, observable, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &UIControl.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         addTarget(self, action: #selector(observableHandler(_:)), for: controlEvents)
         return observable
     }
