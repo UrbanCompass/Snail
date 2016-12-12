@@ -5,7 +5,7 @@ import Foundation
 public class Just<T>: Observable<T> {
     private let value: T
 
-    public init(value: T) {
+    public init(_ value: T) {
         self.value = value
     }
 
