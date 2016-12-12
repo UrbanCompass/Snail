@@ -22,6 +22,9 @@ public class Replay<T>: Observable<T> {
 
     public override func on(_ event: Event<E>) {
         events.append(event)
+        if events.count > threshold {
+            events.removeFirst()
+        }
         super.on(event)
     }
 
