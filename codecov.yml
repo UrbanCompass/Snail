@@ -2,8 +2,8 @@ ignore:
  - "SnailTests"
 coverage:
   status:
-  project:
-    default:
-      against: parent
-      target: auto
-      threshold: 1%
+    project:
+      default:
+        against: parent
+        target: auto
+        threshold: 1%
