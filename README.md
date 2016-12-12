@@ -70,6 +70,21 @@ int.asObservable().subscribe(
 
 int.value = 42
 ```
+
+## Miscellaneous Observables
+
+```swift
+let just = Just(1) // always returns the initial value (1 in this case)
+
+enum TestError: Error {
+  case test
+}
+let failure = Fail(TestError.test) //always fail with error
+
+let n = 5
+let replay = Replay(n) // replays the last N events when a new observer subscribes
+```
+
 ## Subscribing to Control Events
 
 ```swift
