@@ -11,13 +11,12 @@ public class Replay<T>: Observable<T> {
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<E>) -> Void) {
-        super.subscribe(handler)
-        replay(handler)
+        super.subscribe(queue: queue, handler)
+        replay(queue: queue, handler)
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
-        super.subscribe(onNext: onNext, onError: onError, onDone: onDone)
-        replay(createHandler(onNext: onNext, onError: onError, onDone: onDone))
+        subscribe(queue: queue, createHandler(onNext: onNext, onError: onError, onDone: onDone))
     }
 
     public override func on(_ event: Event<E>) {
@@ -26,7 +25,7 @@ public class Replay<T>: Observable<T> {
         super.on(event)
     }
 
-    private func replay(_ handler: @escaping (Event<E>) -> Void) {
-        events.forEach { event in handler(event) }
+    private func replay(queue: DispatchQueue?, _ handler: @escaping (Event<E>) -> Void) {
+        events.forEach { event in fire(queue: queue, handler: handler, event: event) }
     }
 }

@@ -11,12 +11,11 @@ public class Just<T>: Observable<T> {
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<T>) -> Void) {
-        handler(.next(value))
-        handler(.done)
+        fire(queue: queue, handler: handler, event: .next(value))
+        fire(queue: queue, handler: handler, event: .done)
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
-        onNext?(value)
-        onDone?()
+        subscribe(queue: queue, createHandler(onNext: onNext, onError: onError, onDone: onDone))
     }
 }
