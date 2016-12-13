@@ -3,7 +3,7 @@
 public class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0
-    var eventHandlers: [(queue: DispatchQueue?, event: (Event<E>) -> Void)] = []
+    var eventHandlers: [(queue: DispatchQueue?, handler: (Event<E>) -> Void)] = []
 
     public init() {}
 
@@ -39,13 +39,13 @@ public class Observable<T> : ObservableType {
         }
     }
 
-    private func fire(eventHandler: (queue: DispatchQueue?, event: (Event<E>) -> Void), event: Event<E>) {
+    private func fire(eventHandler: (queue: DispatchQueue?, handler: (Event<E>) -> Void), event: Event<E>) {
         if let queue = eventHandler.queue {
             queue.async {
-                eventHandler.event(event)
+                eventHandler.handler(event)
             }
         } else {
-            eventHandler.event(event)
+            eventHandler.handler(event)
         }
     }
 }
