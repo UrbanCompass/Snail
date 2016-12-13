@@ -12,7 +12,9 @@ public extension UIControl {
 
     func observableHandler(_ sender: UIControl) {
         if let observable = objc_getAssociatedObject(self, &UIControl.observableKey) as? Observable<Void> {
-            observable.on(.next())
+            DispatchQueue.main.async {
+                observable.on(.next())
+            }
         }
     }
 }
