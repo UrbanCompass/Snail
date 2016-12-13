@@ -11,12 +11,12 @@ public class Replay<T>: Observable<T> {
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<E>) -> Void) {
-        super.subscribe(handler)
+        super.subscribe(queue: queue, handler)
         replay(handler)
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
-        super.subscribe(onNext: onNext, onError: onError, onDone: onDone)
+        super.subscribe(queue: queue, onNext: onNext, onError: onError, onDone: onDone)
         replay(createHandler(onNext: onNext, onError: onError, onDone: onDone))
     }
 
