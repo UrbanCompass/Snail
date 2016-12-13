@@ -41,8 +41,12 @@ public class Observable<T> : ObservableType {
 
     private func fire(eventHandler: (queue: DispatchQueue?, handler: (Event<E>) -> Void), event: Event<E>) {
         if let queue = eventHandler.queue {
-            queue.async {
+            if queue == DispatchQueue.main && Thread.isMainThread {
                 eventHandler.handler(event)
+            } else {
+                queue.async {
+                    eventHandler.handler(event)
+                }
             }
         } else {
             eventHandler.handler(event)
