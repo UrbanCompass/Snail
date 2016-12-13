@@ -3,12 +3,12 @@
 public class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0
-    var eventHandlers: [(Event<E>) -> Void] = []
+    var eventHandlers: [(queue: DispatchQueue?, event: (Event<E>) -> Void)] = []
 
     public init() {}
 
-    public func subscribe(_ handler: @escaping (Event<E>) -> Void) {
-        eventHandlers.append(handler)
+    public func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<E>) -> Void) {
+        eventHandlers.append((queue, handler))
     }
 
     func createHandler(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> (Event<E>) -> Void {
@@ -21,8 +21,8 @@ public class Observable<T> : ObservableType {
         }
     }
 
-    public func subscribe(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
-        eventHandlers.append(createHandler(onNext: onNext, onError: onError, onDone: onDone))
+    public func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
+        eventHandlers.append((queue, createHandler(onNext: onNext, onError: onError, onDone: onDone)))
     }
 
     public func on(_ event: Event<E>) {
@@ -31,11 +31,21 @@ public class Observable<T> : ObservableType {
             guard isStopped == 0 else {
                 return
             }
-            eventHandlers.forEach { $0(event) }
+            eventHandlers.forEach { fire(eventHandler: $0, event: event) }
         case .error, .done:
             if OSAtomicCompareAndSwap32Barrier(0, 1, &isStopped) {
-                eventHandlers.forEach { $0(event) }
+                eventHandlers.forEach { fire(eventHandler: $0, event: event) }
             }
+        }
+    }
+
+    private func fire(eventHandler: (queue: DispatchQueue?, event: (Event<E>) -> Void), event: Event<E>) {
+        if let queue = eventHandler.queue {
+            queue.async {
+                eventHandler.event(event)
+            }
+        } else {
+            eventHandler.event(event)
         }
     }
 }

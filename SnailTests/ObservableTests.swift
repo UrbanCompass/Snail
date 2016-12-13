@@ -81,4 +81,22 @@ class ObservableTests: XCTestCase {
         subject?.on(.next("1"))
         XCTAssert(strings?.first == more.first)
     }
+
+    func testSubscribeOnMainThread() {
+        var isMainQueue = false
+        let exp = expectation(description: "queue")
+
+        DispatchQueue.global().async {
+            self.subject?.subscribe(queue: DispatchQueue.main, onNext: { string in
+                exp.fulfill()
+                isMainQueue = Thread.isMainThread
+            })
+            self.subject?.on(.next("1"))
+        }
+
+        waitForExpectations(timeout: 2) { error in
+            XCTAssertNil(error)
+            XCTAssert(isMainQueue)
+        }
+    }
 }

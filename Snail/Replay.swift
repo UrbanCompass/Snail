@@ -10,12 +10,12 @@ public class Replay<T>: Observable<T> {
         self.threshold = threshold
     }
 
-    public override func subscribe(_ handler: @escaping (Event<E>) -> Void) {
+    public override func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<E>) -> Void) {
         super.subscribe(handler)
         replay(handler)
     }
 
-    public override func subscribe(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
+    public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
         super.subscribe(onNext: onNext, onError: onError, onDone: onDone)
         replay(createHandler(onNext: onNext, onError: onError, onDone: onDone))
     }
