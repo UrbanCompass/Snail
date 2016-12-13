@@ -33,6 +33,7 @@ class ReplayTests: XCTestCase {
         var strings: [String] = []
         subject?.on(.next("1"))
         subject?.on(.next("2"))
+        subject?.on(.done)
         subject?
             .subscribe(onNext: { string in strings.append(string) })
         XCTAssert(strings[0] == "1")
