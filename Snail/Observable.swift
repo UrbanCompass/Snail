@@ -31,25 +31,26 @@ public class Observable<T> : ObservableType {
             guard isStopped == 0 else {
                 return
             }
-            eventHandlers.forEach { fire(eventHandler: $0, event: event) }
+            eventHandlers.forEach { (queue, handler) in fire(queue: queue, handler: handler, event: event) }
         case .error, .done:
             if OSAtomicCompareAndSwap32Barrier(0, 1, &isStopped) {
-                eventHandlers.forEach { fire(eventHandler: $0, event: event) }
+                eventHandlers.forEach { (queue, handler) in fire(queue: queue, handler: handler, event: event) }
             }
         }
     }
 
-    private func fire(eventHandler: (queue: DispatchQueue?, handler: (Event<E>) -> Void), event: Event<E>) {
-        if let queue = eventHandler.queue {
-            if queue == DispatchQueue.main && Thread.isMainThread {
-                eventHandler.handler(event)
-            } else {
-                queue.async {
-                    eventHandler.handler(event)
-                }
-            }
+    private func fire(queue: DispatchQueue?, handler: @escaping (Event<E>) -> Void, event: Event<E>) {
+        guard let queue = queue else {
+            handler(event)
+            return
+        }
+
+        if queue == DispatchQueue.main && Thread.isMainThread {
+            handler(event)
         } else {
-            eventHandler.handler(event)
+            queue.async {
+                handler(event)
+            }
         }
     }
 }
