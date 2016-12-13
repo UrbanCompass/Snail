@@ -4,7 +4,8 @@ public class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0
     var eventHandlers: [(Event<E>) -> Void] = []
-    private var test: [(next: ((T) -> Void)?, done: (() -> Void)?, error: ((Error) -> Void)?)] = []
+
+    public init() {}
 
     public func subscribe(_ handler: @escaping (Event<E>) -> Void) {
         eventHandlers.append(handler)
