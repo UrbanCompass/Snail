@@ -104,6 +104,7 @@ button.tap.subscribe(
 You can specify which queue an observables will be notified on by using `.subscribe(queue: <desired queue>)`. If you don't specify, then the observable will be notified on the same queue that the observable published on.
 
 There are 3 scenarios:
+
 1. You don't specify the queue. Your observer will be notified on the same thread as the observable published on.
 
 2. You specified `main` queue AND the observable published on the `main` queue. Your observer will be notified synchronously on the `main` queue.
