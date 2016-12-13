@@ -87,7 +87,7 @@ class ObservableTests: XCTestCase {
         let exp = expectation(description: "queue")
 
         DispatchQueue.global().async {
-            self.subject?.subscribe(queue: DispatchQueue.main, onNext: { string in
+            self.subject?.subscribe(queue: .main, onNext: { string in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
             })
@@ -105,7 +105,7 @@ class ObservableTests: XCTestCase {
         let exp = expectation(description: "queue")
 
         DispatchQueue.global().async {
-            self.subject?.subscribe(queue: DispatchQueue.main, onNext: { string in
+            self.subject?.subscribe(queue: .main, onNext: { string in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
             })
