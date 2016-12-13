@@ -39,7 +39,7 @@ public class Observable<T> : ObservableType {
         }
     }
 
-    private func fire(queue: DispatchQueue?, handler: @escaping (Event<E>) -> Void, event: Event<E>) {
+    func fire(queue: DispatchQueue?, handler: @escaping (Event<E>) -> Void, event: Event<E>) {
         guard let queue = queue else {
             handler(event)
             return
