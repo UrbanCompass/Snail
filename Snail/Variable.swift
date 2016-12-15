@@ -24,6 +24,7 @@ public class Variable<T> {
     public init(_ value: T) {
         _value = value
         subject = Replay<T>(1)
+        self.value = value
     }
 
     public func asObservable() -> Observable<T> {
