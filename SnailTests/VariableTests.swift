@@ -11,7 +11,6 @@ class VariableTests: XCTestCase {
         subject.asObservable().subscribe(
             onNext: { string in events.append(string) }
         )
-        subject.value = nil
         subject.value = "1"
         subject.value = "2"
         XCTAssert(events[0] == nil)
@@ -30,5 +29,16 @@ class VariableTests: XCTestCase {
         })
 
         XCTAssertEqual("new", result)
+    }
+
+    func testVariableNotifiesInitialOnSubscribe() {
+        let subject = Variable("initial")
+        var result: String?
+
+        subject.asObservable().subscribe(onNext: { string in
+            result = string
+        })
+
+        XCTAssertEqual("initial", result)
     }
 }
