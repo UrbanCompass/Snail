@@ -12,7 +12,7 @@ class NSNotificationCenterTests: XCTestCase {
         subject.subscribe(onNext: { exp.fulfill() })
         NotificationCenter.default.post(name: notificationName, object: nil)
         waitForExpectations(timeout: 3) { error in
-            XCTAssert(error == nil)
+            XCTAssertNil(error)
         }
     }
 }
