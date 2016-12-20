@@ -10,6 +10,7 @@
 		241F15581E03124600DD70A2 /* UIBarButtonItemExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241F15571E03124600DD70A2 /* UIBarButtonItemExtensions.swift */; };
 		2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */; };
 		2421BA741E0992D400EA9064 /* NSNotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA731E0992D400EA9064 /* NSNotificationCenterExtensions.swift */; };
+		2421BA771E09A78F00EA9064 /* NSNotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA761E09A78F00EA9064 /* NSNotificationCenterExtensions.swift */; };
 		24FABD561DFEF670005CF84E /* Fail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD551DFEF670005CF84E /* Fail.swift */; };
 		24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD571DFEF7EC005CF84E /* FailTests.swift */; };
 		24FABD5A1DFF0B48005CF84E /* Replay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD591DFF0B48005CF84E /* Replay.swift */; };
@@ -42,6 +43,7 @@
 		241F15571E03124600DD70A2 /* UIBarButtonItemExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemExtensions.swift; sourceTree = "<group>"; };
 		2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizerExtensions.swift; sourceTree = "<group>"; };
 		2421BA731E0992D400EA9064 /* NSNotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSNotificationCenterExtensions.swift; sourceTree = "<group>"; };
+		2421BA761E09A78F00EA9064 /* NSNotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSNotificationCenterExtensions.swift; path = Extensions/NSNotificationCenterExtensions.swift; sourceTree = "<group>"; };
 		24FABD551DFEF670005CF84E /* Fail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fail.swift; sourceTree = "<group>"; };
 		24FABD571DFEF7EC005CF84E /* FailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailTests.swift; sourceTree = "<group>"; };
 		24FABD591DFF0B48005CF84E /* Replay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Replay.swift; sourceTree = "<group>"; };
@@ -82,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2421BA751E09A6D500EA9064 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2421BA761E09A78F00EA9064 /* NSNotificationCenterExtensions.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		CBE54E371DFB36DF0008DD64 = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +136,7 @@
 				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
 				24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */,
 				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
+				2421BA751E09A6D500EA9064 /* Extensions */,
 			);
 			path = SnailTests;
 			sourceTree = "<group>";
@@ -276,6 +287,7 @@
 				CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */,
 				24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */,
 				CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */,
+				2421BA771E09A78F00EA9064 /* NSNotificationCenterExtensions.swift in Sources */,
 				24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
