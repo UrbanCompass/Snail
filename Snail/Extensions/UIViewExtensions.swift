@@ -3,8 +3,8 @@
 public extension UIView {
     public var tap: Observable<Void> {
         get {
-            if let button = self as? UIButton {
-                return button.controlEvent(.touchUpInside)
+            if let control = self as? UIControl {
+                return control.controlEvent(.touchUpInside)
             }
             let tap = UITapGestureRecognizer()
             addGestureRecognizer(tap)
