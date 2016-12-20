@@ -111,17 +111,6 @@ There are 3 scenarios:
 
 3. You specified a queue. Your observer will be notified async on the specified queue.
 
-
-## Weak self
-
-To avoid retain cycles and/or crashes, always use `[weak self]` when self is needed by an observer
-
-```swift
-observable.subscribe(onNext: { [weak self] in
-    // use self? as needed.
-})
-```
-
 ### Examples
 
 Subscribing on `DispatchQueue.main`
@@ -134,4 +123,14 @@ observable.subscribe(queue: .main,
 observable.subscribe(queue: .main) { event in
     ...
 }
+```
+
+## Weak self
+
+To avoid retain cycles and/or crashes, always use `[weak self]` when self is needed by an observer
+
+```swift
+observable.subscribe(onNext: { [weak self] in
+    // use self? as needed.
+})
 ```
