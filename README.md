@@ -99,7 +99,7 @@ button.tap.subscribe(
 )
 ```
 
-# Queues
+## Queues
 
 You can specify which queue an observables will be notified on by using `.subscribe(queue: <desired queue>)`. If you don't specify, then the observable will be notified on the same queue that the observable published on.
 
@@ -110,6 +110,17 @@ There are 3 scenarios:
 2. You specified `main` queue AND the observable published on the `main` queue. Your observer will be notified synchronously on the `main` queue.
 
 3. You specified a queue. Your observer will be notified async on the specified queue.
+
+
+## Weak self
+
+To avoid retain cycles and/or crashes, always use `[weak self]` when self is needed by an observer
+
+```swift
+observable.subscribe(onNext: { [weak self] in
+    // use self? as needed.
+})
+```
 
 ### Examples
 
