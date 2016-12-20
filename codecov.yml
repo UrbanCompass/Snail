@@ -1,5 +1,6 @@
 ignore:
  - "SnailTests"
+ - "Snail/Extensions"
 coverage:
   status:
     project:
