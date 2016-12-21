@@ -11,7 +11,7 @@ extension NotificationCenter {
         }
     }
 
-    func observeEvent(_ name: NSNotification.Name?) -> Observable<NSNotification> {
+    public func observeEvent(_ name: NSNotification.Name?) -> Observable<NSNotification> {
         let observable = Observable<NSNotification>()
         objc_setAssociatedObject(self, &NotificationCenter.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         addObserver(self, selector: #selector(observableHandler(_:)), name: name, object: nil)
