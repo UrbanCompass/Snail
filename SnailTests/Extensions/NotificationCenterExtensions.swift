@@ -4,11 +4,11 @@ import UIKit
 import XCTest
 @testable import Snail
 
-class NSNotificationCenterTests: XCTestCase {
+class NotificationCenterTests: XCTestCase {
     func testNotificaiton() {
         let exp = expectation(description: "notification")
-        let notificationName = NSNotification.Name.UIKeyboardWillShow
-        var notifcation: NSNotification?
+        let notificationName = Notification.Name.UIKeyboardWillShow
+        var notifcation: Notification?
         let subject = NotificationCenter.default.observeEvent(notificationName)
         subject.subscribe(onNext: { n in
             notifcation = n
