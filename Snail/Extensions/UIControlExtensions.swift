@@ -10,7 +10,7 @@ public extension UIControl {
         return observable
     }
 
-    func observableHandler(_ sender: UIControl) {
+    @objc private func observableHandler(_ sender: UIControl) {
         if let observable = objc_getAssociatedObject(self, &UIControl.observableKey) as? Observable<Void> {
             observable.on(.next())
         }
