@@ -5,7 +5,7 @@ import Foundation
 extension NotificationCenter {
     private static var observableKey = "ObservableKey"
 
-    func observableHandler(_ notification: Notification) {
+    @objc private func observableHandler(_ notification: Notification) {
         if let observable = objc_getAssociatedObject(self, &NotificationCenter.observableKey) as? Observable<Notification> {
             observable.on(.next(notification))
         }

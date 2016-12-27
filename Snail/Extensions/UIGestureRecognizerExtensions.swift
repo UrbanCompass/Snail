@@ -12,7 +12,7 @@ extension UIGestureRecognizer {
         return observable
     }
 
-    func observableHandler() {
+    @objc private func observableHandler() {
         if let observable = objc_getAssociatedObject(self, &UIGestureRecognizer.observableKey) as? Observable<Void> {
             observable.on(.next())
         }
