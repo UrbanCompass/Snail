@@ -4,7 +4,7 @@ import UIKit
 import XCTest
 @testable import Snail
 
-class NotificationCenterTests: XCTestCase {    
+class NotificationCenterTests: XCTestCase {
     func testNotificaiton() {
         let exp = expectation(description: "notification")
         let notificationName = Notification.Name.UIKeyboardWillShow
