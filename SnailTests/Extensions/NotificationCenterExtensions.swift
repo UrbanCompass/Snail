@@ -4,7 +4,7 @@ import UIKit
 import XCTest
 @testable import Snail
 
-class NotificationCenterTests: XCTestCase {
+class NotificationCenterTests: XCTestCase {    
     func testNotificaiton() {
         let exp = expectation(description: "notification")
         let notificationName = Notification.Name.UIKeyboardWillShow
@@ -19,6 +19,30 @@ class NotificationCenterTests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertNotNil(notifcation)
             XCTAssert(notifcation?.name == notificationName)
+        }
+    }
+
+    func testMultipleNotificaitons() {
+        let willHide = expectation(description: "notification")
+        var gotWillShow = false
+        var gotWillHide = false
+
+        let willShowName = Notification.Name.UIKeyboardWillShow
+        let willHideName = Notification.Name.UIKeyboardWillHide
+
+        NotificationCenter.default.observeEvent(willShowName).subscribe(onNext: { _ in gotWillShow = true })
+        NotificationCenter.default.observeEvent(willHideName).subscribe(onNext: { _ in
+            gotWillHide = true
+            willHide.fulfill()
+        })
+
+        NotificationCenter.default.post(name: willShowName, object: nil)
+        NotificationCenter.default.post(name: willHideName, object: nil)
+
+        waitForExpectations(timeout: 3) { error in
+            XCTAssertNil(error)
+            XCTAssert(gotWillShow)
+            XCTAssert(gotWillHide)
         }
     }
 }
