@@ -21,4 +21,28 @@ class NotificationCenterTests: XCTestCase {
             XCTAssert(notifcation?.name == notificationName)
         }
     }
+
+    func testMultipleNotificaitons() {
+        let willHide = expectation(description: "notification")
+        var gotWillShow = false
+        var gotWillHide = false
+
+        let willShowName = Notification.Name.UIKeyboardWillShow
+        let willHideName = Notification.Name.UIKeyboardWillHide
+
+        NotificationCenter.default.observeEvent(willShowName).subscribe(onNext: { _ in gotWillShow = true })
+        NotificationCenter.default.observeEvent(willHideName).subscribe(onNext: { _ in
+            gotWillHide = true
+            willHide.fulfill()
+        })
+
+        NotificationCenter.default.post(name: willShowName, object: nil)
+        NotificationCenter.default.post(name: willHideName, object: nil)
+
+        waitForExpectations(timeout: 3) { error in
+            XCTAssertNil(error)
+            XCTAssert(gotWillShow)
+            XCTAssert(gotWillHide)
+        }
+    }
 }
