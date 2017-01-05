@@ -18,10 +18,7 @@ class FailTests: XCTestCase {
         super.setUp()
         subject = Fail(TestError.test)
         strings = []
-    }
-
-    override func tearDown() {
-        super.tearDown()
+        subject?.subscribe(onNext: { [weak self] string in self?.strings?.append(string) })
     }
 
     func testEvent() {
@@ -34,6 +31,7 @@ class FailTests: XCTestCase {
             }
         }
         subject?.on(.next("1"))
+        XCTAssert(strings?.count == 0)
         XCTAssert(more.count == 0)
     }
 
@@ -47,7 +45,6 @@ class FailTests: XCTestCase {
         subject?
             .subscribe(onError: { error in self.error = error })
         subject?.on(.next("1"))
-
         XCTAssert(strings?.count == 0)
         XCTAssert((error as? TestError) == TestError.test)
     }
