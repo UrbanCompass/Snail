@@ -3,11 +3,16 @@
 public class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0
+    private var stoppedEvent: Event<E>?
     var eventHandlers: [(queue: DispatchQueue?, handler: (Event<E>) -> Void)] = []
 
     public init() {}
 
     public func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<E>) -> Void) {
+        if let event = stoppedEvent {
+            fire(queue: queue, handler: handler, event: event)
+            return
+        }
         eventHandlers.append((queue, handler))
     }
 
@@ -22,6 +27,10 @@ public class Observable<T> : ObservableType {
     }
 
     public func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
+        if let event = stoppedEvent {
+            fire(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone), event: event)
+            return
+        }
         eventHandlers.append((queue, createHandler(onNext: onNext, onError: onError, onDone: onDone)))
     }
 
@@ -35,6 +44,7 @@ public class Observable<T> : ObservableType {
         case .error, .done:
             if OSAtomicCompareAndSwap32Barrier(0, 1, &isStopped) {
                 eventHandlers.forEach { (queue, handler) in fire(queue: queue, handler: handler, event: event) }
+                stoppedEvent = event
             }
         }
     }
