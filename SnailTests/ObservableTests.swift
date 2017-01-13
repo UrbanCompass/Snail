@@ -82,6 +82,14 @@ class ObservableTests: XCTestCase {
         XCTAssert(strings?.first == more.first)
     }
 
+    func testFiresStoppedEventOnSubscribeIfStopped() {
+        subject?.on(.error(TestError.test))
+
+        var oldError: TestError?
+        subject?.subscribe(onError: { e in oldError = e as? TestError })
+        XCTAssert(oldError == TestError.test)
+    }
+
     func testSubscribeOnMainThread() {
         var isMainQueue = false
         let exp = expectation(description: "queue")
