@@ -6,6 +6,9 @@ extension UIBarButtonItem {
     private static var observableKey = "ObservableKey"
 
     public var tap: Observable<Void> {
+        if let observable = objc_getAssociatedObject(self, &UIBarButtonItem.observableKey) as? Observable<Void> {
+            return observable
+        }
         let observable = Observable<Void>()
         objc_setAssociatedObject(self, &UIBarButtonItem.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         target = self
