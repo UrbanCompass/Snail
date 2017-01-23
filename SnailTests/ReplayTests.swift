@@ -63,7 +63,7 @@ class ReplayTests: XCTestCase {
 
         subject?.on(.next("1"))
         DispatchQueue.global().async {
-            self.subject?.subscribe(queue: .main) { event in
+            self.subject?.subscribe(queue: .main) { _ in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
             }
