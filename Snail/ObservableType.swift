@@ -1,5 +1,8 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+import Foundation
+import Dispatch
+
 public protocol ObservableType {
     associatedtype E
     func subscribe(queue: DispatchQueue?, _ handler: @escaping (Event<E>) -> Void)

@@ -1,5 +1,8 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+#if os(iOS) || os(tvOS)
+import UIKit
+
 public extension UIView {
     public var tap: Observable<Void> {
         if let control = self as? UIControl {
@@ -10,3 +13,5 @@ public extension UIView {
         return tap.asObservable()
     }
 }
+
+#endif

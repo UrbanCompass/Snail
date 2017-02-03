@@ -1,5 +1,6 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+#if os(iOS) || os(tvOS)
 import UIKit
 
 extension UIBarButtonItem {
@@ -22,3 +23,5 @@ extension UIBarButtonItem {
         }
     }
 }
+
+#endif
