@@ -1,6 +1,7 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
 
 extension UIBarButtonItem {
     private static var observableKey = "ObservableKey"
@@ -19,3 +20,5 @@ extension UIBarButtonItem {
         }
     }
 }
+
+#endif

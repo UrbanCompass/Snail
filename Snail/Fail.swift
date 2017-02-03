@@ -1,6 +1,7 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
 import Foundation
+import Dispatch
 
 public class Fail<T>: Observable<T> {
     private let error: Error

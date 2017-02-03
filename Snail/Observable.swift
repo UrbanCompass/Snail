@@ -1,5 +1,8 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+import Foundation
+import Dispatch
+
 public class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0

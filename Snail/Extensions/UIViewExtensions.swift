@@ -1,5 +1,8 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+#if os(iOS) || os(tvOS)
+    import UIKit
+
 public extension UIView {
     public var tap: Observable<Void> {
         get {
@@ -12,3 +15,5 @@ public extension UIView {
         }
     }
 }
+
+#endif

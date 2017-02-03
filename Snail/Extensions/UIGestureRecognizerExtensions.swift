@@ -1,6 +1,7 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
 
 extension UIGestureRecognizer {
     private static var observableKey = "ObservableKey"
@@ -18,3 +19,5 @@ extension UIGestureRecognizer {
         }
     }
 }
+
+#endif
