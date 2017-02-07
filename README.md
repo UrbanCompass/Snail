@@ -2,6 +2,35 @@
 
 [![SNAIL](https://img.youtube.com/vi/u4QAnCFd4iw/0.jpg)](https://www.youtube.com/watch?v=u4QAnCFd4iw)
 
+## Installation
+
+### Carthage
+
+You can install [Carthage](https://github.com/Carthage/Carthage) with [Homebrew](http://brew.sh/) using the following command:
+
+```bash
+brew update
+brew install carthage
+```
+To integrate Snail into your Xcode project using Carthage, specify it in your `Cartfile` where `"x.x.x"` is the current release:
+
+```ogdl
+github "UrbanCompass/Snail" "x.x.x"
+```
+
+### Swift Package Manager
+
+To install using [Swift Package Manager](https://swift.org/package-manager/) have your Swift package set up, and add Snail as a dependency to your `Package.swift`.
+
+```swift
+dependencies: [
+    .Package(url: "https://github.com/UrbanCompass/Snail.git", majorVersion: 0)
+]
+```
+
+### Manually
+Add all the files from `Snail/Snail` to your project
+
 ## Creating Observables
 
 ```swift
