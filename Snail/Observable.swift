@@ -7,16 +7,16 @@ public class Observable<T> : ObservableType {
     public typealias E = T
     private var isStopped: Int32 = 0
     private var stoppedEvent: Event<E>?
-    var eventHandlers: [(queue: DispatchQueue?, handler: (Event<E>) -> Void)] = []
+    var subscribers: [Subscriber<E>] = []
 
     public init() {}
 
     public func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<E>) -> Void) {
         if let event = stoppedEvent {
-            fire(queue: queue, handler: handler, event: event)
+            notify(subscriber: Subscriber(queue: queue, handler: handler), event: event)
             return
         }
-        eventHandlers.append((queue, handler))
+        subscribers.append(Subscriber(queue: queue, handler: handler))
     }
 
     func createHandler(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> (Event<E>) -> Void {
@@ -31,10 +31,10 @@ public class Observable<T> : ObservableType {
 
     public func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
         if let event = stoppedEvent {
-            fire(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone), event: event)
+            notify(subscriber: Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)), event: event)
             return
         }
-        eventHandlers.append((queue, createHandler(onNext: onNext, onError: onError, onDone: onDone)))
+        subscribers.append(Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)))
     }
 
     public func on(_ event: Event<E>) {
@@ -43,26 +43,30 @@ public class Observable<T> : ObservableType {
             guard isStopped == 0 else {
                 return
             }
-            eventHandlers.forEach { (queue, handler) in fire(queue: queue, handler: handler, event: event) }
+            subscribers.forEach { notify(subscriber: $0, event: event) }
         case .error, .done:
             if OSAtomicCompareAndSwap32Barrier(0, 1, &isStopped) {
-                eventHandlers.forEach { (queue, handler) in fire(queue: queue, handler: handler, event: event) }
+                subscribers.forEach { notify(subscriber: $0, event: event) }
                 stoppedEvent = event
             }
         }
     }
 
-    func fire(queue: DispatchQueue?, handler: @escaping (Event<E>) -> Void, event: Event<E>) {
-        guard let queue = queue else {
-            handler(event)
+    public func removeSubscribers() {
+        subscribers.removeAll()
+    }
+
+    func notify(subscriber: Subscriber<E>, event: Event<E>) {
+        guard let queue = subscriber.queue else {
+            subscriber.handler(event)
             return
         }
 
         if queue == DispatchQueue.main && Thread.isMainThread {
-            handler(event)
+            subscriber.handler(event)
         } else {
             queue.async {
-                handler(event)
+                subscriber.handler(event)
             }
         }
     }

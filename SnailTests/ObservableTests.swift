@@ -147,4 +147,12 @@ class ObservableTests: XCTestCase {
             XCTAssert(isMainQueue)
         }
     }
+
+    func testRemovingSubscribers() {
+        subject?.on(.next("1"))
+        subject?.removeSubscribers()
+        subject?.on(.next("2"))
+        XCTAssert(strings?[0] == "1")
+        XCTAssert(strings?.count == 1)
+    }
 }
