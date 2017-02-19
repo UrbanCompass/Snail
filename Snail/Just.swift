@@ -12,8 +12,8 @@ public class Just<T>: Observable<T> {
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<T>) -> Void) {
-        fire(queue: queue, handler: handler, event: .next(value))
-        fire(queue: queue, handler: handler, event: .done)
+        notify(subscriber: Subscriber(queue: queue, handler: handler), event: .next(value))
+        notify(subscriber: Subscriber(queue: queue, handler: handler), event: .done)
     }
 
     public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {

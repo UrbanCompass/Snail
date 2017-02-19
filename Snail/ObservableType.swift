@@ -8,4 +8,5 @@ public protocol ObservableType {
     func subscribe(queue: DispatchQueue?, _ handler: @escaping (Event<E>) -> Void)
     func subscribe(queue: DispatchQueue?, onNext: ((Self.E) -> Void)?, onError: ((Error) -> Void)?, onDone: (() -> Void)?)
     func on(_ event: Event<E>)
+    func removeSubscribers()
 }
