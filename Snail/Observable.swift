@@ -11,14 +11,6 @@ public class Observable<T> : ObservableType {
 
     public init() {}
 
-    public func subscribe(queue: DispatchQueue? = nil, _ handler: @escaping (Event<E>) -> Void) {
-        if let event = stoppedEvent {
-            notify(subscriber: Subscriber(queue: queue, handler: handler), event: event)
-            return
-        }
-        subscribers.append(Subscriber(queue: queue, handler: handler))
-    }
-
     func createHandler(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> (Event<E>) -> Void {
         return { event in
             switch event {

@@ -30,21 +30,7 @@ class ObservableTests: XCTestCase {
         super.tearDown()
     }
 
-    func testEvent() {
-        var more: [String] = []
-        subject?.subscribe { event in
-            switch event {
-            case .next(let string):
-                more.append(string)
-            default: break
-            }
-        }
-
-        subject?.on(.next("1"))
-        XCTAssert(more.first == "1")
-    }
-
-    func testOnNext() {
+    func testNext() {
         subject?.on(.next("1"))
         subject?.on(.next("2"))
         XCTAssert(strings?[0] == "1")
@@ -117,26 +103,6 @@ class ObservableTests: XCTestCase {
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
             })
-            DispatchQueue.main.async {
-                self.subject?.on(.next("1"))
-            }
-        }
-
-        waitForExpectations(timeout: 2) { error in
-            XCTAssertNil(error)
-            XCTAssert(isMainQueue)
-        }
-    }
-
-    func testSubscribeOnMainUsingEvent() {
-        var isMainQueue = false
-        let exp = expectation(description: "queue")
-
-        DispatchQueue.global().async {
-            self.subject?.subscribe(queue: .main) { _ in
-                exp.fulfill()
-                isMainQueue = Thread.isMainThread
-            }
             DispatchQueue.main.async {
                 self.subject?.on(.next("1"))
             }
