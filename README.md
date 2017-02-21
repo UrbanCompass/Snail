@@ -39,7 +39,6 @@ let observable = Observable<thing>()
 
 ## Subscribing to Observables
 
-### Using closures
 ```swift
 observable.subscribe(
     onNext: { thing in ... }, // do something with thing
@@ -60,20 +59,6 @@ observable.subscribe(
 observable.subscribe(
     onError: { error in ... } // do something with error
 )
-```
-
-### Using raw event
-```swift
-observable.subscribe { event in
-    switch event {
-    case .next(let thing):
-        // do something with thing
-    case .error(let error):
-        // do something with error
-    case .done:
-        // do something when it's done
-    }
-}
 ```
 
 ## Creating Observables Variables
@@ -148,15 +133,11 @@ Subscribing on `DispatchQueue.main`
 observable.subscribe(queue: .main,
     onNext: { thing in ... }
 )
-
-observable.subscribe(queue: .main) { event in
-    ...
-}
 ```
 
 ## Weak self
 
-To avoid retain cycles and/or crashes, always use `[weak self]` when self is needed by an observer
+To avoid retain cycles and/or crashes, __always__ use `[weak self]` when self is needed by an observer
 
 ```swift
 observable.subscribe(onNext: { [weak self] in

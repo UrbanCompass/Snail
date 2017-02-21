@@ -16,20 +16,7 @@ class ReplayTests: XCTestCase {
         super.tearDown()
     }
 
-    func testEvent() {
-        var strings: [String] = []
-        subject?.on(.next("1"))
-        subject?.subscribe { event in
-            switch event {
-            case .next(let string):
-                strings.append(string)
-            default: break
-            }
-        }
-        XCTAssert(strings.first == "1")
-    }
-
-    func testOnNext() {
+    func testReplay() {
         var strings: [String] = []
         subject?.on(.next("1"))
         subject?.on(.next("2"))
@@ -63,10 +50,10 @@ class ReplayTests: XCTestCase {
 
         subject?.on(.next("1"))
         DispatchQueue.global().async {
-            self.subject?.subscribe(queue: .main) { _ in
+            self.subject?.subscribe(queue: .main, onNext: { _ in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
-            }
+            })
         }
 
         waitForExpectations(timeout: 2) { error in

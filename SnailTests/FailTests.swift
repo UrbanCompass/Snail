@@ -21,27 +21,7 @@ class FailTests: XCTestCase {
         subject?.subscribe(onNext: { [weak self] string in self?.strings?.append(string) })
     }
 
-    func testEvent() {
-        var more: [String] = []
-        subject?.subscribe { event in
-            switch event {
-            case .next(let string):
-                more.append(string)
-            default: break
-            }
-        }
-        subject?.on(.next("1"))
-        XCTAssert(strings?.count == 0)
-        XCTAssert(more.count == 0)
-    }
-
-    func testOnNext() {
-        subject?.on(.next("1"))
-        subject?.on(.next("2"))
-        XCTAssert(strings?.count == 0)
-    }
-
-    func testOnError() {
+    func testFail() {
         subject?
             .subscribe(onError: { error in self.error = error })
         subject?.on(.next("1"))
