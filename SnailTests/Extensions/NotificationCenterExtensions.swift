@@ -10,8 +10,8 @@ class NotificationCenterTests: XCTestCase {
         let notificationName = Notification.Name.UIKeyboardWillShow
         var notifcation: Notification?
         let subject = NotificationCenter.default.observeEvent(notificationName)
-        subject.subscribe(onNext: { notificationName in
-            notifcation = notificationName
+        subject.subscribe(onNext: { notification in
+            notifcation = notification
             exp.fulfill()
         })
         NotificationCenter.default.post(name: notificationName, object: nil)
