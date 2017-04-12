@@ -72,7 +72,7 @@ class ObservableTests: XCTestCase {
         subject?.on(.error(TestError.test))
 
         var oldError: TestError?
-        subject?.subscribe(onError: { e in oldError = e as? TestError })
+        subject?.subscribe(onError: { error in oldError = error as? TestError })
         XCTAssert(oldError == TestError.test)
     }
 
