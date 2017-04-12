@@ -2,6 +2,8 @@
 
 [![SNAIL](https://img.youtube.com/vi/u4QAnCFd4iw/0.jpg)](https://www.youtube.com/watch?v=u4QAnCFd4iw)
 
+A lightweight observables framework, also available in [Kotlin](https://github.com/UrbanCompass/Snail-Kotlin)
+
 ## Installation
 
 ### Carthage
