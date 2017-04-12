@@ -18,9 +18,11 @@ public class Replay<T>: Observable<T> {
     }
 
     public override func on(_ event: Event<E>) {
-        if case .next(_) = event {
+        switch event {
+        case .next(_):
             events.append(event)
             events = Array(events.suffix(threshold))
+        default: break
         }
         super.on(event)
     }
