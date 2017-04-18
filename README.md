@@ -146,3 +146,34 @@ observable.subscribe(onNext: { [weak self] in
     // use self? as needed.
 })
 ```
+
+# In Practice
+
+## Subscribing to Notifications
+
+```swift
+NotificationCenter.default.observeEvent(Notification.Name.UIKeyboardWillShow)
+  .subscribe(queue: .main, onNext: { [weak self] notification in
+    self?.keyboardWillShow(notification)
+  })
+```
+
+## Subscribing to Gestures
+
+```swift
+let panGestureRecognizer = UIPanGestureRecognizer()
+panGestureRecognizer.asObservable()
+  .subscribe(queue: .main, onNext: { [weak self] in
+    self?.handlePan(panGestureRecognizer)
+  })
+view.addGestureRecognizer(panGestureRecognizer)
+```
+
+## Subscribing to UIBarButton Taps
+
+```swift
+navigationItem.leftBarButtonItem?.tap
+  .subscribe(onNext: { [weak self] in
+    self?.dismiss(animated: true, completion: nil)
+  })
+```
