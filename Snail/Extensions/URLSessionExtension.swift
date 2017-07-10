@@ -8,7 +8,7 @@ extension URLSession {
         case invalidResponse
     }
 
-    public func observable(request: URLRequest) -> Observable<[String: Any]> {
+    public func dictionary(request: URLRequest) -> Observable<[String: Any]> {
         let observer: Observable<[String: Any]> = Replay(1)
         data(request: request).subscribe(onNext: { data, response in
             guard let object = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = object as? [String: Any] else {
@@ -24,7 +24,7 @@ extension URLSession {
         return observer
     }
 
-    public func observables(request: URLRequest) -> Observable<[Any]> {
+    public func array(request: URLRequest) -> Observable<[Any]> {
         let observer: Observable<[Any]> = Replay(1)
         data(request: request).subscribe(onNext: { data, response in
             guard let object = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = object as? [Any] else {
