@@ -8,14 +8,14 @@ extension URLSession {
         case invalidResponse
     }
 
-    public func observable(request: URLRequest) -> Observable<[String: AnyObject]> {
-        let observer: Observable<[String: AnyObject]> = Replay(1)
+    public func observable(request: URLRequest) -> Observable<[String: Any]> {
+        let observer: Observable<[String: Any]> = Replay(1)
         data(request: request).subscribe(onNext: { data, response in
-            guard let object = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = object as? [String: AnyObject] else {
+            guard let object = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = object as? [String: Any] else {
                 observer.on(.error(ErrorType.invalidData))
                 return
             }
-            guard response.isSuccessful() else {
+            guard response.isSuccessful else {
                 observer.on(.error(ErrorType.invalidResponse))
                 return
             }
@@ -24,9 +24,25 @@ extension URLSession {
         return observer
     }
 
-    func data(request: URLRequest) -> Observable<(Data, URLResponse)> {
+    public func observables(request: URLRequest) -> Observable<[Any]> {
+        let observer: Observable<[Any]> = Replay(1)
+        data(request: request).subscribe(onNext: { data, response in
+            guard let object = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = object as? [Any] else {
+                observer.on(.error(ErrorType.invalidData))
+                return
+            }
+            guard response.isSuccessful else {
+                observer.on(.error(ErrorType.invalidResponse))
+                return
+            }
+            observer.on(.next(dictionary))
+        }, onError: { observer.on(.error($0)) })
+        return observer
+    }
+
+    public func data(request: URLRequest) -> Observable<(Data, URLResponse)> {
         let observer = Replay<(Data, URLResponse)>(1)
-        let task = dataTask(with: request, completionHandler: { data, aResponse, error in
+        let task = dataTask(with: request, completionHandler: { data, response, error in
             if let error = error {
                 observer.on(.error(error))
                 return
@@ -35,7 +51,7 @@ extension URLSession {
                 observer.on(.error(ErrorType.invalidData))
                 return
             }
-            guard let response = aResponse else {
+            guard let response = response else {
                 observer.on(.error(ErrorType.invalidResponse))
                 return
             }

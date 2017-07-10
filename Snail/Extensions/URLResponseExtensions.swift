@@ -3,7 +3,7 @@
 import Foundation
 
 extension URLResponse {
-    func isSuccessful() -> Bool {
+    var isSuccessful: Bool {
         guard let response = self as? HTTPURLResponse else {
             return false
         }

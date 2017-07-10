@@ -156,8 +156,8 @@
 				CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */,
 				2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */,
 				CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */,
-				24CF1FA71EF875A400F34234 /* URLSessionExtension.swift */,
 				249016A41F13CA4800F00404 /* URLResponseExtensions.swift */,
+				24CF1FA71EF875A400F34234 /* URLSessionExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
