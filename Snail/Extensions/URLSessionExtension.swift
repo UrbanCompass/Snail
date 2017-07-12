@@ -1,9 +1,9 @@
 //  Copyright © 2017 Compass. All rights reserved.
 
-import UIKit
+import Foundation
 
 extension URLSession {
-    enum ErrorType: Error {
+    public enum ErrorType: Error {
         case invalidData
         case invalidResponse
     }
