@@ -1,41 +1,33 @@
 //  Copyright © 2017 Compass. All rights reserved.
 
-import Foundation
+import UIKit
 
 extension URLSession {
-    public enum ErrorType: Error {
+    enum ErrorType: Error {
         case invalidData
         case invalidResponse
     }
 
-    public func dictionary(request: URLRequest) -> Observable<[String: Any]> {
-        let observer: Observable<[String: Any]> = Replay(1)
+    public func dictionary(request: URLRequest) -> Observable<([String: Any], URLResponse)> {
+        let observer = Replay<([String: Any], URLResponse)>(1)
         data(request: request).subscribe(onNext: { data, response in
             guard let object = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = object as? [String: Any] else {
                 observer.on(.error(ErrorType.invalidData))
                 return
             }
-            guard response.isSuccessful else {
-                observer.on(.error(ErrorType.invalidResponse))
-                return
-            }
-            observer.on(.next(dictionary))
+            observer.on(.next(dictionary, response))
         }, onError: { observer.on(.error($0)) })
         return observer
     }
 
-    public func array(request: URLRequest) -> Observable<[Any]> {
-        let observer: Observable<[Any]> = Replay(1)
+    public func array(request: URLRequest) -> Observable<([Any], URLResponse)> {
+        let observer = Replay<([Any], URLResponse)>(1)
         data(request: request).subscribe(onNext: { data, response in
             guard let object = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = object as? [Any] else {
                 observer.on(.error(ErrorType.invalidData))
                 return
             }
-            guard response.isSuccessful else {
-                observer.on(.error(ErrorType.invalidResponse))
-                return
-            }
-            observer.on(.next(dictionary))
+            observer.on(.next(dictionary, response))
         }, onError: { observer.on(.error($0)) })
         return observer
     }
