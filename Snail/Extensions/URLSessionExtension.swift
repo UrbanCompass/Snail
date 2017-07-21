@@ -3,7 +3,7 @@
 import UIKit
 
 extension URLSession {
-    enum ErrorType: Error {
+    public enum ErrorType: Error {
         case invalidData
         case invalidResponse
     }
