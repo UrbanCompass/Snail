@@ -52,4 +52,17 @@ extension URLSession {
         task.resume()
         return observer
     }
+
+    public func image(request: URLRequest) -> Observable<(UIImage, URLResponse)> {
+        let observer = Replay<(UIImage, URLResponse)>(1)
+        data(request: request).subscribe(queue: .main, onNext: { data, response in
+            guard let image = UIImage(data: data) else {
+                observer.on(.error(ErrorType.invalidData))
+                return
+            }
+            observer.on(.next(image, response))
+            observer.on(.done)
+        }, onError: { observer.on(.error($0)) })
+        return observer
+    }
 }
