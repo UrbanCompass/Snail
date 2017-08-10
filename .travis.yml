@@ -1,0 +1,6 @@
+language: swift
+osx_image: xcode8.3
+script:
+  - xcodebuild -scheme Snail -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest' build test
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
