@@ -19,7 +19,7 @@ extension UIBarButtonItem {
 
     @objc private func observableHandler(_ sender: UIBarButtonItem) {
         if let observable = objc_getAssociatedObject(self, &UIBarButtonItem.observableKey) as? Observable<Void> {
-            observable.on(.next())
+            observable.on(.next(()))
         }
     }
 }

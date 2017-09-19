@@ -15,7 +15,7 @@ extension URLSession {
                 observer.on(.error(ErrorType.invalidData))
                 return
             }
-            observer.on(.next(dictionary, response))
+            observer.on(.next((dictionary, response)))
         }, onError: { observer.on(.error($0)) })
         return observer
     }
@@ -27,7 +27,7 @@ extension URLSession {
                 observer.on(.error(ErrorType.invalidData))
                 return
             }
-            observer.on(.next(dictionary, response))
+            observer.on(.next((dictionary, response)))
         }, onError: { observer.on(.error($0)) })
         return observer
     }
@@ -47,7 +47,7 @@ extension URLSession {
                 observer.on(.error(ErrorType.invalidResponse))
                 return
             }
-            observer.on(.next(data, response))
+            observer.on(.next((data, response)))
         })
         task.resume()
         return observer
@@ -60,7 +60,7 @@ extension URLSession {
                 observer.on(.error(ErrorType.invalidData))
                 return
             }
-            observer.on(.next(image, response))
+            observer.on(.next((image, response)))
             observer.on(.done)
         }, onError: { observer.on(.error($0)) })
         return observer
