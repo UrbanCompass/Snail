@@ -3,9 +3,16 @@
 import UIKit
 
 extension URLSession {
-    public enum ErrorType: Error {
+    public enum ErrorType: LocalizedError {
         case invalidData
         case invalidResponse
+
+        public var errorDescription: String? {
+            switch self {
+            case .invalidData: return NSLocalizedString("Invalid Data", comment: "")
+            case .invalidResponse: return NSLocalizedString("Invalid Response", comment: "")
+            }
+        }
     }
 
     public func dictionary(request: URLRequest) -> Observable<([String: Any], URLResponse)> {
