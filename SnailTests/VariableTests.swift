@@ -7,7 +7,7 @@ import XCTest
 class VariableTests: XCTestCase {
     func testVariableChanges() {
         var events: [String?] = []
-        let subject = Variable<String>(nil)
+        let subject = Variable<String?>(nil)
         subject.asObservable().subscribe(
             onNext: { string in events.append(string) }
         )

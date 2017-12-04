@@ -4,10 +4,10 @@ import Foundation
 import XCTest
 @testable import Snail
 
-class UniqueVariableTests: XCTestCase {
+class UniqueTests: XCTestCase {
     func testVariableChanges() {
         var events: [String?] = []
-        let subject = UniqueVariable<String>(nil)
+        let subject = Unique<String>(nil)
         subject.asObservable().subscribe(
             onNext: { string in events.append(string) }
         )
@@ -23,7 +23,7 @@ class UniqueVariableTests: XCTestCase {
     }
 
     func testVariableNotifiesOnSubscribe() {
-        let subject = UniqueVariable("initial")
+        let subject = Unique("initial")
         subject.value = "new"
         var result: String?
 
@@ -35,7 +35,7 @@ class UniqueVariableTests: XCTestCase {
     }
 
     func testVariableNotifiesInitialOnSubscribe() {
-        let subject = UniqueVariable<String>(nil)
+        let subject = Unique<String>(nil)
         var result: String?
 
         subject.asObservable().subscribe(onNext: { string in
