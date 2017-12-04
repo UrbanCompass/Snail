@@ -1,26 +1,29 @@
-//  Copyright © 2016 Compass. All rights reserved.
+//  Copyright © 2017 Compass. All rights reserved.
 
 import Foundation
 import XCTest
 @testable import Snail
 
-class VariableTests: XCTestCase {
+class UniqueVariableTests: XCTestCase {
     func testVariableChanges() {
         var events: [String?] = []
-        let subject = Variable<String>(nil)
+        let subject = UniqueVariable<String>(nil)
         subject.asObservable().subscribe(
             onNext: { string in events.append(string) }
         )
+        subject.value = nil
         subject.value = "1"
         subject.value = "2"
-        XCTAssert(events[0] == nil)
-        XCTAssert(events[1] == "1")
-        XCTAssert(events[2] == "2")
+        subject.value = "2"
+        subject.value = "2"
+        XCTAssert(events[0] == "1")
+        XCTAssert(events[1] == "2")
         XCTAssert(subject.value == "2")
+        XCTAssert(events.count == 2)
     }
 
     func testVariableNotifiesOnSubscribe() {
-        let subject = Variable("initial")
+        let subject = UniqueVariable("initial")
         subject.value = "new"
         var result: String?
 
@@ -32,13 +35,13 @@ class VariableTests: XCTestCase {
     }
 
     func testVariableNotifiesInitialOnSubscribe() {
-        let subject = Variable("initial")
+        let subject = UniqueVariable<String>(nil)
         var result: String?
 
         subject.asObservable().subscribe(onNext: { string in
             result = string
         })
 
-        XCTAssertEqual("initial", result)
+        XCTAssertEqual(nil, result)
     }
 }

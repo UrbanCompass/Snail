@@ -3,31 +3,31 @@
 import Foundation
 
 public class Variable<T> {
-    private let subject: Replay<T>
-    private var lock = NSRecursiveLock()
-    private var _value: T
+    internal let subject: Replay<T?>
+    internal var lock = NSRecursiveLock()
+    internal var currentValue: T?
 
-    public var value: T {
+    public var value: T? {
         get {
             lock.lock(); defer { lock.unlock() }
-            return _value
+            return currentValue
         }
-        set(newValue) {
+        set {
             lock.lock()
-            _value = newValue
+            currentValue = newValue
             lock.unlock()
 
             subject.on(.next(newValue))
         }
     }
 
-    public init(_ value: T) {
-        _value = value
-        subject = Replay<T>(1)
+    public init(_ value: T?) {
+        currentValue = value
+        subject = Replay<T?>(1)
         self.value = value
     }
 
-    public func asObservable() -> Observable<T> {
+    public func asObservable() -> Observable<T?> {
         return subject
     }
 

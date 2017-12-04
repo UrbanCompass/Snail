@@ -29,6 +29,8 @@
 		CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */; };
 		CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */; };
 		CBE54E6F1DFB797F0008DD64 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */; };
+		DEF9B98B1FD5D8AA00F8514E /* UniqueVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98A1FD5D8AA00F8514E /* UniqueVariable.swift */; };
+		DEF9B98D1FD5D8FD00F8514E /* UniqueVariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98C1FD5D8FD00F8514E /* UniqueVariableTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableTests.swift; sourceTree = "<group>"; };
 		CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControlExtensions.swift; sourceTree = "<group>"; };
 		CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		DEF9B98A1FD5D8AA00F8514E /* UniqueVariable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueVariable.swift; sourceTree = "<group>"; };
+		DEF9B98C1FD5D8FD00F8514E /* UniqueVariableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueVariableTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +130,7 @@
 				CBE54E5E1DFB39510008DD64 /* ObservableType.swift */,
 				24FABD591DFF0B48005CF84E /* Replay.swift */,
 				CBE54A791E5A16AC00971F74 /* Subscriber.swift */,
+				DEF9B98A1FD5D8AA00F8514E /* UniqueVariable.swift */,
 				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
 				CBE54E5C1DFB39510008DD64 /* Extensions */,
 			);
@@ -140,6 +145,7 @@
 				CB2936781DFEF77500792E6B /* JustTests.swift */,
 				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
 				24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */,
+				DEF9B98C1FD5D8FD00F8514E /* UniqueVariableTests.swift */,
 				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
 				2421BA751E09A6D500EA9064 /* Extensions */,
 			);
@@ -291,6 +297,7 @@
 			files = (
 				CBE54E621DFB39510008DD64 /* ObservableType.swift in Sources */,
 				CBE54A7A1E5A16AC00971F74 /* Subscriber.swift in Sources */,
+				DEF9B98B1FD5D8AA00F8514E /* UniqueVariable.swift in Sources */,
 				2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */,
 				24FABD561DFEF670005CF84E /* Fail.swift in Sources */,
 				CBE54E611DFB39510008DD64 /* Observable.swift in Sources */,
@@ -313,6 +320,7 @@
 				CB2936791DFEF77500792E6B /* JustTests.swift in Sources */,
 				CBE54E651DFB395A0008DD64 /* ObservableTests.swift in Sources */,
 				24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */,
+				DEF9B98D1FD5D8FD00F8514E /* UniqueVariableTests.swift in Sources */,
 				CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */,
 				2421BA771E09A78F00EA9064 /* NotificationCenterExtensions.swift in Sources */,
 				24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */,
