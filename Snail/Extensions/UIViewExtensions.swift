@@ -6,10 +6,10 @@ import UIKit
 public extension UIView {
     public func observe(event: Notification.Name) -> Observable<Notification> {
         var key = event
-        return associatedNotification(name: key, key: &key)
+        return associatedNotification(name: event, key: &key)
     }
 
-    private func associatedNotification(name: NSNotification.Name, key: UnsafeRawPointer) -> Observable<Notification> {
+    private func associatedNotification(name: Notification.Name, key: UnsafeRawPointer) -> Observable<Notification> {
         if let observable = objc_getAssociatedObject(self, key) as? Observable<Notification> {
             return observable
         }
