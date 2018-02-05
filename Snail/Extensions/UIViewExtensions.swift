@@ -4,15 +4,19 @@
 import UIKit
 
 public extension UIView {
-    private static var keyboardWillShowObservableKey = "UIKeyboardWillShowObservableKey"
-    private static var keyboardWillHideObservableKey = "UIKeyboardWillHideObservableKey"
-
-    public var keyboardWillShow: Observable<Notification> {
-        return associatedNotification(name: Notification.Name.UIKeyboardWillShow, key: &UIView.keyboardWillShowObservableKey)
+    public func observe(event: Notification.Name) -> Observable<Notification> {
+        var key = event
+        return associatedNotification(name: event, key: &key)
     }
 
-    public var keyboardWillHide: Observable<Notification> {
-        return associatedNotification(name: Notification.Name.UIKeyboardWillHide, key: &UIView.keyboardWillHideObservableKey)
+    private func associatedNotification(name: Notification.Name, key: UnsafeRawPointer) -> Observable<Notification> {
+        if let observable = objc_getAssociatedObject(self, key) as? Observable<Notification> {
+            return observable
+        }
+        let observable = Observable<Notification>()
+        NotificationCenter.default.observeEvent(name).subscribe(onNext: { observable.on(.next($0)) })
+        objc_setAssociatedObject(self, key, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return observable
     }
 
     public var tap: Observable<Void> {
@@ -22,16 +26,6 @@ public extension UIView {
         let tap = UITapGestureRecognizer()
         addGestureRecognizer(tap)
         return tap.asObservable()
-    }
-
-    private func associatedNotification(name: NSNotification.Name, key: UnsafeRawPointer) -> Observable<Notification> {
-        if let observable = objc_getAssociatedObject(self, key) as? Observable<Notification> {
-            return observable
-        }
-        let observable = Observable<Notification>()
-        NotificationCenter.default.observeEvent(name).subscribe(onNext: { observable.on(.next($0)) })
-        objc_setAssociatedObject(self, key, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        return observable
     }
 }
 
