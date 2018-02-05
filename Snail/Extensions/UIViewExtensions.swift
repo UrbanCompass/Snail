@@ -4,24 +4,9 @@
 import UIKit
 
 public extension UIView {
-    private static var keyboardWillShowObservableKey = "UIKeyboardWillShowObservableKey"
-    private static var keyboardWillHideObservableKey = "UIKeyboardWillHideObservableKey"
-
-    public var keyboardWillShow: Observable<Notification> {
-        return associatedNotification(name: Notification.Name.UIKeyboardWillShow, key: &UIView.keyboardWillShowObservableKey)
-    }
-
-    public var keyboardWillHide: Observable<Notification> {
-        return associatedNotification(name: Notification.Name.UIKeyboardWillHide, key: &UIView.keyboardWillHideObservableKey)
-    }
-
-    public var tap: Observable<Void> {
-        if let control = self as? UIControl {
-            return control.controlEvent(.touchUpInside)
-        }
-        let tap = UITapGestureRecognizer()
-        addGestureRecognizer(tap)
-        return tap.asObservable()
+    public func observe(event: Notification.Name) -> Observable<Notification> {
+        var key = event
+        return associatedNotification(name: key, key: &key)
     }
 
     private func associatedNotification(name: NSNotification.Name, key: UnsafeRawPointer) -> Observable<Notification> {
@@ -32,6 +17,15 @@ public extension UIView {
         NotificationCenter.default.observeEvent(name).subscribe(onNext: { observable.on(.next($0)) })
         objc_setAssociatedObject(self, key, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return observable
+    }
+
+    public var tap: Observable<Void> {
+        if let control = self as? UIControl {
+            return control.controlEvent(.touchUpInside)
+        }
+        let tap = UITapGestureRecognizer()
+        addGestureRecognizer(tap)
+        return tap.asObservable()
     }
 }
 
