@@ -5,18 +5,7 @@ import UIKit
 
 public extension UIView {
     public func observe(event: Notification.Name) -> Observable<Notification> {
-        var key = event
-        return associatedNotification(name: event, key: &key)
-    }
-
-    private func associatedNotification(name: Notification.Name, key: UnsafeRawPointer) -> Observable<Notification> {
-        if let observable = objc_getAssociatedObject(self, key) as? Observable<Notification> {
-            return observable
-        }
-        let observable = Observable<Notification>()
-        NotificationCenter.default.observeEvent(name).subscribe(onNext: { observable.on(.next($0)) })
-        objc_setAssociatedObject(self, key, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        return observable
+        return NotificationCenter.default.observeEvent(event)
     }
 
     public var tap: Observable<Void> {
