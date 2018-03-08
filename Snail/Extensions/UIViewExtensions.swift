@@ -16,6 +16,25 @@ public extension UIView {
         addGestureRecognizer(tap)
         return tap.asObservable()
     }
+
+    public var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {
+        let observable = Observable<(height: CGFloat, duration: Double)>()
+        observe(event: .UIKeyboardWillShow).subscribe(onNext: { notification in
+            guard let offset = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue,
+                let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double else {
+                    return
+            }
+            observable.on(.next((offset.cgRectValue.size.height, duration)))
+        })
+
+        observe(event: .UIKeyboardWillHide).subscribe(onNext: { notification in
+            guard let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double else {
+                return
+            }
+            observable.on(.next((0, duration)))
+        })
+        return observable
+    }
 }
 
 #endif

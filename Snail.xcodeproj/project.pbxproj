@@ -97,7 +97,7 @@
 			children = (
 				2421BA761E09A78F00EA9064 /* NotificationCenterExtensions.swift */,
 			);
-			name = Extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		CBE54E371DFB36DF0008DD64 = {
