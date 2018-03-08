@@ -10,7 +10,6 @@
 		241F15581E03124600DD70A2 /* UIBarButtonItemExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241F15571E03124600DD70A2 /* UIBarButtonItemExtensions.swift */; };
 		2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */; };
 		2421BA741E0992D400EA9064 /* NotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA731E0992D400EA9064 /* NotificationCenterExtensions.swift */; };
-		2421BA771E09A78F00EA9064 /* NotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA761E09A78F00EA9064 /* NotificationCenterExtensions.swift */; };
 		24CF1FA81EF875A400F34234 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF1FA71EF875A400F34234 /* URLSessionExtension.swift */; };
 		24FABD561DFEF670005CF84E /* Fail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD551DFEF670005CF84E /* Fail.swift */; };
 		24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD571DFEF7EC005CF84E /* FailTests.swift */; };
@@ -29,6 +28,7 @@
 		CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */; };
 		CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */; };
 		CBE54E6F1DFB797F0008DD64 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */; };
+		DEEDA8EB2051BCB4000FE578 /* NotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */; };
 		DEF9B98D1FD5D8FD00F8514E /* UniqueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */; };
 		DEF9B98F1FD5FE5800F8514E /* Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98E1FD5FE5800F8514E /* Unique.swift */; };
 /* End PBXBuildFile section */
@@ -47,7 +47,6 @@
 		241F15571E03124600DD70A2 /* UIBarButtonItemExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemExtensions.swift; sourceTree = "<group>"; };
 		2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizerExtensions.swift; sourceTree = "<group>"; };
 		2421BA731E0992D400EA9064 /* NotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenterExtensions.swift; sourceTree = "<group>"; };
-		2421BA761E09A78F00EA9064 /* NotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationCenterExtensions.swift; path = Extensions/NotificationCenterExtensions.swift; sourceTree = "<group>"; };
 		24CF1FA71EF875A400F34234 /* URLSessionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
 		24FABD551DFEF670005CF84E /* Fail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fail.swift; sourceTree = "<group>"; };
 		24FABD571DFEF7EC005CF84E /* FailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailTests.swift; sourceTree = "<group>"; };
@@ -69,6 +68,7 @@
 		CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableTests.swift; sourceTree = "<group>"; };
 		CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControlExtensions.swift; sourceTree = "<group>"; };
 		CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenterExtensions.swift; sourceTree = "<group>"; };
 		DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueTests.swift; sourceTree = "<group>"; };
 		DEF9B98E1FD5FE5800F8514E /* Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unique.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,9 +95,9 @@
 		2421BA751E09A6D500EA9064 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				2421BA761E09A78F00EA9064 /* NotificationCenterExtensions.swift */,
+				DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */,
 			);
-			name = Extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		CBE54E371DFB36DF0008DD64 = {
@@ -322,8 +322,8 @@
 				24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */,
 				DEF9B98D1FD5D8FD00F8514E /* UniqueTests.swift in Sources */,
 				CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */,
-				2421BA771E09A78F00EA9064 /* NotificationCenterExtensions.swift in Sources */,
 				24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */,
+				DEEDA8EB2051BCB4000FE578 /* NotificationCenterExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
