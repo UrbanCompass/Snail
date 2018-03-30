@@ -7,4 +7,4 @@ jobs:
     steps:
     - checkout
     - run: brew bundle
-    - run: set -o pipefail && xcodebuild clean build test -project 'Snail.xcodeproj' -scheme 'Snail' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=latest'  CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= PROVISIONING_PROFILE= | xcpretty --color
+    - run: set -o pipefail && xcodebuild clean build test -project 'Snail.xcodeproj' -scheme 'Snail' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=Generic iOS Simulator Device,OS=latest'  CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= PROVISIONING_PROFILE= | xcpretty --color
