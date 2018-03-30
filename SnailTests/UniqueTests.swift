@@ -7,7 +7,7 @@ import XCTest
 class UniqueTests: XCTestCase {
     func testVariableChanges() {
         var events: [String?] = []
-        let subject = Unique<String>(nil)
+        let subject = Unique<String?>(nil)
         subject.asObservable().subscribe(
             onNext: { string in events.append(string) }
         )
@@ -35,7 +35,7 @@ class UniqueTests: XCTestCase {
     }
 
     func testVariableNotifiesInitialOnSubscribe() {
-        let subject = Unique<String>(nil)
+        let subject = Unique<String?>(nil)
         var result: String?
 
         subject.asObservable().subscribe(onNext: { string in
