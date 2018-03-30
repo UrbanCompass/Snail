@@ -44,4 +44,18 @@ class UniqueTests: XCTestCase {
 
         XCTAssertEqual(nil, result)
     }
+
+    func testVariableHandlesEquatableArrays() {
+        var events: [[String]] = []
+        let subject = Unique<[String]>(["1", "2"])
+        subject.asObservable().subscribe(
+            onNext: { array in events.append(array) }
+        )
+        subject.value = ["1", "2"]
+        subject.value = ["2", "1"]
+        subject.value = ["2", "1"]
+        subject.value = ["1", "2"]
+        XCTAssert(events[0] == ["2", "1"])
+        XCTAssert(events[1] == ["1", "2"])
+    }
 }
