@@ -1,9 +1,10 @@
-machine:
-  xcode:
-    version: 9.1
-dependencies:
-  pre:
-    - brew install swiftlint
-test:
-  post:
-    - bash <(curl -s https://codecov.io/bash)
+version: 2
+jobs:
+  build:
+    working_directory: ~/UrbanCompass/Snail
+    macos:
+      xcode: '9.3.0'
+    steps:
+    - checkout
+    - run: brew bundle
+    - run: set -o pipefail && xcodebuild clean build test -project 'Snail.xcodeproj' -scheme 'Snail' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=latest'  CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= PROVISIONING_PROFILE= | xcpretty --color

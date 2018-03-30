@@ -1,11 +1,11 @@
 //  Copyright © 2017 Compass. All rights reserved.
 
 public class Unique<T: Equatable> {
-    private let subject: Replay<T?>
+    private let subject: Replay<T>
     private var lock = NSRecursiveLock()
-    private var currentValue: T?
+    private var currentValue: T
 
-    public var value: T? {
+    public var value: T {
         get {
             lock.lock(); defer { lock.unlock() }
             return currentValue
@@ -22,13 +22,13 @@ public class Unique<T: Equatable> {
         }
     }
 
-    public init(_ value: T?) {
+    public init(_ value: T) {
         currentValue = value
-        subject = Replay<T?>(1)
+        subject = Replay<T>(1)
         self.value = value
     }
 
-    public func asObservable() -> Observable<T?> {
+    public func asObservable() -> Observable<T> {
         return subject
     }
 
