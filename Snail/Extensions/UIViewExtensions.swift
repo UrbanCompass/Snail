@@ -14,7 +14,9 @@ public extension UIView {
         }
         let tap = UITapGestureRecognizer()
         addGestureRecognizer(tap)
-        return tap.asObservable()
+        let result = Observable<Void>()
+        tap.asObservable().subscribe(onNext: { _ in result.on(.next(())) })
+        return result
     }
 
     public var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {
