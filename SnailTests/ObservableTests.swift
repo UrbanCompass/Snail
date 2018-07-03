@@ -121,4 +121,24 @@ class ObservableTests: XCTestCase {
         XCTAssert(strings?[0] == "1")
         XCTAssert(strings?.count == 1)
     }
+
+    func testBlockSuccess() {
+        let result = Just(1).block()
+        XCTAssertEqual(result.result, 1)
+        XCTAssertNil(result.error)
+    }
+
+    func testBlockFail() {
+        let result = Fail<Void>(TestError.test).block()
+        XCTAssertNil(result.result)
+        XCTAssertNotNil(result.error)
+    }
+
+    func testBlockDone() {
+        let observable = Observable<String>()
+        observable.on(.done)
+        let result = observable.block()
+        XCTAssertNil(result.result)
+        XCTAssertNil(result.error)
+    }
 }
