@@ -5,7 +5,7 @@ import Dispatch
 
 public class Replay<T>: Observable<T> {
     private let threshold: Int
-    private var events: [Event<E>] = []
+    private var events: [Event<T>] = []
 
     public init(_ threshold: Int) {
         self.threshold = threshold
@@ -17,7 +17,7 @@ public class Replay<T>: Observable<T> {
 
     }
 
-    public override func on(_ event: Event<E>) {
+    public override func on(_ event: Event<T>) {
         switch event {
         case .next:
             events.append(event)
@@ -27,7 +27,7 @@ public class Replay<T>: Observable<T> {
         super.on(event)
     }
 
-    private func replay(queue: DispatchQueue?, handler: @escaping (Event<E>) -> Void) {
+    private func replay(queue: DispatchQueue?, handler: @escaping (Event<T>) -> Void) {
         events.forEach { event in notify(subscriber: Subscriber(queue: queue, handler: handler), event: event) }
     }
 }
