@@ -4,14 +4,13 @@ import Foundation
 import Dispatch
 
 public class Observable<T> : ObservableType {
-    public typealias E = T
     private var isStopped: Int32 = 0
-    private var stoppedEvent: Event<E>?
-    var subscribers: [Subscriber<E>] = []
+    private var stoppedEvent: Event<T>?
+    var subscribers: [Subscriber<T>] = []
 
     public init() {}
 
-    func createHandler(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> (Event<E>) -> Void {
+    func createHandler(onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> (Event<T>) -> Void {
         return { event in
             switch event {
             case .next(let t): onNext?(t)
@@ -29,7 +28,7 @@ public class Observable<T> : ObservableType {
         subscribers.append(Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)))
     }
 
-    public func on(_ event: Event<E>) {
+    public func on(_ event: Event<T>) {
         switch event {
         case .next:
             guard isStopped == 0 else {
@@ -69,7 +68,7 @@ public class Observable<T> : ObservableType {
         return (result, error)
     }
 
-    func notify(subscriber: Subscriber<E>, event: Event<E>) {
+    func notify(subscriber: Subscriber<T>, event: Event<T>) {
         guard let queue = subscriber.queue else {
             subscriber.handler(event)
             return
