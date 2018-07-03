@@ -48,6 +48,27 @@ public class Observable<T> : ObservableType {
         subscribers.removeAll()
     }
 
+    public func block() -> (result: T?, error: Error?) {
+        var result: T?
+        var error: Error?
+
+        let semaphore = DispatchSemaphore(value: 0)
+
+        subscribe(onNext: { value in
+            result = value
+            semaphore.signal()
+        }, onError: { err in
+            error = err
+            semaphore.signal()
+        }, onDone: {
+            semaphore.signal()
+        })
+
+        _ = semaphore.wait(timeout: .distantFuture)
+
+        return (result, error)
+    }
+
     func notify(subscriber: Subscriber<E>, event: Event<E>) {
         guard let queue = subscriber.queue else {
             subscriber.handler(event)
