@@ -133,4 +133,12 @@ class ObservableTests: XCTestCase {
         XCTAssertNil(result.result)
         XCTAssertNotNil(result.error)
     }
+
+    func testBlockDone() {
+        let observable = Observable<String>()
+        observable.on(.done)
+        let result = observable.block()
+        XCTAssertNil(result.result)
+        XCTAssertNil(result.error)
+    }
 }
