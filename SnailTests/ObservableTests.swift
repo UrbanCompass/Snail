@@ -114,6 +114,26 @@ class ObservableTests: XCTestCase {
         }
     }
 
+    func testOnMainThreadNotifiedOnMain() {
+        var isMainQueue = false
+        let exp = expectation(description: "queue")
+
+        DispatchQueue.global().async {
+            self.subject?.on(.main).subscribe(onNext: { _ in
+                exp.fulfill()
+                isMainQueue = Thread.isMainThread
+            })
+            DispatchQueue.main.async {
+                self.subject?.on(.next("1"))
+            }
+        }
+
+        waitForExpectations(timeout: 2) { error in
+            XCTAssertNil(error)
+            XCTAssert(isMainQueue)
+        }
+    }
+
     func testRemovingSubscribers() {
         subject?.on(.next("1"))
         subject?.removeSubscribers()
