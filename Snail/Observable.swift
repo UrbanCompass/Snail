@@ -43,6 +43,15 @@ public class Observable<T> : ObservableType {
         }
     }
 
+    public func on(_ queue: DispatchQueue) -> Observable<T> {
+        let observable = Observable<T>()
+        subscribe(queue: queue,
+                  onNext: { observable.on(.next($0)) },
+                  onError: { observable.on(.error($0)) },
+                  onDone: { observable.on(.done) })
+        return observable
+    }
+
     public func removeSubscribers() {
         subscribers.removeAll()
     }
