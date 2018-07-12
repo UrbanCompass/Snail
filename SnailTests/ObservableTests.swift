@@ -103,9 +103,7 @@ class ObservableTests: XCTestCase {
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
             })
-            DispatchQueue.main.async {
-                self.subject?.on(.next("1"))
-            }
+            self.subject?.on(.next("1"))
         }
 
         waitForExpectations(timeout: 2) { error in
