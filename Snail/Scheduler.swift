@@ -12,7 +12,6 @@ class Scheduler {
     init(_ delay: TimeInterval, repeats: Bool = true) {
         self.delay = delay
         self.repeats = repeats
-        reset()
     }
 
     @objc private func onNext() {

@@ -11,4 +11,5 @@ public protocol ObservableType {
     func removeSubscribers()
     func block() -> (result: Self.T?, error: Error?)
     func throttle(_ delay: TimeInterval) -> Observable<Self.T>
+    func debounce(_ delay: TimeInterval) -> Observable<Self.T>
 }
