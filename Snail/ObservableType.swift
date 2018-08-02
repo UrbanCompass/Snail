@@ -10,4 +10,5 @@ public protocol ObservableType {
     func on(_ queue: DispatchQueue) -> Observable<Self.T>
     func removeSubscribers()
     func block() -> (result: Self.T?, error: Error?)
+    func throttle(_ delay: TimeInterval) -> Observable<Self.T>
 }

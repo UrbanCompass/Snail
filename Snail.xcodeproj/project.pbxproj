@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2408FA902112A15900B9F59E /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2408FA8F2112A15900B9F59E /* Scheduler.swift */; };
 		241F15581E03124600DD70A2 /* UIBarButtonItemExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241F15571E03124600DD70A2 /* UIBarButtonItemExtensions.swift */; };
 		2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */; };
 		2421BA741E0992D400EA9064 /* NotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2421BA731E0992D400EA9064 /* NotificationCenterExtensions.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2408FA8F2112A15900B9F59E /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		241F15571E03124600DD70A2 /* UIBarButtonItemExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemExtensions.swift; sourceTree = "<group>"; };
 		2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizerExtensions.swift; sourceTree = "<group>"; };
 		2421BA731E0992D400EA9064 /* NotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenterExtensions.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				CBE54E5D1DFB39510008DD64 /* Observable.swift */,
 				CBE54E5E1DFB39510008DD64 /* ObservableType.swift */,
 				24FABD591DFF0B48005CF84E /* Replay.swift */,
+				2408FA8F2112A15900B9F59E /* Scheduler.swift */,
 				CBE54A791E5A16AC00971F74 /* Subscriber.swift */,
 				DEF9B98E1FD5FE5800F8514E /* Unique.swift */,
 				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
@@ -304,6 +307,7 @@
 				CB2936771DFE151B00792E6B /* Just.swift in Sources */,
 				241F15581E03124600DD70A2 /* UIBarButtonItemExtensions.swift in Sources */,
 				24CF1FA81EF875A400F34234 /* URLSessionExtension.swift in Sources */,
+				2408FA902112A15900B9F59E /* Scheduler.swift in Sources */,
 				CBE54E601DFB39510008DD64 /* Event.swift in Sources */,
 				CBE54E631DFB39510008DD64 /* Variable.swift in Sources */,
 				CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */,

@@ -159,4 +159,22 @@ class ObservableTests: XCTestCase {
         XCTAssertNil(result.result)
         XCTAssertNil(result.error)
     }
+
+    func testThrottle() {
+        let observable = Observable<String>()
+        var received: [String] = []
+
+        let exp = expectation(description: "throttle")
+
+        observable.throttle(1).subscribe(onNext: {
+            received.append($0)
+            exp.fulfill()
+        })
+        observable.on(.next("1"))
+        observable.on(.next("2"))
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 1)
+            XCTAssert(received.first == "2")
+        }
+    }
 }
