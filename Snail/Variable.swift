@@ -3,9 +3,9 @@
 import Foundation
 
 public class Variable<T> {
-    private let subject: Replay<T>
-    private var lock = NSRecursiveLock()
-    private var currentValue: T
+    let subject: Replay<T>
+    var lock = NSRecursiveLock()
+    var currentValue: T
 
     public var value: T {
         get {
