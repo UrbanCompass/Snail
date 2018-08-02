@@ -77,6 +77,44 @@ public class Observable<T> : ObservableType {
         return (result, error)
     }
 
+    public func throttle(_ delay: TimeInterval) -> Observable<T> {
+        let observable = Observable<T>()
+        let scheduler = Scheduler(delay)
+        scheduler.reset()
+
+        var next: T?
+        scheduler.event.subscribe(onNext: {
+            guard let event = next else {
+                return
+            }
+            observable.on(.next(event))
+            next = nil
+        })
+
+        subscribe(onNext: { next = $0 }, onError: { observable.on(.error($0)) }, onDone: { observable.on(.done) })
+        return observable
+    }
+
+    public func debounce(_ delay: TimeInterval) -> Observable<T> {
+        let observable = Observable<T>()
+        let scheduler = Scheduler(delay)
+
+        var next: T?
+        scheduler.event.subscribe(onNext: {
+            guard let event = next else {
+                return
+            }
+            observable.on(.next(event))
+            next = nil
+        })
+
+        subscribe(onNext: {
+            next = $0
+            scheduler.reset()
+        }, onError: { observable.on(.error($0)) }, onDone: { observable.on(.done) })
+        return observable
+    }
+
     func notify(subscriber: Subscriber<T>, event: Event<T>) {
         guard let queue = subscriber.queue else {
             subscriber.handler(event)

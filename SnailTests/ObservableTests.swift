@@ -159,4 +159,83 @@ class ObservableTests: XCTestCase {
         XCTAssertNil(result.result)
         XCTAssertNil(result.error)
     }
+
+    func testThrottle() {
+        let observable = Observable<String>()
+        var received: [String] = []
+
+        let exp = expectation(description: "throttle")
+        let delay = 0.01
+
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + delay) {
+            exp.fulfill()
+        }
+
+        observable.throttle(delay).subscribe(onNext: {
+            received.append($0)
+        })
+        observable.on(.next("1"))
+        observable.on(.next("2"))
+        waitForExpectations(timeout: delay) { _ in
+            XCTAssert(received.count == 1)
+            XCTAssert(received.first == "2")
+        }
+    }
+
+    func testThrottleDelays() {
+        let observable = Observable<String>()
+        var received: [String] = []
+
+        let exp = expectation(description: "debounce")
+        let delay = 0.01
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) {
+            observable.on(.next("2"))
+            observable.on(.next("3"))
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) {
+                exp.fulfill()
+            }
+        }
+
+        observable.throttle(delay).subscribe(onNext: {
+            received.append($0)
+        })
+
+        observable.on(.next("1"))
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 2)
+            XCTAssert(received.first == "1")
+            XCTAssert(received.last == "3")
+        }
+    }
+
+    func testDebounce() {
+        let observable = Observable<String>()
+        var received: [String] = []
+
+        let exp = expectation(description: "debounce")
+        let delay = 0.02
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay/2) {
+            observable.on(.next("2"))
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay/2) {
+                observable.on(.next("3"))
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) {
+                    exp.fulfill()
+                }
+            }
+        }
+
+        observable.debounce(delay).subscribe(onNext: {
+            received.append($0)
+        })
+
+        observable.on(.next("1"))
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 1)
+            XCTAssert(received.first == "3")
+        }
+    }
 }
