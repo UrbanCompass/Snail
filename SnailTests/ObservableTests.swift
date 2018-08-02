@@ -165,7 +165,7 @@ class ObservableTests: XCTestCase {
         var received: [String] = []
 
         let exp = expectation(description: "throttle")
-        let delay = 0.1
+        let delay = 0.01
 
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + delay) {
             exp.fulfill()
@@ -187,7 +187,7 @@ class ObservableTests: XCTestCase {
         var received: [String] = []
 
         let exp = expectation(description: "debounce")
-        let delay = 0.1
+        let delay = 0.01
 
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) {
             observable.on(.next("2"))
@@ -215,18 +215,19 @@ class ObservableTests: XCTestCase {
         var received: [String] = []
 
         let exp = expectation(description: "debounce")
+        let delay = 0.02
 
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay/2) {
             observable.on(.next("2"))
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay/2) {
                 observable.on(.next("3"))
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) {
                     exp.fulfill()
                 }
             }
         }
 
-        observable.debounce(0.2).subscribe(onNext: {
+        observable.debounce(delay).subscribe(onNext: {
             received.append($0)
         })
 
