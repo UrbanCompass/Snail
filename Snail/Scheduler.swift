@@ -6,7 +6,7 @@ public class Scheduler {
     let delay: TimeInterval
     let repeats: Bool
 
-    let event = Observable<Void>()
+    public let event = Observable<Void>()
     private var timer: Timer?
 
     public init(_ delay: TimeInterval, repeats: Bool = true) {
