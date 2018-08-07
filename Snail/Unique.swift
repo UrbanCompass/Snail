@@ -17,4 +17,9 @@ public class Unique<T: Equatable>: Variable<T> {
             subject.on(.next(newValue))
         }
     }
+
+    public override init(_ value: T) {
+        super.init(value)
+        subject.on(.next(value))
+    }
 }
