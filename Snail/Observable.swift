@@ -80,7 +80,7 @@ public class Observable<T> : ObservableType {
     public func throttle(_ delay: TimeInterval) -> Observable<T> {
         let observable = Observable<T>()
         let scheduler = Scheduler(delay)
-        scheduler.reset()
+        scheduler.start()
 
         var next: T?
         scheduler.event.subscribe(onNext: {
@@ -110,7 +110,7 @@ public class Observable<T> : ObservableType {
 
         subscribe(onNext: {
             next = $0
-            scheduler.reset()
+            scheduler.start()
         }, onError: { observable.on(.error($0)) }, onDone: { observable.on(.done) })
         return observable
     }

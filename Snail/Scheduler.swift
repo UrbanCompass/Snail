@@ -2,24 +2,28 @@
 
 import Foundation
 
-class Scheduler {
+public class Scheduler {
     let delay: TimeInterval
     let repeats: Bool
 
     let event = Observable<Void>()
     private var timer: Timer?
 
-    init(_ delay: TimeInterval, repeats: Bool = true) {
+    public init(_ delay: TimeInterval, repeats: Bool = true) {
         self.delay = delay
         self.repeats = repeats
     }
 
-    @objc private func onNext() {
+    @objc public func onNext() {
         event.on(.next(()))
     }
 
-    func reset() {
+    public func start() {
+        stop()
+        timer = Timer.scheduledTimer(timeInterval: delay, target: self, selector: #selector(onNext), userInfo: nil, repeats: repeats)
+    }
+
+    public func stop() {
         timer?.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: delay, target: self, selector: #selector(onNext), userInfo: nil, repeats: true)
     }
 }
