@@ -87,6 +87,16 @@ int.asObservable().subscribe(
 int.value = 42
 ```
 
+## Transforming Observable Variable Types
+
+
+```swift
+let variable = Variable<String>("Something")
+variable.map { $0.count }.asObservable().subscribe(
+    onNext: { (charactersCount: Int -> Void) in ... } // do something with Integer 'charactersCount' on value changes
+)
+```
+
 ## Miscellaneous Observables
 
 ```swift
