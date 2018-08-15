@@ -41,4 +41,27 @@ class VariableTests: XCTestCase {
 
         XCTAssertEqual("initial", result)
     }
+
+    func testMappedVariableNotifiesOnSubscribe() {
+        let subject = Variable("initial")
+        subject.value = "new"
+        var subjectCharactersCount: Int?
+
+        subject.map { $0.count }.asObservable().subscribe(onNext: { count in
+            subjectCharactersCount = count
+        })
+
+        XCTAssertEqual(subject.value.count, subjectCharactersCount)
+    }
+
+    func testMappedVariableNotifiesInitialOnSubscribe() {
+        let subject = Variable("initial")
+        var subjectCharactersCount: Int?
+
+        subject.map { $0.count }.asObservable().subscribe(onNext: { count in
+            subjectCharactersCount = count
+        })
+
+        XCTAssertEqual(subject.value.count, subjectCharactersCount)
+    }
 }
