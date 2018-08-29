@@ -6,21 +6,23 @@ import UIKit
 extension UIBarButtonItem {
     private static var observableKey = "com.compass.Snail.UIBarButtonItem.ObservableKey"
 
-    public var tap: Observable<Void> {
+    private var tapObservable: Observable<Void> {
         if let observable = objc_getAssociatedObject(self, &UIBarButtonItem.observableKey) as? Observable<Void> {
             return observable
         }
         let observable = Observable<Void>()
         objc_setAssociatedObject(self, &UIBarButtonItem.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        target = self
-        action = #selector(observableHandler(_:))
         return observable
     }
 
+    public var tap: Observable<Void> {
+        target = self
+        action = #selector(observableHandler(_:))
+        return tapObservable
+    }
+
     @objc private func observableHandler(_ sender: UIBarButtonItem) {
-        if let observable = objc_getAssociatedObject(self, &UIBarButtonItem.observableKey) as? Observable<Void> {
-            observable.on(.next(()))
-        }
+        tapObservable.on(.next(()))
     }
 }
 

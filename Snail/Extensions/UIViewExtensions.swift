@@ -10,22 +10,23 @@ public extension UIView {
         return NotificationCenter.default.observeEvent(event)
     }
 
-    public var tap: Observable<Void> {
-        if let control = self as? UIControl {
-            return control.controlEvent(.touchUpInside)
-        }
-
+    private var tapObservable: Observable<Void> {
         if let observable = objc_getAssociatedObject(self, &UIView.observableKey) as? Observable<Void> {
             return observable
         }
         let observable = Observable<Void>()
         objc_setAssociatedObject(self, &UIView.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return observable
+    }
 
+    public var tap: Observable<Void> {
+        if let control = self as? UIControl {
+            return control.controlEvent(.touchUpInside)
+        }
         let tap = UITapGestureRecognizer()
         addGestureRecognizer(tap)
-
-        tap.asObservable().subscribe(onNext: { _ in observable.on(.next(())) })
-        return observable
+        tap.asObservable().subscribe(onNext: { [weak self] _ in self?.tapObservable.on(.next(())) })
+        return tapObservable
     }
 
     public var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {
