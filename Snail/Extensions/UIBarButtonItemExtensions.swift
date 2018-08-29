@@ -4,7 +4,7 @@
 import UIKit
 
 extension UIBarButtonItem {
-    private static var observableKey = "ObservableKey"
+    private static var observableKey = "com.compass.Snail.UIBarButtonItem.ObservableKey"
 
     public var tap: Observable<Void> {
         if let observable = objc_getAssociatedObject(self, &UIBarButtonItem.observableKey) as? Observable<Void> {

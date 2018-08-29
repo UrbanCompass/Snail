@@ -4,7 +4,7 @@
 import UIKit
 
 public extension UIView {
-    private static var observableKey = "ObservableKey"
+    private static var observableKey = "com.compass.Snail.UIView.ObservableKey"
 
     public func observe(event: Notification.Name) -> Observable<Notification> {
         return NotificationCenter.default.observeEvent(event)
