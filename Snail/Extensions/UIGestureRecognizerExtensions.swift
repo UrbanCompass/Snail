@@ -4,7 +4,7 @@
 import UIKit
 
 extension UIGestureRecognizer {
-    private static var observableKey = "ObservableKey"
+    private static var observableKey = "com.compass.Snail.UIGestureRecognizer.ObservableKey"
 
     public func asObservable() -> Observable<UIGestureRecognizerState> {
         if let observable = objc_getAssociatedObject(self, &UIGestureRecognizer.observableKey) as? Observable<UIGestureRecognizerState> {

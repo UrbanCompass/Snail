@@ -4,8 +4,19 @@
 import UIKit
 
 public extension UIView {
+    private static var observableKey = "com.compass.Snail.UIView.ObservableKey"
+
     public func observe(event: Notification.Name) -> Observable<Notification> {
         return NotificationCenter.default.observeEvent(event)
+    }
+
+    private var tapObservable: Observable<Void> {
+        if let observable = objc_getAssociatedObject(self, &UIView.observableKey) as? Observable<Void> {
+            return observable
+        }
+        let observable = Observable<Void>()
+        objc_setAssociatedObject(self, &UIView.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return observable
     }
 
     public var tap: Observable<Void> {
@@ -14,9 +25,8 @@ public extension UIView {
         }
         let tap = UITapGestureRecognizer()
         addGestureRecognizer(tap)
-        let result = Observable<Void>()
-        tap.asObservable().subscribe(onNext: { _ in result.on(.next(())) })
-        return result
+        tap.asObservable().subscribe(onNext: { [weak self] _ in self?.tapObservable.on(.next(())) })
+        return tapObservable
     }
 
     public var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {

@@ -4,7 +4,7 @@
 import UIKit
 
 public extension UIControl {
-    private static var observableKey = "ObservableKey"
+    private static var observableKey = "com.compass.Snail.UIControl.ObservableKey"
 
     public func controlEvent(_ controlEvents: UIControlEvents) -> Observable<Void> {
         if let observable = objc_getAssociatedObject(self, &UIControl.observableKey) as? Observable<Void> {
