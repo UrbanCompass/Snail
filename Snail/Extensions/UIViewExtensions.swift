@@ -4,6 +4,8 @@
 import UIKit
 
 public extension UIView {
+    private static var observableKey = "ObservableKey"
+
     public func observe(event: Notification.Name) -> Observable<Notification> {
         return NotificationCenter.default.observeEvent(event)
     }
@@ -12,11 +14,18 @@ public extension UIView {
         if let control = self as? UIControl {
             return control.controlEvent(.touchUpInside)
         }
+
+        if let observable = objc_getAssociatedObject(self, &UIView.observableKey) as? Observable<Void> {
+            return observable
+        }
+        let observable = Observable<Void>()
+        objc_setAssociatedObject(self, &UIView.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
         let tap = UITapGestureRecognizer()
         addGestureRecognizer(tap)
-        let result = Observable<Void>()
-        tap.asObservable().subscribe(onNext: { _ in result.on(.next(())) })
-        return result
+
+        tap.asObservable().subscribe(onNext: { _ in observable.on(.next(())) })
+        return observable
     }
 
     public var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {

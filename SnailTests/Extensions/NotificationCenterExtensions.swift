@@ -5,7 +5,7 @@ import XCTest
 @testable import Snail
 
 class NotificationCenterTests: XCTestCase {
-    func testNotificaiton() {
+    func testNotification() {
         let exp = expectation(description: "notification")
         let notificationName = Notification.Name.UIKeyboardWillShow
         var notifcation: Notification?
@@ -22,7 +22,7 @@ class NotificationCenterTests: XCTestCase {
         }
     }
 
-    func testMultipleNotificaitons() {
+    func testMultipleNotifications() {
         let willHide = expectation(description: "notification")
         var gotWillShow = false
         var gotWillHide = false
