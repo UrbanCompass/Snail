@@ -64,4 +64,15 @@ class VariableTests: XCTestCase {
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
+
+    func testMapToVoid() {
+        let subject = Variable("initial")
+        var fired = false
+
+        subject.map { _ in return () }.asObservable().subscribe(onNext: { _ in
+            fired = true
+        })
+
+        XCTAssertTrue(fired)
+    }
 }
