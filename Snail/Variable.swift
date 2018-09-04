@@ -31,7 +31,7 @@ public class Variable<T> {
         return subject
     }
 
-    func map<U>(transform: @escaping (T) -> U) -> Unique<U> {
+    public func map<U>(transform: @escaping (T) -> U) -> Unique<U> {
         let newVariable = Unique<U>(transform(value))
         asObservable().subscribe(onNext: { _ in newVariable.value = transform(self.value) })
         return newVariable
