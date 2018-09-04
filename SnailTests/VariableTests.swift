@@ -64,4 +64,41 @@ class VariableTests: XCTestCase {
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
+
+    func testUniqueFireCounts() {
+        let subject = Unique("one")
+        var firedCount = 0
+
+        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
+            firedCount += 1
+        })
+
+        subject.value = "two"
+
+        XCTAssertTrue(firedCount == 1)
+    }
+
+    func testVariableFireCounts() {
+        let subject = Variable("one")
+        var firedCount = 0
+
+        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
+            firedCount += 1
+        })
+
+        subject.value = "two"
+
+        XCTAssertTrue(firedCount == 2)
+    }
+
+    func testMapToVoid() {
+        let subject = Variable("initial")
+        var fired = false
+
+        subject.map { _ in return () }.asObservable().subscribe(onNext: { _ in
+            fired = true
+        })
+
+        XCTAssertTrue(fired)
+    }
 }
