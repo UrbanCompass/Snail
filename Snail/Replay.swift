@@ -27,6 +27,15 @@ public class Replay<T>: Observable<T> {
         super.on(event)
     }
 
+    public override func on(_ queue: DispatchQueue) -> Observable<T> {
+        let replay = Replay<T>(threshold)
+        subscribe(queue: queue,
+                  onNext: { replay.on(.next($0)) },
+                  onError: { replay.on(.error($0)) },
+                  onDone: { replay.on(.done) })
+        return replay
+    }
+
     private func replay(queue: DispatchQueue?, handler: @escaping (Event<T>) -> Void) {
         events.forEach { event in notify(subscriber: Subscriber(queue: queue, handler: handler), event: event) }
     }

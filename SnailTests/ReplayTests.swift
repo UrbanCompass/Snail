@@ -61,4 +61,23 @@ class ReplayTests: XCTestCase {
             XCTAssert(isMainQueue)
         }
     }
+
+    func testReplayOnMainThreadNotifiedOnMain() {
+        var isMainQueue = false
+        let exp = expectation(description: "queue")
+
+        subject?.on(.next("1"))
+
+        DispatchQueue.global().async {
+            self.subject?.on(.main).subscribe(onNext: { _ in
+                exp.fulfill()
+                isMainQueue = Thread.isMainThread
+            })
+        }
+
+        waitForExpectations(timeout: 2) { error in
+            XCTAssertNil(error)
+            XCTAssert(isMainQueue)
+        }
+    }
 }
