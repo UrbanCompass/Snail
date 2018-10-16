@@ -7,7 +7,7 @@ import XCTest
 class NotificationCenterTests: XCTestCase {
     func testNotification() {
         let exp = expectation(description: "notification")
-        let notificationName = Notification.Name.UIKeyboardWillShow
+        let notificationName = UIResponder.keyboardWillShowNotification
         var notifcation: Notification?
         let subject = NotificationCenter.default.observeEvent(notificationName)
         subject.subscribe(onNext: { notification in
@@ -27,8 +27,8 @@ class NotificationCenterTests: XCTestCase {
         var gotWillShow = false
         var gotWillHide = false
 
-        let willShowName = Notification.Name.UIKeyboardWillShow
-        let willHideName = Notification.Name.UIKeyboardWillHide
+        let willShowName = UIResponder.keyboardWillShowNotification
+        let willHideName = UIResponder.keyboardWillHideNotification
 
         NotificationCenter.default.observeEvent(willShowName).subscribe(onNext: { _ in gotWillShow = true })
         NotificationCenter.default.observeEvent(willHideName).subscribe(onNext: { _ in

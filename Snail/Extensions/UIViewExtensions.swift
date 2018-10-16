@@ -31,16 +31,16 @@ public extension UIView {
 
     public var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {
         let observable = Observable<(height: CGFloat, duration: Double)>()
-        observe(event: .UIKeyboardWillShow).subscribe(onNext: { notification in
-            guard let offset = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue,
-                let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double else {
+        observe(event: UIResponder.keyboardWillShowNotification).subscribe(onNext: { notification in
+            guard let offset = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+                let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
                     return
             }
             observable.on(.next((offset.cgRectValue.size.height, duration)))
         })
 
-        observe(event: .UIKeyboardWillHide).subscribe(onNext: { notification in
-            guard let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double else {
+        observe(event: UIResponder.keyboardWillHideNotification).subscribe(onNext: { notification in
+            guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
                 return
             }
             observable.on(.next((0, duration)))
