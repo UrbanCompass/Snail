@@ -6,7 +6,7 @@ public class Scheduler {
     let delay: TimeInterval
     let repeats: Bool
 
-    public let event = Observable<Void>()
+    public let observable = Observable<Void>()
     private var timer: Timer?
 
     public init(_ delay: TimeInterval, repeats: Bool = true) {
@@ -15,7 +15,7 @@ public class Scheduler {
     }
 
     @objc public func onNext() {
-        event.on(.next(()))
+        observable.on(.next(()))
     }
 
     public func start() {

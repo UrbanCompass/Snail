@@ -21,8 +21,8 @@ public class Observable<T> : ObservableType {
     }
 
     public func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
-        if let event = stoppedEvent {
-            notify(subscriber: Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)), event: event)
+        if let stoppedEvent = stoppedEvent {
+            notify(subscriber: Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)), event: stoppedEvent)
             return
         }
         subscribers.append(Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)))
@@ -72,7 +72,7 @@ public class Observable<T> : ObservableType {
             semaphore.signal()
         })
 
-        _ = semaphore.wait(timeout: .distantFuture)
+        _ = semaphore.wait()
 
         return (result, error)
     }
@@ -83,11 +83,11 @@ public class Observable<T> : ObservableType {
         scheduler.start()
 
         var next: T?
-        scheduler.event.subscribe(onNext: {
-            guard let event = next else {
+        scheduler.observable.subscribe(onNext: {
+            guard let nextValue = next else {
                 return
             }
-            observable.on(.next(event))
+            observable.on(.next(nextValue))
             next = nil
         })
 
@@ -100,11 +100,11 @@ public class Observable<T> : ObservableType {
         let scheduler = Scheduler(delay)
 
         var next: T?
-        scheduler.event.subscribe(onNext: {
-            guard let event = next else {
+        scheduler.observable.subscribe(onNext: {
+            guard let nextValue = next else {
                 return
             }
-            observable.on(.next(event))
+            observable.on(.next(nextValue))
             next = nil
         })
 
