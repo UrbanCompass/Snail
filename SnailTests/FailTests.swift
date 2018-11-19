@@ -18,14 +18,41 @@ class FailTests: XCTestCase {
         super.setUp()
         subject = Fail(TestError.test)
         strings = []
-        subject?.subscribe(onNext: { [weak self] string in self?.strings?.append(string) })
+        error = nil
+        done = nil
+
+        subject?.subscribe(
+            queue: nil,
+            onNext: { [weak self] in self?.strings?.append($0) },
+            onError: { self.error = $0 },
+            onDone: { self.done = true }
+        )
     }
 
-    func testFail() {
-        subject?
-            .subscribe(onError: { error in self.error = error })
+    func testOnErrorIsRun() {
+        XCTAssertEqual((error as? TestError), TestError.test)
+    }
+
+    func testOnNextIsNotRun() {
         subject?.on(.next("1"))
-        XCTAssert(strings?.count == 0)
-        XCTAssert((error as? TestError) == TestError.test)
+        XCTAssertEqual(strings?.count, 0)
+    }
+
+    func testOnDoneIsNotRun() {
+        XCTAssertNil(done)
+    }
+
+    func testFiresStoppedEventOnSubscribe() {
+        var newError: Error?
+        done = nil
+
+        subject?.subscribe(
+            onError: { error in newError = error },
+            onDone: { self.done = true }
+        )
+
+        XCTAssertNotNil(newError as? TestError)
+        XCTAssertEqual(newError as? TestError, error as? TestError)
+        XCTAssertNil(done)
     }
 }
