@@ -43,9 +43,9 @@ class FailTests: XCTestCase {
     }
 
     func testFiresStoppedEventOnSubscribe() {
-        var newError: Error? = nil
+        var newError: Error?
         done = nil
-        
+
         subject?.subscribe(
             onError: { error in newError = error },
             onDone: { self.done = true }
