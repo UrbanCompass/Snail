@@ -238,4 +238,20 @@ class ObservableTests: XCTestCase {
             XCTAssert(received.first == "3")
         }
     }
+
+    func testSkipFirst() {
+        let observable = Observable<String>()
+        var received: [String] = []
+
+        observable.skip(first: 2).subscribe(onNext: { string in
+            received.append(string)
+
+            XCTAssert(received.count == 1)
+            XCTAssert(received.first == "3")
+        })
+
+        observable.on(.next("1"))
+        observable.on(.next("2"))
+        observable.on(.next("3"))
+    }
 }
