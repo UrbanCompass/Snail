@@ -115,6 +115,23 @@ public class Observable<T> : ObservableType {
         return observable
     }
 
+    public func skip(first: UInt) -> Observable<T> {
+        let observable = Observable<T>()
+        var count = first
+
+        subscribe(onNext: {
+            if count > 0 {
+                observable.on(.next($0))
+            }
+            count -= 1
+        }, onError: {
+            observable.on(.error($0))
+        }, onDone: {
+            observable.on(.done)
+        })
+        return observable
+    }
+
     func notify(subscriber: Subscriber<T>, event: Event<T>) {
         guard let queue = subscriber.queue else {
             subscriber.handler(event)
