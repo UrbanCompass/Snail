@@ -120,10 +120,10 @@ public class Observable<T> : ObservableType {
         var count = first
 
         subscribe(onNext: {
-            if count > 0 {
+            if count == 0 {
                 observable.on(.next($0))
             }
-            count -= 1
+            count = UInt(max(Int(count) - 1, 0))
         }, onError: {
             observable.on(.error($0))
         }, onDone: {
