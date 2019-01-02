@@ -1,9 +1,9 @@
 //  Copyright © 2017 Compass. All rights reserved.
 
 #if os(iOS) || os(tvOS)
-import Foundation
-#else
 import UIKit
+#else
+import Foundation
 #endif
 
 extension URLSession {
