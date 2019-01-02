@@ -1,6 +1,10 @@
 //  Copyright © 2017 Compass. All rights reserved.
 
+#if os(iOS) || os(tvOS)
+import Foundation
+#else
 import UIKit
+#endif
 
 extension URLSession {
     public enum ErrorType: LocalizedError {
@@ -60,6 +64,7 @@ extension URLSession {
         return observer
     }
 
+    #if os(iOS) || os(tvOS)
     public func image(request: URLRequest) -> Observable<(UIImage, URLResponse)> {
         let observer = Replay<(UIImage, URLResponse)>(1)
         data(request: request).subscribe(queue: .main, onNext: { data, response in
@@ -72,4 +77,5 @@ extension URLSession {
         }, onError: { observer.on(.error($0)) })
         return observer
     }
+    #endif
 }
