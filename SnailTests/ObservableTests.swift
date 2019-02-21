@@ -305,4 +305,31 @@ class ObservableTests: XCTestCase {
             XCTAssert(received.first == "1")
         }
     }
+
+    func testMerge() {
+        let exp = expectation(description: "merge")
+
+        var received: [String] = []
+
+        let a = Observable<String>()
+        let b = Observable<String>()
+
+        let subject = Observable.merge([a, b])
+
+        subject.subscribe(onNext: { string in
+            received.append(string)
+        }, onDone: {
+            exp.fulfill()
+        })
+
+        a.on(.next("1"))
+        b.on(.next("2"))
+        b.on(.done)
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 2)
+            XCTAssert(received.first == "1")
+            XCTAssert(received.last == "2")
+        }
+    }
 }
