@@ -13,4 +13,5 @@ public protocol ObservableType {
     func throttle(_ delay: TimeInterval) -> Observable<Self.T>
     func debounce(_ delay: TimeInterval) -> Observable<Self.T>
     func forward(to: Observable<Self.T>)
+    static func merge(_ observables: [Observable<Self.T>]) -> Observable<Self.T>
 }

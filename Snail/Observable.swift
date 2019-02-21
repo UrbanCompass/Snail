@@ -156,4 +156,10 @@ public class Observable<T> : ObservableType {
             to.on(.done)
         })
     }
+
+    public static func merge(_ observables: [Observable<T>]) -> Observable<T> {
+        let latest = Observable<T>()
+        observables.forEach { $0.forward(to: latest) }
+        return latest
+    }
 }
