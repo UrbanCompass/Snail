@@ -254,4 +254,17 @@ class ObservableTests: XCTestCase {
         observable.on(.next("2"))
         observable.on(.next("3"))
     }
+
+    func testForward() {
+        let subject = Observable<String>()
+
+        let observable = Observable<String>()
+        observable.forward(to: subject)
+
+        subject.subscribe(onNext: { string in
+            XCTAssertEqual(string, "1")
+        })
+
+        observable.on(.next("1"))
+    }
 }

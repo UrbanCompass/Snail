@@ -12,4 +12,5 @@ public protocol ObservableType {
     func block() -> (result: Self.T?, error: Error?)
     func throttle(_ delay: TimeInterval) -> Observable<Self.T>
     func debounce(_ delay: TimeInterval) -> Observable<Self.T>
+    func forward(to: Observable<Self.T>)
 }

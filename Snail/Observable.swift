@@ -146,4 +146,14 @@ public class Observable<T> : ObservableType {
             }
         }
     }
+
+    public func forward(to: Observable<T>) {
+        subscribe(onNext: {
+            to.on(.next($0))
+        }, onError: {
+            to.on(.error($0))
+        }, onDone: {
+            to.on(.done)
+        })
+    }
 }
