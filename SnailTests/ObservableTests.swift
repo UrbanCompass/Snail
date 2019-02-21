@@ -256,15 +256,29 @@ class ObservableTests: XCTestCase {
     }
 
     func testForward() {
-        let subject = Observable<String>()
+        var received: [String] = []
+        var receivedError: Error?
 
+        let exp = expectation(description: "forward")
+
+        let subject = Observable<String>()
         let observable = Observable<String>()
         observable.forward(to: subject)
 
         subject.subscribe(onNext: { string in
-            XCTAssertEqual(string, "1")
+            received.append(string)
+        }, onError: { error in
+            receivedError = error
+            exp.fulfill()
         })
 
         observable.on(.next("1"))
+        observable.on(.error(TestError.test))
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 1)
+            XCTAssert(received.first == "1")
+            XCTAssertEqual(receivedError as? TestError, TestError.test)
+        }
     }
 }
