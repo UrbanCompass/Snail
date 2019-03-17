@@ -332,4 +332,36 @@ class ObservableTests: XCTestCase {
             XCTAssert(received.last == "2")
         }
     }
+
+    func testCombineLatestNonOptional() {
+        let exp = expectation(description: "merge")
+
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.combineLatest((string, int))
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string): \(int)")
+        }, onDone: {
+            exp.fulfill()
+        })
+
+        string.on(.next("The number"))
+        int.on(.next(1))
+        int.on(.next(2))
+        string.on(.next("The digit"))
+        int.on(.next(3))
+        int.on(.done)
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 4)
+            XCTAssert(received[0] == "The number: 1")
+            XCTAssert(received[1] == "The number: 2")
+            XCTAssert(received[2] == "The digit: 2")
+            XCTAssert(received[3] == "The digit: 3")
+        }
+    }
 }

@@ -163,11 +163,11 @@ public class Observable<T> : ObservableType {
         return latest
     }
 
-    public static func combineLatest<A: Any, B: Any>(_ observables: (Observable<A>, Observable<B>)) -> Observable<(A, B)> {
-        let combined = Observable<(A, B)>()
+    public static func combineLatest<U>(_ input: (Observable<T>, Observable<U>)) -> Observable<(T, U)> {
+        let combined = Observable<(T, U)>()
 
-        var value0: A?
-        var value1: B?
+        var value0: T?
+        var value1: U?
 
         func triggerIfNeeded() {
             if let value0 = value0, let value1 = value1 {
@@ -175,7 +175,7 @@ public class Observable<T> : ObservableType {
             }
         }
 
-        observables.0.subscribe(onNext: {
+        input.0.subscribe(onNext: {
             value0 = $0
             triggerIfNeeded()
         }, onError: {
@@ -184,7 +184,7 @@ public class Observable<T> : ObservableType {
             combined.on(.done)
         })
 
-        observables.1.subscribe(onNext: {
+        input.1.subscribe(onNext: {
             value1 = $0
             triggerIfNeeded()
         }, onError: {
