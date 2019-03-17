@@ -101,4 +101,15 @@ class VariableTests: XCTestCase {
 
         XCTAssertTrue(fired)
     }
+
+    func testBindToOtherVariable() {
+        let subject = Variable("one")
+        let observedVariable = Variable("two")
+
+        subject.bind(to: observedVariable)
+        XCTAssertEqual(subject.value, "two")
+
+        observedVariable.value = "three"
+        XCTAssertEqual(subject.value, "three")
+    }
 }
