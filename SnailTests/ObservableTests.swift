@@ -400,6 +400,38 @@ class ObservableTests: XCTestCase {
             XCTAssert(received[3] == "<no title>: 3")
         }
     }
+
+    func testCombineLatestError() {
+        let exp = expectation(description: "combineLatest")
+
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.combineLatest((string, int))
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string): \(int)")
+        }, onError: { _ in
+            received.append("ERROR")
+        }, onDone: {
+            exp.fulfill()
+        })
+
+        string.on(.next("The number"))
+        int.on(.next(1))
+        string.on(.error(TestError.test))
+        string.on(.next("The digit"))
+        int.on(.next(3))
+        int.on(.done)
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 2)
+            XCTAssert(received.first == "The number: 1")
+            XCTAssert(received.last == "ERROR")
+        }
+    }
 }
 
 // swiftlint:enable file_length
