@@ -1,5 +1,7 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+// swiftlint:disable file_length
+
 import Foundation
 import XCTest
 @testable import Snail
@@ -334,7 +336,7 @@ class ObservableTests: XCTestCase {
     }
 
     func testCombineLatestNonOptional() {
-        let exp = expectation(description: "merge")
+        let exp = expectation(description: "combineLatest")
 
         var received: [String] = []
 
@@ -367,7 +369,7 @@ class ObservableTests: XCTestCase {
     }
 
     func testCombineLatestOptional() {
-        let exp = expectation(description: "merge")
+        let exp = expectation(description: "combineLatest")
 
         var received: [String] = []
 
@@ -399,3 +401,5 @@ class ObservableTests: XCTestCase {
         }
     }
 }
+
+// swiftlint:enable file_length
