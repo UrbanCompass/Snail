@@ -390,7 +390,7 @@ class ObservableTests: XCTestCase {
         int.on(.next(nil))
         string.on(.next(nil))
         int.on(.next(3))
-        int.on(.done)
+        string.on(.done)
 
         waitForExpectations(timeout: 1) { _ in
             XCTAssert(received.count == 4)
@@ -401,7 +401,7 @@ class ObservableTests: XCTestCase {
         }
     }
 
-    func testCombineLatestError() {
+    func testCombineLatestError_firstMember() {
         let exp = expectation(description: "combineLatest")
 
         var received: [String] = []
@@ -415,21 +415,47 @@ class ObservableTests: XCTestCase {
             received.append("\(string): \(int)")
         }, onError: { _ in
             received.append("ERROR")
-        }, onDone: {
-            exp.fulfill()
         })
 
         string.on(.next("The number"))
         int.on(.next(1))
         string.on(.error(TestError.test))
+
         string.on(.next("The digit"))
-        int.on(.next(3))
-        int.on(.done)
+        int.on(.next(2))
+        string.on(.error(TestError.test))
+
+        exp.fulfill()
 
         waitForExpectations(timeout: 1) { _ in
             XCTAssert(received.count == 2)
             XCTAssert(received.first == "The number: 1")
             XCTAssert(received.last == "ERROR")
+        }
+    }
+
+    func testCombineLatestError_secondMember() {
+        let exp = expectation(description: "combineLatest")
+
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.combineLatest((string, int))
+
+        subject.subscribe(onError: { _ in
+            received.append("ERROR")
+        })
+
+        int.on(.error(TestError.test))
+        int.on(.next(1))
+
+        exp.fulfill()
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 1)
+            XCTAssert(received.first == "ERROR")
         }
     }
 }
