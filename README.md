@@ -87,12 +87,33 @@ int.asObservable().subscribe(
 int.value = 42
 ```
 
+## Combining Observable Variables
+
+
 ```swift
 let isLoaderAnimating = Variable<Bool>(false)
 isLoaderAnimating.bind(to: viewModel.isLoading) // forward changes from one Variable to another
 
 viewModel.isLoading = true
 print(isLoaderAnimating.value) // true
+```
+
+```swift
+Observable.merge([userCreated, userUpdated]).subscribe(
+  onNext: { user in ... } // do something with the latest value that got updated
+})
+
+userCreated.value = User(name: "Russell") // triggers 
+userUpdated.value = User(name: "Lee") // triggers 
+```
+
+```swift
+Observable.combineLatest((isMapLoading, isListLoading)).subscribe(
+  onNext: { isMapLoading, isListLoading in ... } // do something when both values are set, every time one gets updated
+})
+
+isMapLoading.value = true
+isListLoading.value = true // triggers
 ```
 
 ## Transforming Observable Variable Types
