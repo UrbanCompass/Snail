@@ -45,7 +45,7 @@ extension URLSession {
 
     public func data(request: URLRequest) -> Observable<(Data, URLResponse)> {
         let observer = Replay<(Data, URLResponse)>(1)
-        let task = dataTask(with: request, completionHandler: { data, response, error in
+        let task = dataTask(with: request) { data, response, error in
             if let error = error {
                 observer.on(.error(error))
                 return
@@ -59,7 +59,7 @@ extension URLSession {
                 return
             }
             observer.on(.next((data, response)))
-        })
+        }
         task.resume()
         return observer
     }
