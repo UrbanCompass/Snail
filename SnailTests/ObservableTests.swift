@@ -1,5 +1,7 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+// swiftlint:disable file_length
+
 import Foundation
 import XCTest
 @testable import Snail
@@ -332,4 +334,130 @@ class ObservableTests: XCTestCase {
             XCTAssert(received.last == "2")
         }
     }
+
+    func testCombineLatestNonOptional() {
+        let exp = expectation(description: "combineLatest")
+
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.combineLatest((string, int))
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string): \(int)")
+        }, onDone: {
+            exp.fulfill()
+        })
+
+        string.on(.next("The value"))
+        string.on(.next("The number"))
+        int.on(.next(1))
+        int.on(.next(2))
+        string.on(.next("The digit"))
+        int.on(.next(3))
+        int.on(.done)
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 4)
+            XCTAssert(received[0] == "The number: 1")
+            XCTAssert(received[1] == "The number: 2")
+            XCTAssert(received[2] == "The digit: 2")
+            XCTAssert(received[3] == "The digit: 3")
+        }
+    }
+
+    func testCombineLatestOptional() {
+        let exp = expectation(description: "combineLatest")
+
+        var received: [String] = []
+
+        let string = Observable<String?>()
+        let int = Observable<Int?>()
+
+        let subject = Observable.combineLatest((string, int))
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string ?? "<no title>"): \(int ?? 0)")
+        }, onDone: {
+            exp.fulfill()
+        })
+
+        string.on(.next("The value"))
+        string.on(.next("The number"))
+        int.on(.next(1))
+        int.on(.next(nil))
+        string.on(.next(nil))
+        int.on(.next(3))
+        string.on(.done)
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 4)
+            XCTAssert(received[0] == "The number: 1")
+            XCTAssert(received[1] == "The number: 0")
+            XCTAssert(received[2] == "<no title>: 0")
+            XCTAssert(received[3] == "<no title>: 3")
+        }
+    }
+
+    func testCombineLatestError_firstMember() {
+        let exp = expectation(description: "combineLatest")
+
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.combineLatest((string, int))
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string): \(int)")
+        }, onError: { _ in
+            received.append("ERROR")
+        })
+
+        string.on(.next("The number"))
+        int.on(.next(1))
+        string.on(.error(TestError.test))
+
+        string.on(.next("The digit"))
+        int.on(.next(2))
+        string.on(.error(TestError.test))
+
+        exp.fulfill()
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 2)
+            XCTAssert(received.first == "The number: 1")
+            XCTAssert(received.last == "ERROR")
+        }
+    }
+
+    func testCombineLatestError_secondMember() {
+        let exp = expectation(description: "combineLatest")
+
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.combineLatest((string, int))
+
+        subject.subscribe(onError: { _ in
+            received.append("ERROR")
+        })
+
+        int.on(.error(TestError.test))
+        int.on(.next(1))
+
+        exp.fulfill()
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssert(received.count == 1)
+            XCTAssert(received.first == "ERROR")
+        }
+    }
 }
+
+// swiftlint:enable file_length

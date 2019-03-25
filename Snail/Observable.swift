@@ -162,4 +162,37 @@ public class Observable<T> : ObservableType {
         observables.forEach { $0.forward(to: latest) }
         return latest
     }
+
+    public static func combineLatest<U>(_ input: (Observable<T>, Observable<U>)) -> Observable<(T, U)> {
+        let combined = Observable<(T, U)>()
+
+        var value0: T?
+        var value1: U?
+
+        func triggerIfNeeded() {
+            if let value0 = value0, let value1 = value1 {
+                combined.on(.next((value0, value1)))
+            }
+        }
+
+        input.0.subscribe(onNext: {
+            value0 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        input.1.subscribe(onNext: {
+            value1 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        return combined
+    }
 }
