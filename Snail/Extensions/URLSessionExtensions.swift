@@ -19,6 +19,18 @@ extension URLSession {
         }
     }
 
+    public func decoded<T: Codable>(request: URLRequest) -> Observable<(T, URLResponse)> {
+        let observer = Replay<(T, URLResponse)>(1)
+        data(request: request).subscribe(onNext: { data, response in
+            guard let codedObject = try? JSONDecoder().decode(T.self, from: data) else {
+                observer.on(.error(ErrorType.invalidData))
+                return
+            }
+            observer.on(.next((codedObject, response)))
+        }, onError: { observer.on(.error($0)) })
+        return observer
+    }
+
     public func dictionary(request: URLRequest) -> Observable<([String: Any], URLResponse)> {
         let observer = Replay<([String: Any], URLResponse)>(1)
         data(request: request).subscribe(onNext: { data, response in
