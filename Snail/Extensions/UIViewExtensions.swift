@@ -6,7 +6,7 @@ import UIKit
 public extension UIView {
     private static var observableKey = "com.compass.Snail.UIView.ObservableKey"
 
-    public func observe(event: Notification.Name) -> Observable<Notification> {
+    func observe(event: Notification.Name) -> Observable<Notification> {
         return NotificationCenter.default.observeEvent(event)
     }
 
@@ -19,7 +19,7 @@ public extension UIView {
         return observable
     }
 
-    public var tap: Observable<Void> {
+    var tap: Observable<Void> {
         if let control = self as? UIControl {
             return control.controlEvent(.touchUpInside)
         }
@@ -29,7 +29,7 @@ public extension UIView {
         return tapObservable
     }
 
-    public var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {
+    var keyboardHeightWillChange: Observable<(height: CGFloat, duration: Double)> {
         let observable = Observable<(height: CGFloat, duration: Double)>()
         observe(event: UIResponder.keyboardWillShowNotification).subscribe(onNext: { notification in
             guard let offset = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
