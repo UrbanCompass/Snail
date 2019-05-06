@@ -8,5 +8,5 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.source       = { :git => "https://github.com/UrbanCompass/Snail.git", :tag => "#{s.version}" }
   s.source_files  = "Snail/**/*.swift"
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 end
