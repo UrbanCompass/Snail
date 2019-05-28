@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Snail"
-  s.version      = "0.2.11"
+  s.version      = "0.3.0"
   s.summary      = "An observables framework for Swift"
   s.homepage     = "https://github.com/UrbanCompass/Snail"
   s.license      = "MIT"
