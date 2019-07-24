@@ -5,10 +5,11 @@ import Dispatch
 
 public protocol ObservableType {
     associatedtype T
-    func subscribe(queue: DispatchQueue?, onNext: ((Self.T) -> Void)?, onError: ((Error) -> Void)?, onDone: (() -> Void)?)
-    func on(_ event: Event<T>)
+    @discardableResult func subscribe(queue: DispatchQueue?, onNext: ((Self.T) -> Void)?, onError: ((Error) -> Void)?, onDone: (() -> Void)?) -> Subscriber<T>
+    func on(_ event: Event<Self.T>)
     func on(_ queue: DispatchQueue) -> Observable<Self.T>
     func removeSubscribers()
+    func removeSubscriber(subscriber: Subscriber<T>)
     func block() -> (result: Self.T?, error: Error?)
     func throttle(_ delay: TimeInterval) -> Observable<Self.T>
     func debounce(_ delay: TimeInterval) -> Observable<Self.T>
