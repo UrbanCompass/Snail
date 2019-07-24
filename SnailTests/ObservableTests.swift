@@ -157,6 +157,13 @@ class ObservableTests: XCTestCase {
         XCTAssert(strings?[0] == "1")
         XCTAssert(strings?[1] == "1")
         XCTAssert(strings?[2] == "2")
+        subject?.removeSubscriber(subscriber: subscriber)
+        subject?.on(.next("3"))
+        XCTAssert(strings?.count == 4)
+        XCTAssert(strings?[0] == "1")
+        XCTAssert(strings?[1] == "1")
+        XCTAssert(strings?[2] == "2")
+        XCTAssert(strings?[3] == "3")
     }
 
     func testBlockSuccess() {
