@@ -59,11 +59,10 @@ public class Observable<T>: ObservableType {
     }
 
     public func removeSubscriber(subscriber: Subscriber<T>) {
-        for (index, element) in subscribers.enumerated() where
-            element === subscriber {
-                subscribers.remove(at: index)
-                return
+        guard let index = subscribers.enumerated().first(where: { $0.element === subscriber })?.offset else {
+            return
         }
+        subscribers.remove(at: index)
     }
 
     public func block() -> (result: T?, error: Error?) {
