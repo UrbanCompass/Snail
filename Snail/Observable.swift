@@ -3,7 +3,7 @@
 import Foundation
 import Dispatch
 
-public class Observable<T> : ObservableType {
+public class Observable<T>: ObservableType {
     private var isStopped: Int32 = 0
     private var stoppedEvent: Event<T>?
     var subscribers: [Subscriber<T>] = []
@@ -20,12 +20,14 @@ public class Observable<T> : ObservableType {
         }
     }
 
-    public func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
+    @discardableResult public func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> Subscriber<T> {
+        let subscriber = Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone))
         if let stoppedEvent = stoppedEvent {
-            notify(subscriber: Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)), event: stoppedEvent)
-            return
+            notify(subscriber: subscriber, event: stoppedEvent)
+            return subscriber
         }
-        subscribers.append(Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone)))
+        subscribers.append(subscriber)
+        return subscriber
     }
 
     public func on(_ event: Event<T>) {
@@ -54,6 +56,13 @@ public class Observable<T> : ObservableType {
 
     public func removeSubscribers() {
         subscribers.removeAll()
+    }
+
+    public func removeSubscriber(subscriber: Subscriber<T>) {
+        guard let index = subscribers.enumerated().first(where: { $0.element === subscriber })?.offset else {
+            return
+        }
+        subscribers.remove(at: index)
     }
 
     public func block() -> (result: T?, error: Error?) {

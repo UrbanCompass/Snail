@@ -11,9 +11,11 @@ public class Just<T>: Observable<T> {
         super.init()
     }
 
-    public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) {
+    @discardableResult public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> Subscriber<T> {
         let handler = createHandler(onNext: onNext, onError: onError, onDone: onDone)
-        notify(subscriber: Subscriber(queue: queue, handler: handler), event: .next(value))
-        notify(subscriber: Subscriber(queue: queue, handler: handler), event: .done)
+        let subscriber = Subscriber(queue: queue, handler: handler)
+        notify(subscriber: subscriber, event: .next(value))
+        notify(subscriber: subscriber, event: .done)
+        return subscriber
     }
 }

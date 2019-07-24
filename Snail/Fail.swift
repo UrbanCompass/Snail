@@ -10,8 +10,10 @@ public class Fail<T>: Observable<T> {
         self.error = error
     }
 
-    public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)?, onError: ((Error) -> Void)?, onDone: (() -> Void)?) {
+    @discardableResult public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)?, onError: ((Error) -> Void)?, onDone: (() -> Void)?) -> Subscriber<T> {
         let handler = createHandler(onNext: onNext, onError: onError, onDone: onDone)
-        notify(subscriber: Subscriber(queue: queue, handler: handler), event: .error(error))
+        let subscriber = Subscriber(queue: queue, handler: handler)
+        notify(subscriber: subscriber, event: .error(error))
+        return subscriber
     }
 }

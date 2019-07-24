@@ -142,6 +142,30 @@ class ObservableTests: XCTestCase {
         XCTAssert(strings?.count == 1)
     }
 
+    func testRemoveSubscriber() {
+        let subscriberToRemove = subject?.subscribe(
+            onNext: { string in self.strings?.append(string) },
+            onError: { error in self.error = error },
+            onDone: { self.done = true })
+        subject?.on(.next("1"))
+        guard let subscriber = subscriberToRemove else {
+            return
+        }
+        subject?.removeSubscriber(subscriber: subscriber)
+        subject?.on(.next("2"))
+        XCTAssert(strings?.count == 3)
+        XCTAssert(strings?[0] == "1")
+        XCTAssert(strings?[1] == "1")
+        XCTAssert(strings?[2] == "2")
+        subject?.removeSubscriber(subscriber: subscriber)
+        subject?.on(.next("3"))
+        XCTAssert(strings?.count == 4)
+        XCTAssert(strings?[0] == "1")
+        XCTAssert(strings?[1] == "1")
+        XCTAssert(strings?[2] == "2")
+        XCTAssert(strings?[3] == "3")
+    }
+
     func testBlockSuccess() {
         let result = Just(1).block()
         XCTAssertEqual(result.result, 1)
