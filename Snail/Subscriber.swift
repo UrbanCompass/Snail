@@ -2,7 +2,18 @@
 
 import Foundation
 
-public class Subscriber<T> {
+public class Disposer {
+    var disposables: [DisposableType] = []
+    public func clear() {
+        disposables.forEach { $0.dispose() }
+    }
+}
+
+public protocol DisposableType {
+    func dispose()
+}
+
+public class Subscriber<T>: DisposableType {
     let queue: DispatchQueue?
     let handler: (Event<T>) -> Void
     public weak var observable: Observable<T>?
@@ -11,5 +22,13 @@ public class Subscriber<T> {
         self.queue = queue
         self.handler = handler
         self.observable = observable
+    }
+
+    public func dispose() {
+        observable?.removeSubscriber(subscriber: self)
+    }
+
+    public func set(on disposer: Disposer) {
+        disposer.disposables.append(self)
     }
 }
