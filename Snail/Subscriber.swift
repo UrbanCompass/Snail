@@ -3,7 +3,8 @@
 import Foundation
 
 public class Disposer {
-    var disposables: [DisposableType] = []
+    public var disposables: [DisposableType] = []
+    public init() {}
     public func clear() {
         disposables.forEach { $0.dispose() }
         disposables = []
