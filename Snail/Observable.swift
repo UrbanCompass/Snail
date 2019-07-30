@@ -21,7 +21,7 @@ public class Observable<T>: ObservableType {
     }
 
     @discardableResult public func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> Subscriber<T> {
-        let subscriber = Subscriber(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone))
+        let subscriber = Subscriber(queue: queue, observable: self, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone))
         if let stoppedEvent = stoppedEvent {
             notify(subscriber: subscriber, event: stoppedEvent)
             return subscriber
