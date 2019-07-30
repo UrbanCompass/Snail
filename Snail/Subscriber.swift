@@ -6,6 +6,7 @@ public class Disposer {
     var disposables: [DisposableType] = []
     public func clear() {
         disposables.forEach { $0.dispose() }
+        disposables = []
     }
 }
 
