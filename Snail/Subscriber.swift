@@ -2,19 +2,6 @@
 
 import Foundation
 
-public class Disposer {
-    public var disposables: [DisposableType] = []
-    public init() {}
-    public func clear() {
-        disposables.forEach { $0.dispose() }
-        disposables = []
-    }
-}
-
-public protocol DisposableType {
-    func dispose()
-}
-
 public class Subscriber<T>: DisposableType {
     let queue: DispatchQueue?
     let handler: (Event<T>) -> Void

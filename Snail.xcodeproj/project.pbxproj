@@ -32,6 +32,7 @@
 		DEEDA8EB2051BCB4000FE578 /* NotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */; };
 		DEF9B98D1FD5D8FD00F8514E /* UniqueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */; };
 		DEF9B98F1FD5FE5800F8514E /* Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98E1FD5FE5800F8514E /* Unique.swift */; };
+		F5C973A622F20C86003DB42C /* Disposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C973A522F20C86003DB42C /* Disposer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenterExtensions.swift; sourceTree = "<group>"; };
 		DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueTests.swift; sourceTree = "<group>"; };
 		DEF9B98E1FD5FE5800F8514E /* Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unique.swift; sourceTree = "<group>"; };
+		F5C973A522F20C86003DB42C /* Disposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disposer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 			children = (
 				CBE54E441DFB36DF0008DD64 /* Snail.h */,
 				CBE54E451DFB36DF0008DD64 /* Info.plist */,
+				F5C973A522F20C86003DB42C /* Disposer.swift */,
 				CBE54E5B1DFB39510008DD64 /* Event.swift */,
 				24FABD551DFEF670005CF84E /* Fail.swift */,
 				CB2936761DFE151B00792E6B /* Just.swift */,
@@ -310,6 +313,7 @@
 				24CF1FA81EF875A400F34234 /* URLSessionExtensions.swift in Sources */,
 				2408FA902112A15900B9F59E /* Scheduler.swift in Sources */,
 				CBE54E601DFB39510008DD64 /* Event.swift in Sources */,
+				F5C973A622F20C86003DB42C /* Disposer.swift in Sources */,
 				CBE54E631DFB39510008DD64 /* Variable.swift in Sources */,
 				CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */,
 				24FABD5A1DFF0B48005CF84E /* Replay.swift in Sources */,
