@@ -16,6 +16,11 @@ public extension UIView {
         }
         let observable = Observable<Void>()
         objc_setAssociatedObject(self, &UIView.observableKey, observable, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
+        let tap = UITapGestureRecognizer()
+        addGestureRecognizer(tap)
+        tap.asObservable().subscribe(onNext: { [weak observable] _ in observable?.on(.next(())) })
+
         return observable
     }
 
@@ -23,9 +28,6 @@ public extension UIView {
         if let control = self as? UIControl {
             return control.controlEvent(.touchUpInside)
         }
-        let tap = UITapGestureRecognizer()
-        addGestureRecognizer(tap)
-        tap.asObservable().subscribe(onNext: { [weak self] _ in self?.tapObservable.on(.next(())) })
         return tapObservable
     }
 
