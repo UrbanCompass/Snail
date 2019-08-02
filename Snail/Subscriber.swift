@@ -17,7 +17,7 @@ public class Subscriber<T>: DisposableType {
         observable?.removeSubscriber(subscriber: self)
     }
 
-    public func set(on disposer: Disposer) {
+    public func add(to disposer: Disposer) {
         disposer.add(disposable: self)
     }
 }

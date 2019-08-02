@@ -12,7 +12,7 @@ class DisposerTests: XCTestCase {
     override func setUp() {
         subject = Disposer()
         observable = Observable()
-        observable.subscribe(onNext: { (_) in }).set(on: subject)
+        observable.subscribe(onNext: { (_) in }).add(to: subject)
     }
 
     func testClean() {
