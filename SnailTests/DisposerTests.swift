@@ -17,7 +17,7 @@ class DisposerTests: XCTestCase {
 
     func testClean() {
         XCTAssertTrue(subject.disposables.count == 1)
-        subject.clear()
+        subject.removeAll()
         XCTAssertTrue(subject.disposables.count == 0)
     }
 }
