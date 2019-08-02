@@ -8,6 +8,7 @@ public protocol DisposableType {
 
 public class Disposer {
     private(set) public var disposables: [DisposableType] = []
+
     public init() {}
 
     public func clear() {
