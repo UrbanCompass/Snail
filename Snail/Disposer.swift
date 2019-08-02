@@ -11,9 +11,9 @@ public class Disposer {
 
     public init() {}
 
-    public func removeAll() {
+    public func disposeAll() {
         disposables.forEach { $0.dispose() }
-        disposables = []
+        disposables.removeAll()
     }
 
     public func add(disposable: DisposableType) {
