@@ -18,6 +18,6 @@ public class Subscriber<T>: DisposableType {
     }
 
     public func set(on disposer: Disposer) {
-        disposer.disposables.append(self)
+        disposer.add(disposable: self)
     }
 }

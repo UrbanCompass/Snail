@@ -7,10 +7,15 @@ public protocol DisposableType {
 }
 
 public class Disposer {
-    public var disposables: [DisposableType] = []
+    private(set) public var disposables: [DisposableType] = []
     public init() {}
+
     public func clear() {
         disposables.forEach { $0.dispose() }
         disposables = []
+    }
+
+    public func add(disposable: DisposableType) {
+        disposables.append(disposable)
     }
 }
