@@ -5,7 +5,6 @@ import XCTest
 @testable import Snail
 
 class DisposerTests: XCTestCase {
-
     private var subject: Disposer!
     private var observable: Observable<String>!
 
