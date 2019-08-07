@@ -21,8 +21,7 @@ class ReplayTests: XCTestCase {
         subject?.on(.next("1"))
         subject?.on(.next("2"))
         subject?.on(.done)
-        subject?
-            .subscribe(onNext: { string in strings.append(string) })
+        _ = subject?.subscribe(onNext: { string in strings.append(string) })
         XCTAssert(strings[0] == "1")
         XCTAssert(strings[1] == "2")
     }
@@ -32,11 +31,11 @@ class ReplayTests: XCTestCase {
         var more: [String] = []
         subject?.on(.next("1"))
         subject?.on(.next("2"))
-        subject?.subscribe(onNext: { string in
+        _ = subject?.subscribe(onNext: { string in
             strings.append(string)
         })
         subject?.on(.next("3"))
-        subject?.subscribe(onNext: { string in
+        _ = subject?.subscribe(onNext: { string in
             more.append(string)
         })
         XCTAssert(strings[0] == "1")
@@ -50,7 +49,7 @@ class ReplayTests: XCTestCase {
 
         subject?.on(.next("1"))
         DispatchQueue.global().async {
-            self.subject?.subscribe(queue: .main, onNext: { _ in
+            _ = self.subject?.subscribe(queue: .main, onNext: { _ in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
             })

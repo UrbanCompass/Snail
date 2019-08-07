@@ -11,7 +11,7 @@ public class Replay<T>: Observable<T> {
         self.threshold = threshold
     }
 
-    @discardableResult public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> Subscriber<T> {
+    public override func subscribe(queue: DispatchQueue? = nil, onNext: ((T) -> Void)? = nil, onError: ((Error) -> Void)? = nil, onDone: (() -> Void)? = nil) -> Subscriber<T> {
         replay(queue: queue, handler: createHandler(onNext: onNext, onError: onError, onDone: onDone))
         return super.subscribe(queue: queue, onNext: onNext, onError: onError, onDone: onDone)
     }
@@ -28,7 +28,7 @@ public class Replay<T>: Observable<T> {
 
     public override func on(_ queue: DispatchQueue) -> Observable<T> {
         let replay = Replay<T>(threshold)
-        subscribe(queue: queue,
+        _ = subscribe(queue: queue,
                   onNext: { replay.on(.next($0)) },
                   onError: { replay.on(.error($0)) },
                   onDone: { replay.on(.done) })
