@@ -39,6 +39,14 @@ Add all the files from `Snail/Snail` to your project
 let observable = Observable<thing>()
 ```
 
+## Disposer
+
+A disposer is in charge of removing all the subscriptions. This prevents creating retention cycles when using closures (see weak self section). For the sake of all the examples, let's have a disposer created:
+
+```swift
+let disposer = Disposer()
+```
+
 ## Subscribing to Observables
 
 ```swift
@@ -46,7 +54,7 @@ observable.subscribe(
     onNext: { thing in ... }, // do something with thing
     onError: { error in ... }, // do something with error
     onDone: { ... } //do something when it's done
-)
+).add(to: disposer)
 ```
 
 Closures are optional too...
@@ -54,13 +62,13 @@ Closures are optional too...
 ```swift
 observable.subscribe(
     onNext: { thing in ... } // do something with thing
-)
+).add(to: disposer)
 ```
 
 ```swift
 observable.subscribe(
     onError: { error in ... } // do something with error
-)
+).add(to: disposer)
 ```
 
 ## Creating Observables Variables
@@ -73,7 +81,7 @@ let variable = Variable<whatever>(some initial value)
 let optionalString = Variable<String?>(nil)
 optionalString.asObservable().subscribe(
     onNext: { string in ... } // do something with value changes
-)
+).add(to: disposer)
 
 optionalString.value = "something"
 ```
@@ -82,7 +90,7 @@ optionalString.value = "something"
 let int = Variable<Int>(12)
 int.asObservable().subscribe(
     onNext: { int in ... } // do something with value changes
-)
+).add(to: disposer)
 
 int.value = 42
 ```
@@ -101,7 +109,7 @@ print(isLoaderAnimating.value) // true
 ```swift
 Observable.merge([userCreated, userUpdated]).subscribe(
   onNext: { user in ... } // do something with the latest value that got updated
-})
+}).add(to: disposer)
 
 userCreated.value = User(name: "Russell") // triggers 
 userUpdated.value = User(name: "Lee") // triggers 
@@ -110,7 +118,7 @@ userUpdated.value = User(name: "Lee") // triggers
 ```swift
 Observable.combineLatest((isMapLoading, isListLoading)).subscribe(
   onNext: { isMapLoading, isListLoading in ... } // do something when both values are set, every time one gets updated
-})
+}).add(to: disposer)
 
 isMapLoading.value = true
 isListLoading.value = true // triggers
@@ -123,7 +131,7 @@ isListLoading.value = true // triggers
 let variable = Variable<String>("Something")
 variable.map { $0.count }.asObservable().subscribe(
     onNext: { (charactersCount: Int -> Void) in ... } // do something with Integer 'charactersCount' on value changes
-)
+).add(to: disposer)
 ```
 
 ## Miscellaneous Observables
@@ -146,12 +154,12 @@ let replay = Replay(n) // replays the last N events when a new observer subscrib
 let control = UIControl()
 control.controlEvent(.touchUpInside).subscribe(
   onNext: { ... }  // do something with thing
-)
+).add(to: disposer)
 
 let button = UIButton()
 button.tap.subscribe(
   onNext: { ... }  // do something with thing
-)
+).add(to: disposer)
 ```
 
 ## Queues
@@ -173,17 +181,27 @@ Subscribing on `DispatchQueue.main`
 ```swift
 observable.subscribe(queue: .main,
     onNext: { thing in ... }
-)
+).add(to: disposer)
 ```
 
-## Weak self
+## Weak self is optional
 
-To avoid retain cycles and/or crashes, __always__ use `[weak self]` when self is needed by an observer
+You can use `[weak self]`  if you want, but with the introduction of `Disposer`, retention cycles are destroyed when calling `disposer.disposeAll()`. 
+
+One idea would be to call `disposer.disposeAll()` when you pop a view controller from the navigation stack.
 
 ```swift
-observable.subscribe(onNext: { [weak self] in
-    // use self? as needed.
-})
+protocol HasDisposer {
+    var disposer: Disposer
+}
+
+class NavigationController: UINavigationController {
+    public override func popViewController(animated: Bool) -> UIViewController? {
+        let viewController = super.popViewController(animated: animated)
+        (viewController as? HasDisposer).disposer.disposeAll()
+        return viewController
+    }
+}
 ```
 
 # In Practice
@@ -192,9 +210,9 @@ observable.subscribe(onNext: { [weak self] in
 
 ```swift
 NotificationCenter.default.observeEvent(Notification.Name.UIKeyboardWillShow)
-  .subscribe(queue: .main, onNext: { [weak self] notification in
-    self?.keyboardWillShow(notification)
-  })
+  .subscribe(queue: .main, onNext: { notification in
+    self.keyboardWillShow(notification)
+  }).add(to: disposer)
 ```
 
 ## Subscribing to Gestures
@@ -202,9 +220,9 @@ NotificationCenter.default.observeEvent(Notification.Name.UIKeyboardWillShow)
 ```swift
 let panGestureRecognizer = UIPanGestureRecognizer()
 panGestureRecognizer.asObservable()
-  .subscribe(queue: .main, onNext: { [weak self] in
-    self?.handlePan(panGestureRecognizer)
-  })
+  .subscribe(queue: .main, onNext: {
+    self.handlePan(panGestureRecognizer)
+  }).add(to: disposer)
 view.addGestureRecognizer(panGestureRecognizer)
 ```
 
@@ -212,7 +230,7 @@ view.addGestureRecognizer(panGestureRecognizer)
 
 ```swift
 navigationItem.leftBarButtonItem?.tap
-  .subscribe(onNext: { [weak self] in
-    self?.dismiss(animated: true, completion: nil)
-  })
+  .subscribe(onNext: {
+    self.dismiss(animated: true, completion: nil)
+  }).add(to: disposer)
 ```
