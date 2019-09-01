@@ -5,6 +5,7 @@ import UIKit
 
 public extension UIView {
     private static var observableKey = "com.compass.Snail.UIView.ObservableKey"
+    private static var disposerKey = "com.compass.Snail.UIView.Disposer"
 
     func observe(event: Notification.Name) -> Observable<Notification> {
         return NotificationCenter.default.observeEvent(event)
@@ -48,6 +49,15 @@ public extension UIView {
             observable.on(.next((0, duration)))
         })
         return observable
+    }
+
+    var disposer: Disposer {
+        if let disposer = objc_getAssociatedObject(self, &UIView.disposerKey) as? Disposer {
+            return disposer
+        }
+        let disposer = Disposer()
+        objc_setAssociatedObject(self, &UIView.disposerKey, disposer, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return disposer
     }
 }
 

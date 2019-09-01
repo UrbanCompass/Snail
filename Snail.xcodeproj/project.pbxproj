@@ -34,6 +34,7 @@
 		DEF9B98F1FD5FE5800F8514E /* Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98E1FD5FE5800F8514E /* Unique.swift */; };
 		F5C973A622F20C86003DB42C /* Disposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C973A522F20C86003DB42C /* Disposer.swift */; };
 		F5C973A822F4B359003DB42C /* DisposerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C973A722F4B359003DB42C /* DisposerTests.swift */; };
+		FB854262231C2BE600C5F2E7 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB854261231C2BE600C5F2E7 /* UIViewControllerExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		DEF9B98E1FD5FE5800F8514E /* Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unique.swift; sourceTree = "<group>"; };
 		F5C973A522F20C86003DB42C /* Disposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disposer.swift; sourceTree = "<group>"; };
 		F5C973A722F4B359003DB42C /* DisposerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisposerTests.swift; sourceTree = "<group>"; };
+		FB854261231C2BE600C5F2E7 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 				2421BA711E09801000EA9064 /* UIGestureRecognizerExtensions.swift */,
 				CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */,
 				24CF1FA71EF875A400F34234 /* URLSessionExtensions.swift */,
+				FB854261231C2BE600C5F2E7 /* UIViewControllerExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				CBE54A7A1E5A16AC00971F74 /* Subscriber.swift in Sources */,
 				2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */,
 				24FABD561DFEF670005CF84E /* Fail.swift in Sources */,
+				FB854262231C2BE600C5F2E7 /* UIViewControllerExtensions.swift in Sources */,
 				CBE54E611DFB39510008DD64 /* Observable.swift in Sources */,
 				2421BA741E0992D400EA9064 /* NotificationCenterExtensions.swift in Sources */,
 				CB2936771DFE151B00792E6B /* Just.swift in Sources */,
