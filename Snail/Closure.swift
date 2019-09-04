@@ -1,7 +1,6 @@
 //  Copyright © 2019 Compass. All rights reserved.
 
 import Foundation
-import Snail
 
 public class Closure<T>: DisposableType {
     public private(set) var closure: T?

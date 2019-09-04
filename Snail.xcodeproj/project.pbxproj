@@ -32,6 +32,8 @@
 		DEEDA8EB2051BCB4000FE578 /* NotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */; };
 		DEF9B98D1FD5D8FD00F8514E /* UniqueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */; };
 		DEF9B98F1FD5FE5800F8514E /* Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98E1FD5FE5800F8514E /* Unique.swift */; };
+		F569538A232046AA00D35C80 /* ClosureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5695389232046AA00D35C80 /* ClosureTests.swift */; };
+		F569538C2320476100D35C80 /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F569538B2320476100D35C80 /* Closure.swift */; };
 		F5C973A622F20C86003DB42C /* Disposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C973A522F20C86003DB42C /* Disposer.swift */; };
 		F5C973A822F4B359003DB42C /* DisposerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C973A722F4B359003DB42C /* DisposerTests.swift */; };
 /* End PBXBuildFile section */
@@ -75,6 +77,8 @@
 		DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenterExtensions.swift; sourceTree = "<group>"; };
 		DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueTests.swift; sourceTree = "<group>"; };
 		DEF9B98E1FD5FE5800F8514E /* Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unique.swift; sourceTree = "<group>"; };
+		F5695389232046AA00D35C80 /* ClosureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureTests.swift; sourceTree = "<group>"; };
+		F569538B2320476100D35C80 /* Closure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Closure.swift; sourceTree = "<group>"; };
 		F5C973A522F20C86003DB42C /* Disposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disposer.swift; sourceTree = "<group>"; };
 		F5C973A722F4B359003DB42C /* DisposerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisposerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,6 +131,7 @@
 		CBE54E431DFB36DF0008DD64 /* Snail */ = {
 			isa = PBXGroup;
 			children = (
+				F569538B2320476100D35C80 /* Closure.swift */,
 				CBE54E441DFB36DF0008DD64 /* Snail.h */,
 				CBE54E451DFB36DF0008DD64 /* Info.plist */,
 				F5C973A522F20C86003DB42C /* Disposer.swift */,
@@ -157,6 +162,7 @@
 				DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */,
 				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
 				2421BA751E09A6D500EA9064 /* Extensions */,
+				F5695389232046AA00D35C80 /* ClosureTests.swift */,
 			);
 			path = SnailTests;
 			sourceTree = "<group>";
@@ -310,6 +316,7 @@
 				2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */,
 				24FABD561DFEF670005CF84E /* Fail.swift in Sources */,
 				CBE54E611DFB39510008DD64 /* Observable.swift in Sources */,
+				F569538C2320476100D35C80 /* Closure.swift in Sources */,
 				2421BA741E0992D400EA9064 /* NotificationCenterExtensions.swift in Sources */,
 				CB2936771DFE151B00792E6B /* Just.swift in Sources */,
 				241F15581E03124600DD70A2 /* UIBarButtonItemExtensions.swift in Sources */,
@@ -334,6 +341,7 @@
 				F5C973A822F4B359003DB42C /* DisposerTests.swift in Sources */,
 				24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */,
 				DEF9B98D1FD5D8FD00F8514E /* UniqueTests.swift in Sources */,
+				F569538A232046AA00D35C80 /* ClosureTests.swift in Sources */,
 				CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */,
 				24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */,
 				DEEDA8EB2051BCB4000FE578 /* NotificationCenterExtensions.swift in Sources */,
