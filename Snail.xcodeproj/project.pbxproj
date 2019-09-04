@@ -33,7 +33,7 @@
 		DEF9B98D1FD5D8FD00F8514E /* UniqueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */; };
 		DEF9B98F1FD5FE5800F8514E /* Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98E1FD5FE5800F8514E /* Unique.swift */; };
 		F569538A232046AA00D35C80 /* ClosureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5695389232046AA00D35C80 /* ClosureTests.swift */; };
-		F569538C2320476100D35C80 /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F569538B2320476100D35C80 /* Closure.swift */; };
+		F569538D23204A2500D35C80 /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F569538B2320476100D35C80 /* Closure.swift */; };
 		F5C973A622F20C86003DB42C /* Disposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C973A522F20C86003DB42C /* Disposer.swift */; };
 		F5C973A822F4B359003DB42C /* DisposerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C973A722F4B359003DB42C /* DisposerTests.swift */; };
 /* End PBXBuildFile section */
@@ -154,15 +154,15 @@
 			isa = PBXGroup;
 			children = (
 				CBE54E511DFB36DF0008DD64 /* Info.plist */,
-				24FABD571DFEF7EC005CF84E /* FailTests.swift */,
+				F5695389232046AA00D35C80 /* ClosureTests.swift */,
 				F5C973A722F4B359003DB42C /* DisposerTests.swift */,
+				24FABD571DFEF7EC005CF84E /* FailTests.swift */,
 				CB2936781DFEF77500792E6B /* JustTests.swift */,
 				CBE54E641DFB395A0008DD64 /* ObservableTests.swift */,
 				24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */,
 				DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */,
 				CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */,
 				2421BA751E09A6D500EA9064 /* Extensions */,
-				F5695389232046AA00D35C80 /* ClosureTests.swift */,
 			);
 			path = SnailTests;
 			sourceTree = "<group>";
@@ -316,7 +316,7 @@
 				2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */,
 				24FABD561DFEF670005CF84E /* Fail.swift in Sources */,
 				CBE54E611DFB39510008DD64 /* Observable.swift in Sources */,
-				F569538C2320476100D35C80 /* Closure.swift in Sources */,
+				F569538D23204A2500D35C80 /* Closure.swift in Sources */,
 				2421BA741E0992D400EA9064 /* NotificationCenterExtensions.swift in Sources */,
 				CB2936771DFE151B00792E6B /* Just.swift in Sources */,
 				241F15581E03124600DD70A2 /* UIBarButtonItemExtensions.swift in Sources */,
