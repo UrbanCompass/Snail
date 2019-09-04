@@ -10,7 +10,7 @@ public class Closure<T>: DisposableType {
     }
 
     public func dispose() {
-        self.closure = nil
+        closure = nil
     }
 
     public func add(to disposer: Disposer) -> Closure<T> {
