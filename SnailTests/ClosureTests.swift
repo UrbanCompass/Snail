@@ -14,7 +14,7 @@ class ClosureTests: XCTestCase {
 
         closure.closure?()
 
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 0.1, handler: nil)
         disposer.disposeAll()
         XCTAssertNil(closure.closure)
     }
