@@ -7,15 +7,15 @@ import XCTest
 class ClosureTests: XCTestCase {
     func testClosure() {
         let expectation = self.expectation(description: "Closure Executed")
-
+        let disposer = Disposer()
         let closure = Closure {
             expectation.fulfill()
-        }
+        }.add(to: disposer)
 
         closure.closure?()
 
         waitForExpectations(timeout: 5, handler: nil)
-        closure.dispose()
+        disposer.disposeAll()
         XCTAssertNil(closure.closure)
     }
 }
