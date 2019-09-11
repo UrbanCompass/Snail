@@ -6,15 +6,16 @@ import XCTest
 
 class ClosureTests: XCTestCase {
     func testClosure() {
-        let expectation = self.expectation(description: "Closure Executed")
         let disposer = Disposer()
+        var closureFired = false
+
         let closure = Closure {
-            expectation.fulfill()
+            closureFired = true
         }.add(to: disposer)
 
         closure.closure?()
 
-        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssertEqual(closureFired, true)
         disposer.disposeAll()
         XCTAssertNil(closure.closure)
     }
