@@ -41,7 +41,7 @@ let observable = Observable<thing>()
 
 ## Disposer
 
-A disposer is in charge of removing all the subscriptions. A disposer is usually located in a centralized place where most of the subscriptions happen (ie: UIViewController in an MVVM architecture). Since most of the subscriptions are from different times, all the things that are going to be disposed need to comform to `Disposable`. 
+A disposer is in charge of removing all the subscriptions. A disposer is usually located in a centralized place where most of the subscriptions happen (ie: UIViewController in an MVVM architecture). Since most of the subscriptions are to different observables, and those observables are tied to type, all the things that are going to be disposed need to comform to `Disposable`. 
 
 If the `Disposer` helps get rid of the closures and prevent retention cycles (see weak self section). For the sake of all the examples, let's have a disposer created:
 
