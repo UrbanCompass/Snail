@@ -41,11 +41,26 @@ let observable = Observable<thing>()
 
 ## Disposer
 
-A disposer is in charge of removing all the subscriptions. This prevents creating retention cycles when using closures (see weak self section). For the sake of all the examples, let's have a disposer created:
+A disposer is in charge of removing all the subscriptions. A disposer is usually located in a centralized place where most of the subscriptions happen (ie: UIViewController in an MVVM architecture). Since most of the subscriptions are to different observables, and those observables are tied to type, all the things that are going to be disposed need to comform to `Disposable`. 
+
+If the `Disposer` helps get rid of the closures and prevent retention cycles (see weak self section). For the sake of all the examples, let's have a disposer created:
 
 ```swift
 let disposer = Disposer()
 ```
+
+## Closure Wrapper
+
+The main usage for the `Disposer` is to get rid of subscription closures that we create on `Observables`, but the other usage that we found handy, is the ability to dispose of regular closures. As part of the library, we created a small `Closure` wrapper class that complies with `Disposable`. This way you can wrap simple closures to be disposed. 
+
+
+```swift
+let closureCall = Closure {
+    print("We ❤️ Snail")
+}.add(to: Disposer)
+```
+
+Please note that this would not dispose of the `closureCall` reference to closure, it would only Dispose the content of the `Closure`.
 
 ## Subscribing to Observables
 
