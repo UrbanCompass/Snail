@@ -235,8 +235,8 @@ NotificationCenter.default.observeEvent(Notification.Name.UIKeyboardWillShow)
 ```swift
 let panGestureRecognizer = UIPanGestureRecognizer()
 panGestureRecognizer.asObservable()
-  .subscribe(queue: .main, onNext: {
-    self.handlePan(panGestureRecognizer)
+  .subscribe(queue: .main, onNext: { sender, event in
+    // Your code here
   }).add(to: disposer)
 view.addGestureRecognizer(panGestureRecognizer)
 ```
