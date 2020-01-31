@@ -22,8 +22,9 @@ class ReplayTests: XCTestCase {
         subject?.on(.next("2"))
         subject?.on(.done)
         _ = subject?.subscribe(onNext: { string in strings.append(string) })
-        XCTAssert(strings[0] == "1")
-        XCTAssert(strings[1] == "2")
+
+        XCTAssertEqual(strings[0], "1")
+        XCTAssertEqual(strings[1], "2")
     }
 
     func testMultipleSubscribers() {
@@ -31,16 +32,14 @@ class ReplayTests: XCTestCase {
         var more: [String] = []
         subject?.on(.next("1"))
         subject?.on(.next("2"))
-        _ = subject?.subscribe(onNext: { string in
-            strings.append(string)
-        })
+        _ = subject?.subscribe(onNext: { strings.append($0) })
+
         subject?.on(.next("3"))
-        _ = subject?.subscribe(onNext: { string in
-            more.append(string)
-        })
-        XCTAssert(strings[0] == "1")
-        XCTAssert(more[0] == "2")
-        XCTAssert(more.count == 2)
+        _ = subject?.subscribe(onNext: { more.append($0) })
+
+        XCTAssertEqual(strings[0], "1")
+        XCTAssertEqual(more[0], "2")
+        XCTAssertEqual(more.count, 2)
     }
 
     func testReplayQueue() {
@@ -50,14 +49,14 @@ class ReplayTests: XCTestCase {
         subject?.on(.next("1"))
         DispatchQueue.global().async {
             _ = self.subject?.subscribe(queue: .main, onNext: { _ in
-                exp.fulfill()
                 isMainQueue = Thread.isMainThread
+                exp.fulfill()
             })
         }
 
         waitForExpectations(timeout: 2) { error in
             XCTAssertNil(error)
-            XCTAssert(isMainQueue)
+            XCTAssertEqual(isMainQueue, true)
         }
     }
 
@@ -69,14 +68,14 @@ class ReplayTests: XCTestCase {
 
         DispatchQueue.global().async {
             self.subject?.on(.main).subscribe(onNext: { _ in
-                exp.fulfill()
                 isMainQueue = Thread.isMainThread
+                exp.fulfill()
             })
         }
 
         waitForExpectations(timeout: 2) { error in
             XCTAssertNil(error)
-            XCTAssert(isMainQueue)
+            XCTAssertEqual(isMainQueue, true)
         }
     }
 }

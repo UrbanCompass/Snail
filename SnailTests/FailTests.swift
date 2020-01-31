@@ -43,16 +43,15 @@ class FailTests: XCTestCase {
     }
 
     func testFiresStoppedEventOnSubscribe() {
-        var newError: Error?
+        var newError: TestError?
         done = nil
 
         subject?.subscribe(
-            onError: { error in newError = error },
+            onError: { newError = $0 as? TestError },
             onDone: { self.done = true }
         )
 
-        XCTAssertNotNil(newError as? TestError)
-        XCTAssertEqual(newError as? TestError, error as? TestError)
+        XCTAssertEqual(newError, .test)
         XCTAssertNil(done)
     }
 }

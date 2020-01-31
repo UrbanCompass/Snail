@@ -16,11 +16,11 @@ class UniqueTests: XCTestCase {
         subject.value = "2"
         subject.value = "2"
         subject.value = "2"
-        XCTAssert(events[0] == nil)
-        XCTAssert(events[1] == "1")
-        XCTAssert(events[2] == "2")
-        XCTAssert(subject.value == "2")
-        XCTAssert(events.count == 3)
+        XCTAssertEqual(events[0], nil)
+        XCTAssertEqual(events[1], "1")
+        XCTAssertEqual(events[2], "2")
+        XCTAssertEqual(subject.value, "2")
+        XCTAssertEqual(events.count, 3)
     }
 
     func testVariableNotifiesOnSubscribe() {
@@ -28,9 +28,7 @@ class UniqueTests: XCTestCase {
         subject.value = "new"
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { string in
-            result = string
-        })
+        subject.asObservable().subscribe(onNext: { result = $0 })
 
         XCTAssertEqual("new", result)
     }
@@ -39,9 +37,7 @@ class UniqueTests: XCTestCase {
         let subject = Unique("initial")
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { string in
-            result = string
-        })
+        subject.asObservable().subscribe(onNext: { result = $0 })
 
         XCTAssertEqual("initial", result)
     }
@@ -62,9 +58,7 @@ class UniqueTests: XCTestCase {
         let subject = Unique("initial")
         var subjectCharactersCount: Int?
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { count in
-            subjectCharactersCount = count
-        })
+        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 })
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -72,16 +66,15 @@ class UniqueTests: XCTestCase {
     func testVariableHandlesEquatableArrays() {
         var events: [[String]] = []
         let subject = Unique<[String]>(["1", "2"])
-        subject.asObservable().subscribe(
-            onNext: { array in events.append(array) }
-        )
+        subject.asObservable().subscribe(onNext: { array in events.append(array) })
+
         subject.value = ["1", "2"]
         subject.value = ["2", "1"]
         subject.value = ["2", "1"]
         subject.value = ["1", "2"]
-        XCTAssert(events[0] == ["1", "2"])
-        XCTAssert(events[1] == ["2", "1"])
-        XCTAssert(events[2] == ["1", "2"])
+        XCTAssertEqual(events[0], ["1", "2"])
+        XCTAssertEqual(events[1], ["2", "1"])
+        XCTAssertEqual(events[2], ["1", "2"])
     }
 
     func testVariableHandlesOptionalArrays() {
@@ -94,9 +87,9 @@ class UniqueTests: XCTestCase {
         subject.value = nil
         subject.value = nil
         subject.value = ["1", "2"]
-        XCTAssert(events[0] == nil)
-        XCTAssert(events[1] == ["1", "2"])
-        XCTAssert(events[2] == nil)
-        XCTAssert(events[3] == ["1", "2"])
+        XCTAssertEqual(events[0], nil)
+        XCTAssertEqual(events[1], ["1", "2"])
+        XCTAssertEqual(events[2], nil)
+        XCTAssertEqual(events[3], ["1", "2"])
     }
 }

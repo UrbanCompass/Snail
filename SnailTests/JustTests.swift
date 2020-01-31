@@ -8,8 +8,7 @@ class JustTests: XCTestCase {
     func testJust() {
         var result: Int?
         var done = false
-        let subject = Just(1)
-        subject.subscribe(
+        Just(1).subscribe(
             onNext: { value in result = value },
             onDone: { done = true }
         )
