@@ -281,6 +281,21 @@ class ObservableTests: XCTestCase {
         observable.on(.next("3"))
     }
 
+    func testSkipError() {
+        let observable = Observable<String>()
+
+        var error: Error?
+
+        observable.skip(first: 2).subscribe(onError: {
+            error = $0
+        })
+
+        observable.on(.error(TestError.test))
+
+        XCTAssertNotNil(error)
+        XCTAssert(error is TestError)
+    }
+
     func testForward() {
         var received: [String] = []
         var receivedError: Error?
