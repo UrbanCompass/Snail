@@ -13,10 +13,10 @@ class VariableTests: XCTestCase {
         )
         subject.value = "1"
         subject.value = "2"
-        XCTAssert(events[0] == nil)
-        XCTAssert(events[1] == "1")
-        XCTAssert(events[2] == "2")
-        XCTAssert(subject.value == "2")
+        XCTAssertEqual(events[0], nil)
+        XCTAssertEqual(events[1], "1")
+        XCTAssertEqual(events[2], "2")
+        XCTAssertEqual(subject.value, "2")
     }
 
     func testVariableNotifiesOnSubscribe() {
@@ -24,9 +24,7 @@ class VariableTests: XCTestCase {
         subject.value = "new"
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { string in
-            result = string
-        })
+        subject.asObservable().subscribe(onNext: { result = $0 })
 
         XCTAssertEqual("new", result)
     }
@@ -35,9 +33,7 @@ class VariableTests: XCTestCase {
         let subject = Variable("initial")
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { string in
-            result = string
-        })
+        subject.asObservable().subscribe(onNext: { result = $0 })
 
         XCTAssertEqual("initial", result)
     }
@@ -47,9 +43,7 @@ class VariableTests: XCTestCase {
         subject.value = "new"
         var subjectCharactersCount: Int?
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { count in
-            subjectCharactersCount = count
-        })
+        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 })
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -58,9 +52,7 @@ class VariableTests: XCTestCase {
         let subject = Variable("initial")
         var subjectCharactersCount: Int?
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { count in
-            subjectCharactersCount = count
-        })
+        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 })
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -88,7 +80,7 @@ class VariableTests: XCTestCase {
 
         subject.value = "two"
 
-        XCTAssertTrue(firedCount == 2)
+        XCTAssertEqual(firedCount, 2)
     }
 
     func testMapToVoid() {

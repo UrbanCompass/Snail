@@ -202,7 +202,7 @@ class ObservableTests: XCTestCase {
         })
         observable.on(.next("1"))
         observable.on(.next("2"))
-        waitForExpectations(timeout: delay) { _ in
+        waitForExpectations(timeout: delay*2) { _ in
             XCTAssertEqual(received.count, 1)
             XCTAssertEqual(received.first, "2")
         }
