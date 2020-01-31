@@ -35,8 +35,8 @@ class ObservableTests: XCTestCase {
     func testNext() {
         subject?.on(.next("1"))
         subject?.on(.next("2"))
-        XCTAssert(strings?[0] == "1")
-        XCTAssert(strings?[1] == "2")
+        XCTAssertEqual(strings?[0], "1")
+        XCTAssertEqual(strings?[1], "2")
     }
 
     func testOnDone() {
@@ -44,10 +44,10 @@ class ObservableTests: XCTestCase {
         subject?.on(.next("2"))
         subject?.on(.done)
         subject?.on(.next("3"))
-        XCTAssert(strings?.count == 2)
-        XCTAssert(strings?[0] == "1")
-        XCTAssert(strings?[1] == "2")
-        XCTAssert(done == true)
+        XCTAssertEqual(strings?.count, 2)
+        XCTAssertEqual(strings?[0], "1")
+        XCTAssertEqual(strings?[1], "2")
+        XCTAssertEqual(done, true)
     }
 
     func testOnError() {
@@ -55,10 +55,10 @@ class ObservableTests: XCTestCase {
         subject?.on(.next("2"))
         subject?.on(.error(TestError.test))
         subject?.on(.next("3"))
-        XCTAssert(strings?.count == 2)
-        XCTAssert(strings?[0] == "1")
-        XCTAssert(strings?[1] == "2")
-        XCTAssert((error as? TestError) == TestError.test)
+        XCTAssertEqual(strings?.count, 2)
+        XCTAssertEqual(strings?[0], "1")
+        XCTAssertEqual(strings?[1], "2")
+        XCTAssertEqual(error as? TestError, .test)
     }
 
     func testMultipleSubscribers() {
@@ -67,7 +67,7 @@ class ObservableTests: XCTestCase {
             more.append(string)
         })
         subject?.on(.next("1"))
-        XCTAssert(strings?.first == more.first)
+        XCTAssertEqual(strings?.first, more.first)
     }
 
     func testFiresStoppedEventOnSubscribeIfStopped() {
@@ -75,7 +75,7 @@ class ObservableTests: XCTestCase {
 
         var oldError: TestError?
         subject?.subscribe(onError: { error in oldError = error as? TestError })
-        XCTAssert(oldError == TestError.test)
+        XCTAssertEqual(oldError, .test)
     }
 
     func testSubscribeOnMainThread() {
@@ -92,7 +92,7 @@ class ObservableTests: XCTestCase {
 
         waitForExpectations(timeout: 2) { error in
             XCTAssertNil(error)
-            XCTAssert(isMainQueue)
+            XCTAssertEqual(isMainQueue, true)
         }
     }
 
@@ -112,7 +112,7 @@ class ObservableTests: XCTestCase {
 
         waitForExpectations(timeout: 2) { error in
             XCTAssertNil(error)
-            XCTAssert(isMainQueue)
+            XCTAssertEqual(isMainQueue, true)
         }
     }
 
@@ -130,7 +130,7 @@ class ObservableTests: XCTestCase {
 
         waitForExpectations(timeout: 2) { error in
             XCTAssertNil(error)
-            XCTAssert(isMainQueue)
+            XCTAssertEqual(isMainQueue, true)
         }
     }
 
@@ -138,8 +138,8 @@ class ObservableTests: XCTestCase {
         subject?.on(.next("1"))
         subject?.removeSubscribers()
         subject?.on(.next("2"))
-        XCTAssert(strings?[0] == "1")
-        XCTAssert(strings?.count == 1)
+        XCTAssertEqual(strings?[0], "1")
+        XCTAssertEqual(strings?.count, 1)
     }
 
     func testRemoveSubscriber() {
@@ -153,17 +153,17 @@ class ObservableTests: XCTestCase {
         }
         subject?.removeSubscriber(subscriber: subscriber)
         subject?.on(.next("2"))
-        XCTAssert(strings?.count == 3)
-        XCTAssert(strings?[0] == "1")
-        XCTAssert(strings?[1] == "1")
-        XCTAssert(strings?[2] == "2")
+        XCTAssertEqual(strings?.count, 3)
+        XCTAssertEqual(strings?[0], "1")
+        XCTAssertEqual(strings?[1], "1")
+        XCTAssertEqual(strings?[2], "2")
         subject?.removeSubscriber(subscriber: subscriber)
         subject?.on(.next("3"))
-        XCTAssert(strings?.count == 4)
-        XCTAssert(strings?[0] == "1")
-        XCTAssert(strings?[1] == "1")
-        XCTAssert(strings?[2] == "2")
-        XCTAssert(strings?[3] == "3")
+        XCTAssertEqual(strings?.count, 4)
+        XCTAssertEqual(strings?[0], "1")
+        XCTAssertEqual(strings?[1], "1")
+        XCTAssertEqual(strings?[2], "2")
+        XCTAssertEqual(strings?[3], "3")
     }
 
     func testBlockSuccess() {
@@ -203,8 +203,8 @@ class ObservableTests: XCTestCase {
         observable.on(.next("1"))
         observable.on(.next("2"))
         waitForExpectations(timeout: delay) { _ in
-            XCTAssert(received.count == 1)
-            XCTAssert(received.first == "2")
+            XCTAssertEqual(received.count, 1)
+            XCTAssertEqual(received.first, "2")
         }
     }
 
@@ -230,9 +230,9 @@ class ObservableTests: XCTestCase {
         observable.on(.next("1"))
 
         waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 2)
-            XCTAssert(received.first == "1")
-            XCTAssert(received.last == "3")
+            XCTAssertEqual(received.count, 2)
+            XCTAssertEqual(received.first, "1")
+            XCTAssertEqual(received.last, "3")
         }
     }
 
@@ -260,8 +260,8 @@ class ObservableTests: XCTestCase {
         observable.on(.next("1"))
 
         waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 1)
-            XCTAssert(received.first == "3")
+            XCTAssertEqual(received.count, 1)
+            XCTAssertEqual(received.first, "3")
         }
     }
 
@@ -269,38 +269,38 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
         var received: [String] = []
 
-        observable.skip(first: 2).subscribe(onNext: { string in
-            received.append(string)
-
-            XCTAssert(received.count == 1)
-            XCTAssert(received.first == "3")
-        })
+        observable.skip(first: 2).subscribe(onNext: { received.append($0) })
 
         observable.on(.next("1"))
         observable.on(.next("2"))
         observable.on(.next("3"))
+        XCTAssertEqual(received.count, 1)
+        XCTAssertEqual(received.first, "3")
     }
 
     func testSkipError() {
         let observable = Observable<String>()
 
-        var error: Error?
-
-        observable.skip(first: 2).subscribe(onError: {
-            error = $0
-        })
-
+        var error: TestError?
+        observable.skip(first: 2).subscribe(onError: { error = $0 as? TestError })
         observable.on(.error(TestError.test))
 
-        XCTAssertNotNil(error)
-        XCTAssert(error is TestError)
+        XCTAssertEqual(error, .test)
+    }
+
+    func testSkipDone() {
+        let observable = Observable<String>()
+        var done = false
+
+        observable.skip(first: 2).subscribe(onDone: { done = true })
+        observable.on(.done)
+
+        XCTAssertEqual(done, true)
     }
 
     func testForward() {
         var received: [String] = []
-        var receivedError: Error?
-
-        let exp = expectation(description: "forward")
+        var receivedError: TestError?
 
         let subject = Observable<String>()
         let observable = Observable<String>()
@@ -309,47 +309,34 @@ class ObservableTests: XCTestCase {
         subject.subscribe(onNext: { string in
             received.append(string)
         }, onError: { error in
-            receivedError = error
-            exp.fulfill()
+            receivedError = error as? TestError
         })
 
         observable.on(.next("1"))
         observable.on(.error(TestError.test))
 
-        waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 1)
-            XCTAssert(received.first == "1")
-            XCTAssertEqual(receivedError as? TestError, TestError.test)
-        }
+        XCTAssertEqual(received.count, 1)
+        XCTAssertEqual(received.first, "1")
+        XCTAssertEqual(receivedError, .test)
     }
 
     func testForwardDone() {
-        let exp = expectation(description: "forward")
-
         var received: [String] = []
 
         let subject = Observable<String>()
         let observable = Observable<String>()
         observable.forward(to: subject)
 
-        subject.subscribe(onNext: { string in
-            received.append(string)
-        }, onDone: {
-            exp.fulfill()
-        })
+        subject.subscribe(onNext: { received.append($0)})
 
         observable.on(.next("1"))
         observable.on(.done)
 
-        waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 1)
-            XCTAssert(received.first == "1")
-        }
+        XCTAssertEqual(received.count, 1)
+        XCTAssertEqual(received.first, "1")
     }
 
     func testMerge() {
-        let exp = expectation(description: "merge")
-
         var received: [String] = []
 
         let a = Observable<String>()
@@ -359,24 +346,18 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: { string in
             received.append(string)
-        }, onDone: {
-            exp.fulfill()
         })
 
         a.on(.next("1"))
         b.on(.next("2"))
         b.on(.done)
 
-        waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 2)
-            XCTAssert(received.first == "1")
-            XCTAssert(received.last == "2")
-        }
+        XCTAssertEqual(received.count, 2)
+        XCTAssertEqual(received.first, "1")
+        XCTAssertEqual(received.last, "2")
     }
 
     func testCombineLatestNonOptional() {
-        let exp = expectation(description: "combineLatest")
-
         var received: [String] = []
 
         let string = Observable<String>()
@@ -386,8 +367,6 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: { string, int in
             received.append("\(string): \(int)")
-        }, onDone: {
-            exp.fulfill()
         })
 
         string.on(.next("The value"))
@@ -398,18 +377,14 @@ class ObservableTests: XCTestCase {
         int.on(.next(3))
         int.on(.done)
 
-        waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 4)
-            XCTAssert(received[0] == "The number: 1")
-            XCTAssert(received[1] == "The number: 2")
-            XCTAssert(received[2] == "The digit: 2")
-            XCTAssert(received[3] == "The digit: 3")
-        }
+        XCTAssertEqual(received.count, 4)
+        XCTAssertEqual(received[0], "The number: 1")
+        XCTAssertEqual(received[1], "The number: 2")
+        XCTAssertEqual(received[2], "The digit: 2")
+        XCTAssertEqual(received[3], "The digit: 3")
     }
 
     func testCombineLatestOptional() {
-        let exp = expectation(description: "combineLatest")
-
         var received: [String] = []
 
         let string = Observable<String?>()
@@ -419,8 +394,6 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: { string, int in
             received.append("\(string ?? "<no title>"): \(int ?? 0)")
-        }, onDone: {
-            exp.fulfill()
         })
 
         string.on(.next("The value"))
@@ -431,18 +404,14 @@ class ObservableTests: XCTestCase {
         int.on(.next(3))
         string.on(.done)
 
-        waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 4)
-            XCTAssert(received[0] == "The number: 1")
-            XCTAssert(received[1] == "The number: 0")
-            XCTAssert(received[2] == "<no title>: 0")
-            XCTAssert(received[3] == "<no title>: 3")
-        }
+        XCTAssertEqual(received.count, 4)
+        XCTAssertEqual(received[0], "The number: 1")
+        XCTAssertEqual(received[1], "The number: 0")
+        XCTAssertEqual(received[2], "<no title>: 0")
+        XCTAssertEqual(received[3], "<no title>: 3")
     }
 
     func testCombineLatestError_firstMember() {
-        let exp = expectation(description: "combineLatest")
-
         var received: [String] = []
 
         let string = Observable<String>()
@@ -464,18 +433,12 @@ class ObservableTests: XCTestCase {
         int.on(.next(2))
         string.on(.error(TestError.test))
 
-        exp.fulfill()
-
-        waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 2)
-            XCTAssert(received.first == "The number: 1")
-            XCTAssert(received.last == "ERROR")
-        }
+        XCTAssertEqual(received.count, 2)
+        XCTAssertEqual(received.first, "The number: 1")
+        XCTAssertEqual(received.last, "ERROR")
     }
 
     func testCombineLatestError_secondMember() {
-        let exp = expectation(description: "combineLatest")
-
         var received: [String] = []
 
         let string = Observable<String>()
@@ -490,12 +453,8 @@ class ObservableTests: XCTestCase {
         int.on(.error(TestError.test))
         int.on(.next(1))
 
-        exp.fulfill()
-
-        waitForExpectations(timeout: 1) { _ in
-            XCTAssert(received.count == 1)
-            XCTAssert(received.first == "ERROR")
-        }
+        XCTAssertEqual(received.count, 1)
+        XCTAssertEqual(received.first, "ERROR")
     }
 }
 
