@@ -1,7 +1,11 @@
 //  Copyright © 2017 Compass. All rights reserved.
 
-public class Unique<T: Equatable>: Variable<T> {
-    public override var value: T {
+public class Unique<T: Equatable> {
+    let subject: Replay<T>
+    var lock = NSRecursiveLock()
+    var currentValue: T
+
+    public var value: T {
         get {
             lock.lock(); defer { lock.unlock() }
             return currentValue
@@ -18,12 +22,24 @@ public class Unique<T: Equatable>: Variable<T> {
         }
     }
 
-    public override init(_ value: T) {
-        super.init(value)
+    public init(_ value: T) {
+        currentValue = value
+        subject = Replay<T>(1)
+        self.value = value
         subject.on(.next(value))
     }
 
-    public override func map<U>(transform: @escaping (T) -> U) -> Unique<U> {
+    public func asObservable() -> Observable<T> {
+        return subject
+    }
+
+    public func bind(to variable: Variable<T>) {
+        variable.asObservable().subscribe(onNext: { [weak self] value in
+            self?.value = value
+        })
+    }
+
+    public func map<U>(transform: @escaping (T) -> U) -> Unique<U> {
         let newVariable = Unique<U>(transform(value))
         asObservable().subscribe(onNext: { _ in newVariable.value = transform(self.value) })
         return newVariable
