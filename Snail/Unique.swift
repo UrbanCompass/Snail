@@ -33,7 +33,7 @@ public class Unique<T: Equatable> {
         return subject
     }
 
-    public func bind(to variable: Variable<T>) {
+    public func bind(to variable: Unique<T>) {
         variable.asObservable().subscribe(onNext: { [weak self] value in
             self?.value = value
         })
