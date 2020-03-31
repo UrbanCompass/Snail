@@ -58,27 +58,27 @@ class VariableTests: XCTestCase {
     }
 
     func testUniqueFireCounts() {
-        let subject = Unique("one")
+        let subject = Unique("sameValue")
         var firedCount = 0
 
         subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
             firedCount += 1
         })
 
-        subject.value = "two"
+        subject.value = "sameValue"
 
         XCTAssertTrue(firedCount == 1)
     }
 
     func testVariableFireCounts() {
-        let subject = Variable("one")
+        let subject = Variable("sameValue")
         var firedCount = 0
 
         subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
             firedCount += 1
         })
 
-        subject.value = "two"
+        subject.value = "sameValue"
 
         XCTAssertEqual(firedCount, 2)
     }
