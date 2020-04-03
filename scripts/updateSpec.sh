@@ -2,10 +2,11 @@
 
 publish=$1
 spec="Snail.podspec"
+template="$spec.template"
 
 #replace spec tag
-replacement=`git describe --tags --abbrev=0`
-sed -i '' "s/  s.version.*/  s.version      = \"$replacement\"/" $spec
+export SnailVersion=`git describe --tags --abbrev=0`
+./scripts/template.sh Snail.podspec.template $spec
 
 echo "Updating spec.. ✅"
 cat $spec
