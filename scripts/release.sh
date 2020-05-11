@@ -13,4 +13,6 @@ cat $spec
 
 if [ "$publish" == "publish" ]; then
     pod trunk push $spec
+else
+    pod lib lint --verbose --allow-warnings
 fi
