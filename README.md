@@ -33,6 +33,10 @@ dependencies: [
 ### Manually
 Add all the files from `Snail/Snail` to your project
 
+### Developing Locally
+
+1. Run the setup script to install required dependencies `./scripts/setup.sh`
+
 ## Creating Observables
 
 ```swift
