@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Snail",
     products: [
-        .library(name: "Snail", targets: ["Snail"]),
+        .library(name: "Snail", targets: ["Snail"])
     ],
     targets: [
         .target(name: "Snail", path: "Snail"),
