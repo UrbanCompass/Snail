@@ -120,15 +120,15 @@ public class Observable<T>: ObservableType {
         return filtered
     }
 
-    public func block() -> (result: T?, error: Error?) {
+    public func block() -> Result<T?, Error> {
         performBlock(timeout: nil)
     }
 
-    public func block(timeout: TimeInterval) -> (result: T?, error: Error?) {
+    public func block(timeout: TimeInterval) -> Result<T?, Error> {
         performBlock(timeout: timeout)
     }
 
-    private func performBlock(timeout: TimeInterval?) -> (result: T?, error: Error?) {
+    private func performBlock(timeout: TimeInterval?) -> Result<T?, Error> {
         var result: T?
         var error: Error?
 
@@ -150,7 +150,15 @@ public class Observable<T>: ObservableType {
             _ = semaphore.wait()
         }
 
-        return (result, error)
+        if let error = error {
+            return .failure(error)
+        }
+
+        if let result = result {
+            return .success(result)
+        }
+
+        return .success(nil)
     }
 
     public func throttle(_ delay: TimeInterval) -> Observable<T> {
@@ -278,12 +286,9 @@ public class Observable<T>: ObservableType {
         return combined
     }
 
-    public static func combineLatest<U, V>(
-        _ input1: Observable<T>,
-        _ input2: Observable<U>,
-        _ input3: Observable<V>
-        // swiftlint:disable:next large_tuple
-    ) -> Observable<(T, U, V)> {
+    public static func combineLatest<U, V>(_ input1: Observable<T>,
+                                           _ input2: Observable<U>,
+                                           _ input3: Observable<V>) -> Observable<(T, U, V)> {
         let combined = Observable<(T, U, V)>()
 
         var value1: T?
@@ -329,13 +334,10 @@ public class Observable<T>: ObservableType {
         return combined
     }
 
-    public static func combineLatest<U, V, K>(
-        _ input1: Observable<T>,
-        _ input2: Observable<U>,
-        _ input3: Observable<V>,
-        _ input4: Observable<K>
-        // swiftlint:disable:next large_tuple
-    ) -> Observable<(T, U, V, K)> {
+    public static func combineLatest<U, V, K>(_ input1: Observable<T>,
+                                              _ input2: Observable<U>,
+                                              _ input3: Observable<V>,
+                                              _ input4: Observable<K>) -> Observable<(T, U, V, K)> {
         let combined = Observable<(T, U, V, K)>()
 
         var value1: T?

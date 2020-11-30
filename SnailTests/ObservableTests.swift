@@ -167,43 +167,68 @@ class ObservableTests: XCTestCase {
     }
 
     func testBlockSuccess() {
-        let result = Just(1).block()
-        XCTAssertEqual(result.result, 1)
-        XCTAssertNil(result.error)
+        let blockResult = Just(1).block()
+
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, 1)
     }
 
     func testBlockFail() {
-        let result = Fail<Void>(TestError.test).block()
-        XCTAssertNil(result.result)
-        XCTAssertNotNil(result.error)
+        let blockResult = Fail<Void>(TestError.test).block()
+        guard case let .failure(result) = blockResult else {
+            XCTFail("expected failure")
+            return
+        }
+
+        XCTAssertTrue(result is TestError)
     }
 
     func testBlockDone() {
         let observable = Observable<String>()
         observable.on(.done)
-        let result = observable.block()
-        XCTAssertNil(result.result)
-        XCTAssertNil(result.error)
+        let blockResult = observable.block()
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, nil)
     }
 
     func testBlockWithTimeoutSuccess() {
-        let result = Just(1).block(timeout: 1)
-        XCTAssertEqual(result.result, 1)
-        XCTAssertNil(result.error)
+        let blockResult = Just(1).block(timeout: 1)
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, 1)
     }
 
     func testBlockWithTimeoutFail() {
-        let result = Fail<Void>(TestError.test).block(timeout: 1)
-        XCTAssertNil(result.result)
-        XCTAssertNotNil(result.error)
+        let blockResult = Fail<Void>(TestError.test).block(timeout: 1)
+        guard case let .failure(result) = blockResult else {
+            XCTFail("expected failure")
+            return
+        }
+
+        XCTAssertTrue(result is TestError)
     }
 
     func testBlockWithTimeoutDone() {
         let observable = Observable<String>()
         observable.on(.done)
-        let result = observable.block(timeout: 1)
-        XCTAssertNil(result.result)
-        XCTAssertNil(result.error)
+        let blockResult = observable.block(timeout: 1)
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, nil)
     }
 
     func testThrottle() {

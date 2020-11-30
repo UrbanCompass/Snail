@@ -3,3 +3,4 @@ disabled_rules:
   - type_name
   - identifier_name
   - type_body_length
+  - large_tuple
