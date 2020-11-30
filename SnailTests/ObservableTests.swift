@@ -547,7 +547,19 @@ class ObservableTests: XCTestCase {
         XCTAssertEqual(received[0].2, 100.5)
     }
 
-    func testCombineLatest3Error() {
+    func testCombineLatest3Error_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let subject = Observable.combineLatest(one, two, three)
+
+        let exp = expectation(description: "combineLatest3 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        two.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest3Error_fromThirdMember() {
         let one = Observable<String>()
         let two = Observable<Int>()
         let three = Observable<Double>()
@@ -559,7 +571,19 @@ class ObservableTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testCombineLatest3Done() {
+    func testCombineLatest3Done_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let subject = Observable.combineLatest(one, two, three)
+
+        let exp = expectation(description: "combineLatest3 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        two.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest3Done_fromThirdMember() {
         let one = Observable<String>()
         let two = Observable<Int>()
         let three = Observable<Double>()
@@ -624,7 +648,46 @@ class ObservableTests: XCTestCase {
         XCTAssertEqual(received[0].3, "The other string")
     }
 
-    func testCombineLatest4Error() {
+    func testCombineLatest4Error_fromFirstMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        one.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Error_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        two.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Error_fromThirdMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        three.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Error_fromFourthMember() {
         let one = Observable<String>()
         let two = Observable<Int>()
         let three = Observable<Double>()
@@ -637,7 +700,46 @@ class ObservableTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testCombineLatest4Done() {
+    func testCombineLatest4Done_fromFirstMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        one.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Done_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        two.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Done_fromThirdMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        three.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Done_fromFourthMember() {
         let one = Observable<String>()
         let two = Observable<Int>()
         let three = Observable<Double>()
