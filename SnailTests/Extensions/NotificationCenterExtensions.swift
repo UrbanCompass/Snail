@@ -1,5 +1,7 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
+#if canImport(UIKit)
+
 import UIKit
 import XCTest
 @testable import Snail
@@ -46,3 +48,5 @@ class NotificationCenterTests: XCTestCase {
         }
     }
 }
+
+#endif

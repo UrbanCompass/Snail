@@ -65,7 +65,70 @@ public class Observable<T>: ObservableType {
         subscribers.remove(at: index)
     }
 
-    public func block() -> (result: T?, error: Error?) {
+    public func map<U>(_ transform: @escaping (T) -> U) -> Observable<U> {
+        let transformed = Observable<U>()
+
+        subscribe(
+            onNext: { value in
+                transformed.on(.next(transform(value)))
+            },
+            onError: { error in
+                transformed.on(.error(error))
+            },
+            onDone: {
+                transformed.on(.done)
+            }
+        )
+
+        return transformed
+    }
+
+    public func flatMap<U>( _ transform: @escaping (T) -> Observable<U>) -> Observable<U> {
+        let flatMapped = Observable<U>()
+
+        subscribe(
+            onNext: { value in
+                let obs = transform(value)
+                obs.forward(to: flatMapped)
+            },
+            onError: { error in
+                flatMapped.on(.error(error))
+            },
+            onDone: {
+                flatMapped.on(.done)
+            }
+        )
+
+        return flatMapped
+    }
+
+    public func filter(_ isIncluded: @escaping (T) -> Bool) -> Observable<T> {
+        let filtered = Observable<T>()
+
+        subscribe(
+            onNext: { value in
+                guard isIncluded(value) else { return }
+                filtered.on(.next(value))
+            },
+            onError: { error in
+                filtered.on(.error(error))
+            }, onDone: {
+                filtered.on(.done)
+            }
+        )
+
+        return filtered
+    }
+
+    public func block() -> Result<T?, Error> {
+        performBlock(timeout: nil)
+    }
+
+    public func block(timeout: TimeInterval) -> Result<T?, Error> {
+        performBlock(timeout: timeout)
+    }
+
+    private func performBlock(timeout: TimeInterval?) -> Result<T?, Error> {
         var result: T?
         var error: Error?
 
@@ -81,9 +144,21 @@ public class Observable<T>: ObservableType {
             semaphore.signal()
         })
 
-        _ = semaphore.wait()
+        if let timeout = timeout {
+            _ = semaphore.wait(timeout: .now() + timeout)
+        } else {
+            _ = semaphore.wait()
+        }
 
-        return (result, error)
+        if let error = error {
+            return .failure(error)
+        }
+
+        if let result = result {
+            return .success(result)
+        }
+
+        return .success(nil)
     }
 
     public func throttle(_ delay: TimeInterval) -> Observable<T> {
@@ -172,20 +247,26 @@ public class Observable<T>: ObservableType {
         return latest
     }
 
-    public static func combineLatest<U>(_ input: (Observable<T>, Observable<U>)) -> Observable<(T, U)> {
+    public static func merge(_ observables: Observable<T>...) -> Observable<T> {
+        merge(observables)
+    }
+
+    public static func combineLatest<U>(_ input1: Observable<T>, _ input2: Observable<U>) -> Observable<(T, U)> {
         let combined = Observable<(T, U)>()
 
-        var value0: T?
-        var value1: U?
+        var value1: T?
+        var value2: U?
 
         func triggerIfNeeded() {
-            if let value0 = value0, let value1 = value1 {
-                combined.on(.next((value0, value1)))
+            guard let value1 = value1,
+                let value2 = value2 else {
+                    return
             }
+            combined.on(.next((value1, value2)))
         }
 
-        input.0.subscribe(onNext: {
-            value0 = $0
+        input1.subscribe(onNext: {
+            value1 = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
@@ -193,8 +274,116 @@ public class Observable<T>: ObservableType {
             combined.on(.done)
         })
 
-        input.1.subscribe(onNext: {
+        input2.subscribe(onNext: {
+            value2 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        return combined
+    }
+
+    public static func combineLatest<U, V>(_ input1: Observable<T>,
+                                           _ input2: Observable<U>,
+                                           _ input3: Observable<V>) -> Observable<(T, U, V)> {
+        let combined = Observable<(T, U, V)>()
+
+        var value1: T?
+        var value2: U?
+        var value3: V?
+
+        func triggerIfNeeded() {
+            guard let value1 = value1,
+                let value2 = value2,
+                let value3 = value3 else {
+                    return
+            }
+            combined.on(.next((value1, value2, value3)))
+        }
+
+        input1.subscribe(onNext: {
             value1 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        input2.subscribe(onNext: {
+            value2 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        input3.subscribe(onNext: {
+            value3 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        return combined
+    }
+
+    public static func combineLatest<U, V, K>(_ input1: Observable<T>,
+                                              _ input2: Observable<U>,
+                                              _ input3: Observable<V>,
+                                              _ input4: Observable<K>) -> Observable<(T, U, V, K)> {
+        let combined = Observable<(T, U, V, K)>()
+
+        var value1: T?
+        var value2: U?
+        var value3: V?
+        var value4: K?
+
+        func triggerIfNeeded() {
+            guard let value1 = value1,
+                let value2 = value2,
+                let value3 = value3,
+                let value4 = value4 else {
+                    return
+            }
+            combined.on(.next((value1, value2, value3, value4)))
+        }
+
+        input1.subscribe(onNext: {
+            value1 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        input2.subscribe(onNext: {
+            value2 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        input3.subscribe(onNext: {
+            value3 = $0
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            combined.on(.done)
+        })
+
+        input4.subscribe(onNext: {
+            value4 = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))

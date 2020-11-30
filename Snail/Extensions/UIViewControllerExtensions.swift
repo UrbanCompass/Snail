@@ -1,10 +1,9 @@
 //  Copyright © 2016 Compass. All rights reserved.
 
-#if os(iOS) || os(tvOS)
-import UIKit
-#else
+#if canImport(UIKit)
+
 import Foundation
-#endif
+import UIKit
 
 extension UIViewController {
     private static var disposerKey = "com.compass.Snail.UIViewController.disposer"
@@ -18,3 +17,5 @@ extension UIViewController {
         return disposer
     }
 }
+
+#endif

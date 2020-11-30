@@ -37,7 +37,7 @@ public class Variable<T> {
         })
     }
 
-    public func map<U>(transform: @escaping (T) -> U) -> Variable<U> {
+    public func map<U>(_ transform: @escaping (T) -> U) -> Variable<U> {
         let newVariable = Variable<U>(transform(value))
         asObservable().subscribe(onNext: { _ in newVariable.value = transform(self.value) })
         return newVariable

@@ -143,16 +143,6 @@ isMapLoading.value = true
 isListLoading.value = true // triggers
 ```
 
-## Transforming Observable Variable Types
-
-
-```swift
-let variable = Variable<String>("Something")
-variable.map { $0.count }.asObservable().subscribe(
-    onNext: { (charactersCount: Int -> Void) in ... } // do something with Integer 'charactersCount' on value changes
-).add(to: disposer)
-```
-
 ## Miscellaneous Observables
 
 ```swift
@@ -166,6 +156,32 @@ let failure = Fail(TestError.test) // always fail with error
 let n = 5
 let replay = Replay(n) // replays the last N events when a new observer subscribes
 ```
+
+## Operators
+
+Snail provides some basic operators in order to transform and operate on observables. 
+
+- `map`: This operator allows to map the value of an obsverable into another value. Similar to `map` on `Collection` types.
+
+  ```swift
+  let observable = Observable<Int>()
+  let subject = observable.map { "Number: \($0)" }
+  // -> subject emits `String` whenever `observable` emits.
+  ```
+- `filter`: This operator allows filtering out certain values from the observable chain. Similar to `filter` on `Collection` types. You simply return `true` if the value should be emitted and `false` to filter it out.
+
+  ```swift
+  let observable = Observable<Int>()
+  let subject = observable.filter { $0 % 2 == 0 }
+  // -> subject will only emit even numbers.
+  ```
+- `flatMap`: This operator allows mapping values into other observables, for example you may want to create an observable for a network request when a user tap observable emits.
+
+  ```swift
+  let fetchTrigger = Observable<Void>()
+  let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
+  // -> subject is an `Observable<Int>` that is created when `fetchTrigger` emits.
+  ```
 
 ## Subscribing to Control Events
 

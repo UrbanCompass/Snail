@@ -10,7 +10,7 @@ public protocol ObservableType {
     func on(_ queue: DispatchQueue) -> Observable<Self.T>
     func removeSubscribers()
     func removeSubscriber(subscriber: Subscriber<T>)
-    func block() -> (result: Self.T?, error: Error?)
+    func block() -> Result<T?, Error>
     func throttle(_ delay: TimeInterval) -> Observable<Self.T>
     func debounce(_ delay: TimeInterval) -> Observable<Self.T>
     func forward(to: Observable<Self.T>)

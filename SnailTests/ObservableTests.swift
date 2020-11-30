@@ -167,23 +167,68 @@ class ObservableTests: XCTestCase {
     }
 
     func testBlockSuccess() {
-        let result = Just(1).block()
-        XCTAssertEqual(result.result, 1)
-        XCTAssertNil(result.error)
+        let blockResult = Just(1).block()
+
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, 1)
     }
 
     func testBlockFail() {
-        let result = Fail<Void>(TestError.test).block()
-        XCTAssertNil(result.result)
-        XCTAssertNotNil(result.error)
+        let blockResult = Fail<Void>(TestError.test).block()
+        guard case let .failure(result) = blockResult else {
+            XCTFail("expected failure")
+            return
+        }
+
+        XCTAssertTrue(result is TestError)
     }
 
     func testBlockDone() {
         let observable = Observable<String>()
         observable.on(.done)
-        let result = observable.block()
-        XCTAssertNil(result.result)
-        XCTAssertNil(result.error)
+        let blockResult = observable.block()
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, nil)
+    }
+
+    func testBlockWithTimeoutSuccess() {
+        let blockResult = Just(1).block(timeout: 1)
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, 1)
+    }
+
+    func testBlockWithTimeoutFail() {
+        let blockResult = Fail<Void>(TestError.test).block(timeout: 1)
+        guard case let .failure(result) = blockResult else {
+            XCTFail("expected failure")
+            return
+        }
+
+        XCTAssertTrue(result is TestError)
+    }
+
+    func testBlockWithTimeoutDone() {
+        let observable = Observable<String>()
+        observable.on(.done)
+        let blockResult = observable.block(timeout: 1)
+        guard case let .success(result) = blockResult else {
+            XCTFail("expected success")
+            return
+        }
+
+        XCTAssertEqual(result, nil)
     }
 
     func testThrottle() {
@@ -357,13 +402,34 @@ class ObservableTests: XCTestCase {
         XCTAssertEqual(received.last, "2")
     }
 
+    func testMergeWithoutArray() {
+        var received: [String] = []
+
+        let a = Observable<String>()
+        let b = Observable<String>()
+
+        let subject = Observable.merge(a, b)
+
+        subject.subscribe(onNext: { string in
+            received.append(string)
+        })
+
+        a.on(.next("1"))
+        b.on(.next("2"))
+        b.on(.done)
+
+        XCTAssertEqual(received.count, 2)
+        XCTAssertEqual(received.first, "1")
+        XCTAssertEqual(received.last, "2")
+    }
+
     func testCombineLatestNonOptional() {
         var received: [String] = []
 
         let string = Observable<String>()
         let int = Observable<Int>()
 
-        let subject = Observable.combineLatest((string, int))
+        let subject = Observable.combineLatest(string, int)
 
         subject.subscribe(onNext: { string, int in
             received.append("\(string): \(int)")
@@ -390,7 +456,7 @@ class ObservableTests: XCTestCase {
         let string = Observable<String?>()
         let int = Observable<Int?>()
 
-        let subject = Observable.combineLatest((string, int))
+        let subject = Observable.combineLatest(string, int)
 
         subject.subscribe(onNext: { string, int in
             received.append("\(string ?? "<no title>"): \(int ?? 0)")
@@ -417,7 +483,7 @@ class ObservableTests: XCTestCase {
         let string = Observable<String>()
         let int = Observable<Int>()
 
-        let subject = Observable.combineLatest((string, int))
+        let subject = Observable.combineLatest(string, int)
 
         subject.subscribe(onNext: { string, int in
             received.append("\(string): \(int)")
@@ -444,7 +510,7 @@ class ObservableTests: XCTestCase {
         let string = Observable<String>()
         let int = Observable<Int>()
 
-        let subject = Observable.combineLatest((string, int))
+        let subject = Observable.combineLatest(string, int)
 
         subject.subscribe(onError: { _ in
             received.append("ERROR")
@@ -456,6 +522,371 @@ class ObservableTests: XCTestCase {
         XCTAssertEqual(received.count, 1)
         XCTAssertEqual(received.first, "ERROR")
     }
-}
 
-// swiftlint:enable file_length
+    func testCombineLatest3() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+
+        var received = [(String, Int, Double)]()
+        let subject = Observable.combineLatest(one, two, three)
+
+        subject.subscribe(onNext: {
+            received.append($0)
+        })
+
+        one.on(.next("The string"))
+        XCTAssertTrue(received.isEmpty)
+
+        two.on(.next(1))
+        XCTAssertTrue(received.isEmpty)
+
+        three.on(.next(100.5))
+        XCTAssertEqual(received[0].0, "The string")
+        XCTAssertEqual(received[0].1, 1)
+        XCTAssertEqual(received[0].2, 100.5)
+    }
+
+    func testCombineLatest3Error_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let subject = Observable.combineLatest(one, two, three)
+
+        let exp = expectation(description: "combineLatest3 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        two.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest3Error_fromThirdMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let subject = Observable.combineLatest(one, two, three)
+
+        let exp = expectation(description: "combineLatest3 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        three.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest3Done_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let subject = Observable.combineLatest(one, two, three)
+
+        let exp = expectation(description: "combineLatest3 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        two.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest3Done_fromThirdMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let subject = Observable.combineLatest(one, two, three)
+
+        let exp = expectation(description: "combineLatest3 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        three.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest3Optional() {
+        let one = Observable<String>()
+        let two = Observable<Int?>()
+        let three = Observable<Double>()
+
+        var received = [(String, Int?, Double)]()
+        let subject = Observable.combineLatest(one, two, three)
+
+        subject.subscribe(onNext: {
+            received.append($0)
+        })
+
+        one.on(.next("The string"))
+        XCTAssertTrue(received.isEmpty)
+
+        two.on(.next(nil))
+        XCTAssertTrue(received.isEmpty)
+
+        three.on(.next(100.5))
+        XCTAssertEqual(received[0].0, "The string")
+        XCTAssertEqual(received[0].1, nil)
+        XCTAssertEqual(received[0].2, 100.5)
+    }
+
+    func testCombineLatest4() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+
+        var received = [(String, Int, Double, String)]()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        subject.subscribe(onNext: {
+            received.append($0)
+        })
+
+        one.on(.next("The string"))
+        XCTAssertTrue(received.isEmpty)
+
+        two.on(.next(1))
+        XCTAssertTrue(received.isEmpty)
+
+        three.on(.next(100.5))
+        XCTAssertTrue(received.isEmpty)
+
+        four.on(.next("The other string"))
+        XCTAssertEqual(received[0].0, "The string")
+        XCTAssertEqual(received[0].1, 1)
+        XCTAssertEqual(received[0].2, 100.5)
+        XCTAssertEqual(received[0].3, "The other string")
+    }
+
+    func testCombineLatest4Error_fromFirstMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        one.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Error_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        two.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Error_fromThirdMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        three.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Error_fromFourthMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        four.on(.error(TestError.test))
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Done_fromFirstMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        one.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Done_fromSecondMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        two.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Done_fromThirdMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        three.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Done_fromFourthMember() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+        let three = Observable<Double>()
+        let four = Observable<String>()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        let exp = expectation(description: "combineLatest4 forwards done from observable")
+        subject.subscribe(onDone: { exp.fulfill() })
+        four.on(.done)
+        waitForExpectations(timeout: 1)
+    }
+
+    func testCombineLatest4Optional() {
+        let one = Observable<String>()
+        let two = Observable<Int?>()
+        let three = Observable<Double>()
+        let four = Observable<String?>()
+
+        var received = [(String, Int?, Double, String?)]()
+        let subject = Observable.combineLatest(one, two, three, four)
+
+        subject.subscribe(onNext: {
+            received.append($0)
+        })
+
+        one.on(.next("The string"))
+        XCTAssertTrue(received.isEmpty)
+
+        two.on(.next(nil))
+        XCTAssertTrue(received.isEmpty)
+
+        three.on(.next(100.5))
+        XCTAssertTrue(received.isEmpty)
+
+        four.on(.next(nil))
+        XCTAssertEqual(received[0].0, "The string")
+        XCTAssertEqual(received[0].1, nil)
+        XCTAssertEqual(received[0].2, 100.5)
+        XCTAssertEqual(received[0].3, nil)
+    }
+
+    func testObservableMap() {
+        let observable = Observable<Int>()
+        let subject = observable.map { "Number: \($0)" }
+        var received = [String]()
+
+        subject.subscribe(onNext: { received.append($0) })
+
+        observable.on(.next(1))
+        observable.on(.next(10))
+
+        XCTAssertEqual(received, ["Number: 1", "Number: 10"])
+    }
+
+    func testObservableMapError() {
+        let observable = Observable<Int>()
+        let subject = observable.map { "Number: \($0)" }
+
+        let exp = expectation(description: "observable map forwards error")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+
+        observable.on(.error(TestError.test))
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testObservableMapDone() {
+        let observable = Observable<Int>()
+        let subject = observable.map { "Number: \($0)" }
+
+        let exp = expectation(description: "observable map forwards done")
+        subject.subscribe(onDone: { exp.fulfill() })
+
+        observable.on(.done)
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testObservableFilter() {
+        let observable = Observable<Int>()
+        let subject = observable.filter { $0 % 2 == 0 }
+        var received = [Int]()
+
+        subject.subscribe(onNext: { received.append($0) })
+
+        observable.on(.next(1))
+        observable.on(.next(2))
+        observable.on(.next(8))
+        observable.on(.next(5))
+
+        XCTAssertEqual(received, [2, 8])
+    }
+
+    func testObservableFilterError() {
+        let observable = Observable<Int>()
+        let subject = observable.filter { $0 % 2 == 0 }
+
+        let exp = expectation(description: "observable filter forwards error")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+
+        observable.on(.error(TestError.test))
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testObservableFilterDone() {
+        let observable = Observable<Int>()
+        let subject = observable.filter { $0 % 2 == 0 }
+
+        let exp = expectation(description: "observable filter forwards done")
+        subject.subscribe(onDone: { exp.fulfill() })
+
+        observable.on(.done)
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testObservableFlatMap() {
+        let fetchTrigger = Observable<Void>()
+        let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
+        var received = [Int]()
+
+        subject.subscribe(onNext: { received.append($0) })
+        fetchTrigger.on(.next(()))
+
+        XCTAssertEqual(received, [100])
+    }
+
+    func testObservableFlatMapError() {
+        let fetchTrigger = Observable<Void>()
+        let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
+
+        let exp = expectation(description: "observable flatMap forwards error")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        fetchTrigger.on(.error(TestError.test))
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testObservableFlatMapDone() {
+        let fetchTrigger = Observable<Void>()
+        let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
+
+        let exp = expectation(description: "observable flatMap forwards done")
+        subject.subscribe(onDone: { exp.fulfill() })
+        fetchTrigger.on(.done)
+
+        waitForExpectations(timeout: 1)
+    }
+}
