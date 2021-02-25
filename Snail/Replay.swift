@@ -6,6 +6,7 @@ import Dispatch
 public class Replay<T>: Observable<T> {
     private let threshold: Int
     private var events: [Event<T>] = []
+    private let eventsQueue = DispatchQueue(label: "snail-replay-queue", attributes: .concurrent)
 
     public init(_ threshold: Int) {
         self.threshold = threshold
@@ -19,8 +20,10 @@ public class Replay<T>: Observable<T> {
     public override func on(_ event: Event<T>) {
         switch event {
         case .next:
-            events.append(event)
-            events = Array(events.suffix(threshold))
+            eventsQueue.async(flags: .barrier) {
+                self.events.append(event)
+                self.events = Array(self.events.suffix(self.threshold))
+            }
         default: break
         }
         super.on(event)
@@ -36,6 +39,10 @@ public class Replay<T>: Observable<T> {
     }
 
     private func replay(queue: DispatchQueue?, handler: @escaping (Event<T>) -> Void) {
-        events.forEach { event in notify(subscriber: Subscriber(queue: queue, observable: self, handler: handler), event: event) }
+        eventsQueue.sync {
+            self.events.forEach {
+                event in notify(subscriber: Subscriber(queue: queue, observable: self, handler: handler), event: event)
+            }
+        }
     }
 }

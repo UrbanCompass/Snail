@@ -78,4 +78,17 @@ class ReplayTests: XCTestCase {
             XCTAssertEqual(isMainQueue, true)
         }
     }
+
+    func testReplayDataRace() {
+        let subject = Replay<String>(1)
+        DispatchQueue.global().async {
+            subject.on(.next("global - async"))
+        }
+
+        subject.on(.next("sync"))
+
+        DispatchQueue.main.async {
+            subject.on(.next("main - async"))
+        }
+    }
 }

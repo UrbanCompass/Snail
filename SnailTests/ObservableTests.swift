@@ -889,4 +889,17 @@ class ObservableTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
+
+    func testObservableDataRace() {
+        let subject = Observable<String>()
+        DispatchQueue.global().async {
+            subject.on(.next("global - async"))
+        }
+
+        subject.on(.next("sync"))
+
+        DispatchQueue.main.async {
+            subject.on(.next("main - async"))
+        }
+    }
 }

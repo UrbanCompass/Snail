@@ -6,7 +6,8 @@ import Dispatch
 public class Observable<T>: ObservableType {
     private var isStopped: Int32 = 0
     private var stoppedEvent: Event<T>?
-    var subscribers: [Subscriber<T>] = []
+    private var subscribers: [Subscriber<T>] = []
+    private let subscribersQueue = DispatchQueue(label: "snail-observable-queue", attributes: .concurrent)
 
     public init() {}
 
@@ -26,7 +27,11 @@ public class Observable<T>: ObservableType {
             notify(subscriber: subscriber, event: stoppedEvent)
             return subscriber
         }
-        subscribers.append(subscriber)
+
+        subscribersQueue.async(flags: .barrier) {
+            self.subscribers.append(subscriber)
+        }
+
         return subscriber
     }
 
@@ -36,10 +41,19 @@ public class Observable<T>: ObservableType {
             guard isStopped == 0 else {
                 return
             }
-            subscribers.forEach { notify(subscriber: $0, event: event) }
+
+            subscribersQueue.sync {
+                self.subscribers.forEach {
+                    notify(subscriber: $0, event: event)
+                }
+            }
         case .error, .done:
             if OSAtomicCompareAndSwap32Barrier(0, 1, &isStopped) {
-                subscribers.forEach { notify(subscriber: $0, event: event) }
+                subscribersQueue.sync {
+                    self.subscribers.forEach {
+                        notify(subscriber: $0, event: event)
+                    }
+                }
                 stoppedEvent = event
             }
         }
@@ -55,14 +69,21 @@ public class Observable<T>: ObservableType {
     }
 
     public func removeSubscribers() {
-        subscribers.removeAll()
+        subscribersQueue.async(flags: .barrier) {
+            self.subscribers.removeAll()
+        }
     }
 
     public func removeSubscriber(subscriber: Subscriber<T>) {
-        guard let index = subscribers.enumerated().first(where: { $0.element === subscriber })?.offset else {
-            return
+        subscribersQueue.sync {
+            guard let index = self.subscribers.enumerated().first(where: { $0.element === subscriber })?.offset else {
+                return
+            }
+
+            subscribersQueue.async(flags: .barrier) {
+                self.subscribers.remove(at: index)
+            }
         }
-        subscribers.remove(at: index)
     }
 
     public func map<U>(_ transform: @escaping (T) -> U) -> Observable<U> {
