@@ -237,6 +237,28 @@ public class Observable<T>: ObservableType {
         return observable
     }
 
+    public func take(first count: UInt) -> Observable<T> {
+        let observable = Observable<T>()
+        var taken = 0
+
+        subscribe(onNext: {
+            if taken < count {
+                observable.on(.next($0))
+                taken += 1
+            }
+
+            if taken == count {
+                observable.on(.done)
+            }
+        }, onError: {
+            observable.on(.error($0))
+        }, onDone: {
+            observable.on(.done)
+        })
+
+        return observable
+    }
+
     func notify(subscriber: Subscriber<T>, event: Event<T>) {
         guard let queue = subscriber.queue else {
             subscriber.handler(event)

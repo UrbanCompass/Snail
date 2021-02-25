@@ -343,6 +343,50 @@ class ObservableTests: XCTestCase {
         XCTAssertEqual(done, true)
     }
 
+    func testTakeFirst() {
+        let observable = Observable<String>()
+        var received: [String] = []
+
+        observable.take(first: 2).subscribe(onNext: { received.append($0) })
+
+        observable.on(.next("1"))
+        observable.on(.next("2"))
+        observable.on(.next("3"))
+
+        XCTAssertEqual(received, ["1", "2"])
+    }
+
+    func testTakeError() {
+        let observable = Observable<String>()
+
+        var error: TestError?
+        observable.take(first: 2).subscribe(onError: { error = $0 as? TestError })
+        observable.on(.error(TestError.test))
+
+        XCTAssertEqual(error, .test)
+    }
+
+    func testTakeDone() {
+        let observable = Observable<String>()
+        var done = false
+
+        observable.take(first: 2).subscribe(onDone: { done = true })
+        observable.on(.done)
+
+        XCTAssertEqual(done, true)
+    }
+
+    func testTakeDoneWhenCountIsReached() {
+        let observable = Observable<String>()
+        var done = false
+
+        observable.take(first: 2).subscribe(onDone: { done = true })
+        observable.on(.next("1"))
+        observable.on(.next("2"))
+
+        XCTAssertEqual(done, true)
+    }
+
     func testForward() {
         var received: [String] = []
         var receivedError: TestError?
