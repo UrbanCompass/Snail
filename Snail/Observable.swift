@@ -297,33 +297,40 @@ public class Observable<T>: ObservableType {
     public static func combineLatest<U>(_ input1: Observable<T>, _ input2: Observable<U>) -> Observable<(T, U)> {
         let combined = Observable<(T, U)>()
 
-        var value1: T?
-        var value2: U?
+        var input1Result: (value: T?, isComplete: Bool) = (nil, false)
+        var input2Result: (value: U?, isComplete: Bool) = (nil, false)
 
         func triggerIfNeeded() {
-            guard let value1 = value1,
-                let value2 = value2 else {
-                    return
+            guard let value1 = input1Result.value,
+                let value2 = input2Result.value else {
+                return
             }
             combined.on(.next((value1, value2)))
         }
 
+        func finishIfNeeded() {
+            guard input1Result.isComplete, input2Result.isComplete else { return }
+            combined.on(.done)
+        }
+
         input1.subscribe(onNext: {
-            value1 = $0
+            input1Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input1Result.isComplete = true
+            finishIfNeeded()
         })
 
         input2.subscribe(onNext: {
-            value2 = $0
+            input2Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input2Result.isComplete = true
+            finishIfNeeded()
         })
 
         return combined
@@ -334,44 +341,52 @@ public class Observable<T>: ObservableType {
                                            _ input3: Observable<V>) -> Observable<(T, U, V)> {
         let combined = Observable<(T, U, V)>()
 
-        var value1: T?
-        var value2: U?
-        var value3: V?
+        var input1Result: (value: T?, isComplete: Bool) = (nil, false)
+        var input2Result: (value: U?, isComplete: Bool) = (nil, false)
+        var input3Result: (value: V?, isComplete: Bool) = (nil, false)
 
         func triggerIfNeeded() {
-            guard let value1 = value1,
-                let value2 = value2,
-                let value3 = value3 else {
+            guard let value1 = input1Result.value,
+                let value2 = input2Result.value,
+                let value3 = input3Result.value else {
                     return
             }
             combined.on(.next((value1, value2, value3)))
         }
 
+        func finishIfNeeded() {
+            guard input1Result.isComplete, input2Result.isComplete, input3Result.isComplete else { return }
+            combined.on(.done)
+        }
+
         input1.subscribe(onNext: {
-            value1 = $0
+            input1Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input1Result.isComplete = true
+            finishIfNeeded()
         })
 
         input2.subscribe(onNext: {
-            value2 = $0
+            input2Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input2Result.isComplete = true
+            finishIfNeeded()
         })
 
         input3.subscribe(onNext: {
-            value3 = $0
+            input3Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input3Result.isComplete = true
+            finishIfNeeded()
         })
 
         return combined
@@ -383,55 +398,64 @@ public class Observable<T>: ObservableType {
                                               _ input4: Observable<K>) -> Observable<(T, U, V, K)> {
         let combined = Observable<(T, U, V, K)>()
 
-        var value1: T?
-        var value2: U?
-        var value3: V?
-        var value4: K?
+        var input1Result: (value: T?, isComplete: Bool) = (nil, false)
+        var input2Result: (value: U?, isComplete: Bool) = (nil, false)
+        var input3Result: (value: V?, isComplete: Bool) = (nil, false)
+        var input4Result: (value: K?, isComplete: Bool) = (nil, false)
 
         func triggerIfNeeded() {
-            guard let value1 = value1,
-                let value2 = value2,
-                let value3 = value3,
-                let value4 = value4 else {
+            guard let value1 = input1Result.value,
+                let value2 = input2Result.value,
+                let value3 = input3Result.value,
+                let value4 = input4Result.value else {
                     return
             }
             combined.on(.next((value1, value2, value3, value4)))
         }
 
+        func finishIfNeeded() {
+            guard input1Result.isComplete, input2Result.isComplete, input3Result.isComplete, input4Result.isComplete else { return }
+            combined.on(.done)
+        }
+
         input1.subscribe(onNext: {
-            value1 = $0
+            input1Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input1Result.isComplete = true
+            finishIfNeeded()
         })
 
         input2.subscribe(onNext: {
-            value2 = $0
+            input2Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input2Result.isComplete = true
+            finishIfNeeded()
         })
 
         input3.subscribe(onNext: {
-            value3 = $0
+            input3Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input3Result.isComplete = true
+            finishIfNeeded()
         })
 
         input4.subscribe(onNext: {
-            value4 = $0
+            input4Result.value = $0
             triggerIfNeeded()
         }, onError: {
             combined.on(.error($0))
         }, onDone: {
-            combined.on(.done)
+            input4Result.isComplete = true
+            finishIfNeeded()
         })
 
         return combined
