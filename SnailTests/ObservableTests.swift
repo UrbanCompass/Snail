@@ -567,6 +567,20 @@ class ObservableTests: XCTestCase {
         XCTAssertEqual(received.first, "ERROR")
     }
 
+    func testCombineLatestDone_whenAllDone() {
+        let obs1 = Observable<String>()
+        let obs2 = Observable<Int>()
+
+        var isDone = false
+        Observable.combineLatest(obs1, obs2).subscribe(onDone: { isDone = true })
+
+        obs1.on(.done)
+        XCTAssertFalse(isDone)
+
+        obs2.on(.done)
+        XCTAssertTrue(isDone)
+    }
+
     func testCombineLatest3() {
         let one = Observable<String>()
         let two = Observable<Int>()
@@ -615,28 +629,22 @@ class ObservableTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testCombineLatest3Done_fromSecondMember() {
-        let one = Observable<String>()
-        let two = Observable<Int>()
-        let three = Observable<Double>()
-        let subject = Observable.combineLatest(one, two, three)
+    func testCombineLatest3Done_whenAllDone() {
+        let obs1 = Observable<String>()
+        let obs2 = Observable<Int>()
+        let obs3 = Observable<Double>()
 
-        let exp = expectation(description: "combineLatest3 forwards done from observable")
-        subject.subscribe(onDone: { exp.fulfill() })
-        two.on(.done)
-        waitForExpectations(timeout: 1)
-    }
+        var isDone = false
+        Observable.combineLatest(obs1, obs2, obs3).subscribe(onDone: { isDone = true })
 
-    func testCombineLatest3Done_fromThirdMember() {
-        let one = Observable<String>()
-        let two = Observable<Int>()
-        let three = Observable<Double>()
-        let subject = Observable.combineLatest(one, two, three)
+        obs1.on(.done)
+        XCTAssertFalse(isDone)
 
-        let exp = expectation(description: "combineLatest3 forwards done from observable")
-        subject.subscribe(onDone: { exp.fulfill() })
-        three.on(.done)
-        waitForExpectations(timeout: 1)
+        obs2.on(.done)
+        XCTAssertFalse(isDone)
+
+        obs3.on(.done)
+        XCTAssertTrue(isDone)
     }
 
     func testCombineLatest3Optional() {
@@ -744,56 +752,26 @@ class ObservableTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testCombineLatest4Done_fromFirstMember() {
-        let one = Observable<String>()
-        let two = Observable<Int>()
-        let three = Observable<Double>()
-        let four = Observable<String>()
-        let subject = Observable.combineLatest(one, two, three, four)
+    func testCombineLatest4Done_whenAllDone() {
+        let obs1 = Observable<String>()
+        let obs2 = Observable<Int>()
+        let obs3 = Observable<Double>()
+        let obs4 = Observable<Float>()
 
-        let exp = expectation(description: "combineLatest4 forwards done from observable")
-        subject.subscribe(onDone: { exp.fulfill() })
-        one.on(.done)
-        waitForExpectations(timeout: 1)
-    }
+        var isDone = false
+        Observable.combineLatest(obs1, obs2, obs3, obs4).subscribe(onDone: { isDone = true })
 
-    func testCombineLatest4Done_fromSecondMember() {
-        let one = Observable<String>()
-        let two = Observable<Int>()
-        let three = Observable<Double>()
-        let four = Observable<String>()
-        let subject = Observable.combineLatest(one, two, three, four)
+        obs1.on(.done)
+        XCTAssertFalse(isDone)
 
-        let exp = expectation(description: "combineLatest4 forwards done from observable")
-        subject.subscribe(onDone: { exp.fulfill() })
-        two.on(.done)
-        waitForExpectations(timeout: 1)
-    }
+        obs2.on(.done)
+        XCTAssertFalse(isDone)
 
-    func testCombineLatest4Done_fromThirdMember() {
-        let one = Observable<String>()
-        let two = Observable<Int>()
-        let three = Observable<Double>()
-        let four = Observable<String>()
-        let subject = Observable.combineLatest(one, two, three, four)
+        obs3.on(.done)
+        XCTAssertFalse(isDone)
 
-        let exp = expectation(description: "combineLatest4 forwards done from observable")
-        subject.subscribe(onDone: { exp.fulfill() })
-        three.on(.done)
-        waitForExpectations(timeout: 1)
-    }
-
-    func testCombineLatest4Done_fromFourthMember() {
-        let one = Observable<String>()
-        let two = Observable<Int>()
-        let three = Observable<Double>()
-        let four = Observable<String>()
-        let subject = Observable.combineLatest(one, two, three, four)
-
-        let exp = expectation(description: "combineLatest4 forwards done from observable")
-        subject.subscribe(onDone: { exp.fulfill() })
-        four.on(.done)
-        waitForExpectations(timeout: 1)
+        obs4.on(.done)
+        XCTAssertTrue(isDone)
     }
 
     func testCombineLatest4Optional() {
