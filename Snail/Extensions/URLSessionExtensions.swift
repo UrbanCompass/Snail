@@ -19,6 +19,17 @@ extension URLSession {
         }
     }
 
+    private static var disposerKey = "com.compass.Snail.URLSession.Disposer"
+    
+    var disposer: Disposer {
+        if let disposer = objc_getAssociatedObject(self, &URLSession.disposerKey) as? Disposer {
+            return disposer
+        }
+        let disposer = Disposer()
+        objc_setAssociatedObject(self, &URLSession.disposerKey, disposer, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return disposer
+    }
+
     public func decoded<T: Codable>(request: URLRequest) -> Observable<(T, URLResponse)> {
         let observer = Replay<(T, URLResponse)>(1)
         data(request: request).subscribe(onNext: { data, response in
@@ -28,6 +39,7 @@ extension URLSession {
             }
             observer.on(.next((codedObject, response)))
         }, onError: { observer.on(.error($0)) })
+        .add(to: disposer)
         return observer
     }
 
@@ -40,6 +52,7 @@ extension URLSession {
             }
             observer.on(.next((dictionary, response)))
         }, onError: { observer.on(.error($0)) })
+        .add(to: disposer)
         return observer
     }
 
@@ -52,6 +65,7 @@ extension URLSession {
             }
             observer.on(.next((dictionary, response)))
         }, onError: { observer.on(.error($0)) })
+        .add(to: disposer)
         return observer
     }
 
@@ -87,6 +101,7 @@ extension URLSession {
             observer.on(.next((image, response)))
             observer.on(.done)
         }, onError: { observer.on(.error($0)) })
+        .add(to: disposer)
         return observer
     }
     #endif

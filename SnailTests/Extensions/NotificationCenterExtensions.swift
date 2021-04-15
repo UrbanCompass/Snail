@@ -7,6 +7,8 @@ import XCTest
 @testable import Snail
 
 class NotificationCenterTests: XCTestCase {
+    private let disposer = Disposer()
+
     func testNotification() {
         let exp = expectation(description: "notification")
         let notificationName = UIResponder.keyboardWillShowNotification
@@ -15,7 +17,7 @@ class NotificationCenterTests: XCTestCase {
         subject.subscribe(onNext: { notification in
             notifcation = notification
             exp.fulfill()
-        })
+        }).add(to: disposer)
         NotificationCenter.default.post(name: notificationName, object: nil)
         waitForExpectations(timeout: 3) { error in
             XCTAssertNil(error)
@@ -32,11 +34,11 @@ class NotificationCenterTests: XCTestCase {
         let willShowName = UIResponder.keyboardWillShowNotification
         let willHideName = UIResponder.keyboardWillHideNotification
 
-        NotificationCenter.default.observeEvent(willShowName).subscribe(onNext: { _ in gotWillShow = true })
+        NotificationCenter.default.observeEvent(willShowName).subscribe(onNext: { _ in gotWillShow = true }).add(to: disposer)
         NotificationCenter.default.observeEvent(willHideName).subscribe(onNext: { _ in
             gotWillHide = true
             willHide.fulfill()
-        })
+        }).add(to: disposer)
 
         NotificationCenter.default.post(name: willShowName, object: nil)
         NotificationCenter.default.post(name: willHideName, object: nil)

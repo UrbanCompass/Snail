@@ -8,15 +8,24 @@ public protocol DisposableType {
 
 public class Disposer {
     private(set) public var disposables: [DisposableType] = []
+    private let disposablesQueue = DispatchQueue(label: "snail-disposer-queue", attributes: .concurrent)
 
     public init() {}
 
+    deinit {
+        disposeAll()
+    }
+
     public func disposeAll() {
-        disposables.forEach { $0.dispose() }
-        disposables.removeAll()
+        disposablesQueue.sync {
+            self.disposables.forEach { $0.dispose() }
+            self.disposables.removeAll()
+        }
     }
 
     public func add(disposable: DisposableType) {
-        disposables.append(disposable)
+        disposablesQueue.sync {
+            self.disposables.append(disposable)
+        }
     }
 }
