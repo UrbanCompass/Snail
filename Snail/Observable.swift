@@ -460,4 +460,48 @@ public class Observable<T>: ObservableType {
 
         return combined
     }
+
+    public static func zip<U>(_ input1: Observable<T>, _ input2: Observable<U>) -> Observable<(T, U)> {
+        let combined = Observable<(T, U)>()
+
+        var input1Result: (value: [T], isComplete: Bool) = ([], false)
+        var input2Result: (value: [U], isComplete: Bool) = ([], false)
+
+        func triggerIfNeeded() {
+            guard let value1 = input1Result.value.first,
+                  let value2 = input2Result.value.first else {
+                return
+            }
+            input1Result.value.removeFirst()
+            input2Result.value.removeFirst()
+            combined.on(.next((value1, value2)))
+        }
+
+        func finishIfNeeded() {
+            guard input1Result.isComplete || input2Result.isComplete else { return }
+            combined.on(.done)
+        }
+
+        input1.subscribe(onNext: {
+            input1Result.value.append($0)
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            input1Result.isComplete = true
+            finishIfNeeded()
+        })
+
+        input2.subscribe(onNext: {
+            input2Result.value.append($0)
+            triggerIfNeeded()
+        }, onError: {
+            combined.on(.error($0))
+        }, onDone: {
+            input2Result.isComplete = true
+            finishIfNeeded()
+        })
+
+        return combined
+    }
 }

@@ -924,4 +924,109 @@ class ObservableTests: XCTestCase {
             subject.on(.next("main - async"))
         }
     }
+
+    func testZipNonOptional() {
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.zip(string, int)
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string): \(int)")
+        })
+
+        string.on(.next("The value"))
+        string.on(.next("The number"))
+        int.on(.next(1))
+        int.on(.next(2))
+        string.on(.next("The digit"))
+        int.on(.next(3))
+        int.on(.done)
+
+        XCTAssertEqual(received.count, 3)
+        XCTAssertEqual(received[0], "The value: 1")
+        XCTAssertEqual(received[1], "The number: 2")
+        XCTAssertEqual(received[2], "The digit: 3")
+    }
+
+    func testZipOptional() {
+        var received: [String] = []
+
+        let string = Observable<String?>()
+        let int = Observable<Int?>()
+
+        let subject = Observable.zip(string, int)
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string ?? "<no title>"): \(int ?? 0)")
+        })
+
+        string.on(.next("The value"))
+        string.on(.next("The number"))
+        int.on(.next(1))
+        int.on(.next(nil))
+        string.on(.next(nil))
+        int.on(.next(3))
+        string.on(.done)
+
+        XCTAssertEqual(received.count, 3)
+        XCTAssertEqual(received[0], "The value: 1")
+        XCTAssertEqual(received[1], "The number: 0")
+        XCTAssertEqual(received[2], "<no title>: 3")
+    }
+
+    func testZipCountEqualToSourceWithFewestEmissions() {
+        var received: [String] = []
+
+        let string = Observable<String>()
+        let int = Observable<Int>()
+
+        let subject = Observable.zip(string, int)
+
+        subject.subscribe(onNext: { string, int in
+            received.append("\(string): \(int)")
+        })
+
+        string.on(.next("The value"))
+        string.on(.next("The number"))
+        int.on(.next(1))
+        int.on(.next(2))
+        string.on(.next("The digit"))
+        int.on(.next(3))
+        int.on(.next(4))
+        int.on(.next(5))
+        int.on(.next(6))
+        int.on(.done)
+
+        XCTAssertEqual(received.count, 3)
+        XCTAssertEqual(received[0], "The value: 1")
+        XCTAssertEqual(received[1], "The number: 2")
+        XCTAssertEqual(received[2], "The digit: 3")
+    }
+
+    func testZipError() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+
+        let subject = Observable.zip(one, two)
+
+        let exp = expectation(description: "zip forwards error from observable")
+        subject.subscribe(onError: { _ in exp.fulfill() })
+        one.on(.error(TestError.test))
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testZipDone() {
+        let one = Observable<String>()
+        let two = Observable<Int>()
+
+        var isDone = false
+        Observable.zip(one, two).subscribe(onDone: { isDone = true })
+
+        one.on(.done)
+        XCTAssertTrue(isDone)
+    }
 }
