@@ -20,8 +20,7 @@ public extension UIView {
 
         let tap = UITapGestureRecognizer()
         addGestureRecognizer(tap)
-        tap.asObservable().subscribe(onNext: { [weak observable] _ in observable?.on(.next(())) })
-            .add(to: disposer)
+        tap.asObservable().subscribe(onNext: { [weak observable] _ in observable?.on(.next(())) }).add(to: disposer)
 
         return observable
     }
@@ -41,14 +40,17 @@ public extension UIView {
                     return
             }
             observable.on(.next((offset.cgRectValue.size.height, duration)))
-        }).add(to: disposer)
+        })
+        .add(to: disposer)
 
         observe(event: UIResponder.keyboardWillHideNotification).subscribe(onNext: { notification in
             guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
                 return
             }
             observable.on(.next((0, duration)))
-        }).add(to: disposer)
+        })
+        .add(to: disposer)
+
         return observable
     }
 

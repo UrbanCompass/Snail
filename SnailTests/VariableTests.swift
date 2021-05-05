@@ -45,7 +45,7 @@ class VariableTests: XCTestCase {
         subject.value = "new"
         var subjectCharactersCount: Int?
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 }).add(to: disposer)
+        subject.asObservable().subscribe(onNext: { val in subjectCharactersCount = val.count }).add(to: disposer)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -54,7 +54,7 @@ class VariableTests: XCTestCase {
         let subject = Variable("initial")
         var subjectCharactersCount: Int?
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 }).add(to: disposer)
+        subject.asObservable().subscribe(onNext: { val in subjectCharactersCount = val.count }).add(to: disposer)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -63,20 +63,20 @@ class VariableTests: XCTestCase {
         let subject = Unique("sameValue")
         var firedCount = 0
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
+        subject.asObservable().subscribe(onNext: { _ in
             firedCount += 1
         }).add(to: disposer)
 
         subject.value = "sameValue"
 
-        XCTAssertTrue(firedCount == 1)
+        XCTAssertEqual(firedCount, 1)
     }
 
     func testVariableFireCounts() {
         let subject = Variable("sameValue")
         var firedCount = 0
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
+        subject.asObservable().subscribe(onNext: { _ in
             firedCount += 1
         }).add(to: disposer)
 
@@ -85,22 +85,11 @@ class VariableTests: XCTestCase {
         XCTAssertEqual(firedCount, 2)
     }
 
-    func testMapToVoid() {
-        let subject = Variable("initial")
-        var fired = false
-
-        subject.map { _ in return () }.asObservable().subscribe(onNext: { _ in
-            fired = true
-        }).add(to: disposer)
-
-        XCTAssertTrue(fired)
-    }
-
     func testBindToOtherVariable() {
         let subject = Variable("one")
         let observedVariable = Variable("two")
 
-        subject.bind(to: observedVariable)
+        subject.bind(to: observedVariable).add(to: disposer)
         XCTAssertEqual(subject.value, "two")
 
         observedVariable.value = "three"

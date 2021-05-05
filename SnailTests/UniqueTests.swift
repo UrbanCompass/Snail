@@ -44,27 +44,6 @@ class UniqueTests: XCTestCase {
         XCTAssertEqual("initial", result)
     }
 
-    func testMappedVariableNotifiesOnSubscribe() {
-        let subject = Unique("initial")
-        subject.value = "new"
-        var subjectCharactersCount: Int?
-
-        subject.map { $0.count }.asObservable().subscribe(onNext: { count in
-            subjectCharactersCount = count
-        }).add(to: disposer)
-
-        XCTAssertEqual(subject.value.count, subjectCharactersCount)
-    }
-
-    func testMappedVariableNotifiesInitialOnSubscribe() {
-        let subject = Unique("initial")
-        var subjectCharactersCount: Int?
-
-        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 }).add(to: disposer)
-
-        XCTAssertEqual(subject.value.count, subjectCharactersCount)
-    }
-
     func testVariableHandlesEquatableArrays() {
         var events: [[String]] = []
         let subject = Unique<[String]>(["1", "2"])
