@@ -6,6 +6,7 @@ import XCTest
 
 class ReplayTests: XCTestCase {
     private var subject: Replay<String>?
+    private let disposer = Disposer()
 
     override func setUp() {
         super.setUp()
@@ -70,7 +71,7 @@ class ReplayTests: XCTestCase {
             self.subject?.on(.main).subscribe(onNext: { _ in
                 isMainQueue = Thread.isMainThread
                 exp.fulfill()
-            })
+            }).add(to: self.disposer)
         }
 
         waitForExpectations(timeout: 2) { error in

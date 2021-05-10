@@ -5,12 +5,14 @@ import XCTest
 @testable import Snail
 
 class UniqueTests: XCTestCase {
+    private let disposer = Disposer()
+
     func testVariableChanges() {
         var events: [String?] = []
         let subject = Unique<String?>(nil)
         subject.asObservable().subscribe(
             onNext: { string in events.append(string) }
-        )
+        ).add(to: disposer)
         subject.value = nil
         subject.value = "1"
         subject.value = "2"
@@ -28,7 +30,7 @@ class UniqueTests: XCTestCase {
         subject.value = "new"
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { result = $0 })
+        subject.asObservable().subscribe(onNext: { result = $0 }).add(to: disposer)
 
         XCTAssertEqual("new", result)
     }
@@ -37,36 +39,15 @@ class UniqueTests: XCTestCase {
         let subject = Unique("initial")
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { result = $0 })
+        subject.asObservable().subscribe(onNext: { result = $0 }).add(to: disposer)
 
         XCTAssertEqual("initial", result)
-    }
-
-    func testMappedVariableNotifiesOnSubscribe() {
-        let subject = Unique("initial")
-        subject.value = "new"
-        var subjectCharactersCount: Int?
-
-        subject.map { $0.count }.asObservable().subscribe(onNext: { count in
-            subjectCharactersCount = count
-        })
-
-        XCTAssertEqual(subject.value.count, subjectCharactersCount)
-    }
-
-    func testMappedVariableNotifiesInitialOnSubscribe() {
-        let subject = Unique("initial")
-        var subjectCharactersCount: Int?
-
-        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 })
-
-        XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
 
     func testVariableHandlesEquatableArrays() {
         var events: [[String]] = []
         let subject = Unique<[String]>(["1", "2"])
-        subject.asObservable().subscribe(onNext: { array in events.append(array) })
+        subject.asObservable().subscribe(onNext: { array in events.append(array) }).add(to: disposer)
 
         subject.value = ["1", "2"]
         subject.value = ["2", "1"]
@@ -82,7 +63,7 @@ class UniqueTests: XCTestCase {
         let subject = Unique<[String]?>(nil)
         subject.asObservable().subscribe(
             onNext: { array in events.append(array) }
-        )
+        ).add(to: disposer)
         subject.value = ["1", "2"]
         subject.value = nil
         subject.value = nil

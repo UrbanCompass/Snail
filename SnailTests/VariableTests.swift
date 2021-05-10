@@ -5,12 +5,14 @@ import XCTest
 @testable import Snail
 
 class VariableTests: XCTestCase {
+    private let disposer = Disposer()
+
     func testVariableChanges() {
         var events: [String?] = []
         let subject = Variable<String?>(nil)
         subject.asObservable().subscribe(
             onNext: { string in events.append(string) }
-        )
+        ).add(to: disposer)
         subject.value = "1"
         subject.value = "2"
         XCTAssertEqual(events[0], nil)
@@ -24,7 +26,7 @@ class VariableTests: XCTestCase {
         subject.value = "new"
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { result = $0 })
+        subject.asObservable().subscribe(onNext: { result = $0 }).add(to: disposer)
 
         XCTAssertEqual("new", result)
     }
@@ -33,7 +35,7 @@ class VariableTests: XCTestCase {
         let subject = Variable("initial")
         var result: String?
 
-        subject.asObservable().subscribe(onNext: { result = $0 })
+        subject.asObservable().subscribe(onNext: { result = $0 }).add(to: disposer)
 
         XCTAssertEqual("initial", result)
     }
@@ -43,7 +45,7 @@ class VariableTests: XCTestCase {
         subject.value = "new"
         var subjectCharactersCount: Int?
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 })
+        subject.asObservable().subscribe(onNext: { val in subjectCharactersCount = val.count }).add(to: disposer)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -52,7 +54,7 @@ class VariableTests: XCTestCase {
         let subject = Variable("initial")
         var subjectCharactersCount: Int?
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 })
+        subject.asObservable().subscribe(onNext: { val in subjectCharactersCount = val.count }).add(to: disposer)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -61,44 +63,33 @@ class VariableTests: XCTestCase {
         let subject = Unique("sameValue")
         var firedCount = 0
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
+        subject.asObservable().subscribe(onNext: { _ in
             firedCount += 1
-        })
+        }).add(to: disposer)
 
         subject.value = "sameValue"
 
-        XCTAssertTrue(firedCount == 1)
+        XCTAssertEqual(firedCount, 1)
     }
 
     func testVariableFireCounts() {
         let subject = Variable("sameValue")
         var firedCount = 0
 
-        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
+        subject.asObservable().subscribe(onNext: { _ in
             firedCount += 1
-        })
+        }).add(to: disposer)
 
         subject.value = "sameValue"
 
         XCTAssertEqual(firedCount, 2)
     }
 
-    func testMapToVoid() {
-        let subject = Variable("initial")
-        var fired = false
-
-        subject.map { _ in return () }.asObservable().subscribe(onNext: { _ in
-            fired = true
-        })
-
-        XCTAssertTrue(fired)
-    }
-
     func testBindToOtherVariable() {
         let subject = Variable("one")
         let observedVariable = Variable("two")
 
-        subject.bind(to: observedVariable)
+        subject.bind(to: observedVariable).add(to: disposer)
         XCTAssertEqual(subject.value, "two")
 
         observedVariable.value = "three"

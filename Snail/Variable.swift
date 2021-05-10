@@ -31,16 +31,10 @@ public class Variable<T> {
         return subject
     }
 
-    public func bind(to variable: Variable<T>) {
-        variable.asObservable().subscribe(onNext: { [weak self] value in
+    public func bind(to variable: Variable<T>) -> Subscriber<T> {
+        return variable.asObservable().subscribe(onNext: { [weak self] value in
             self?.value = value
         })
-    }
-
-    public func map<U>(_ transform: @escaping (T) -> U) -> Variable<U> {
-        let newVariable = Variable<U>(transform(value))
-        asObservable().subscribe(onNext: { _ in newVariable.value = transform(self.value) })
-        return newVariable
     }
 
     deinit {
