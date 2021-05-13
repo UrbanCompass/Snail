@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/UrbanCompass/Snail"
   s.license      = "MIT"
   s.author       = "Compass"
-  s.ios.deployment_target = "11.0"
+  s.ios.deployment_target = "8.0"
   s.source       = { :git => "https://github.com/UrbanCompass/Snail.git", :tag => "#{s.version}" }
   s.source_files  = "Snail/**/*.swift"
   s.swift_version = '5.0'
