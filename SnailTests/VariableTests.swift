@@ -45,7 +45,7 @@ class VariableTests: XCTestCase {
         subject.value = "new"
         var subjectCharactersCount: Int?
 
-        subject.asObservable().subscribe(onNext: { val in subjectCharactersCount = val.count }).add(to: disposer)
+        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 }).add(to: disposer)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -54,7 +54,7 @@ class VariableTests: XCTestCase {
         let subject = Variable("initial")
         var subjectCharactersCount: Int?
 
-        subject.asObservable().subscribe(onNext: { val in subjectCharactersCount = val.count }).add(to: disposer)
+        subject.map { $0.count }.asObservable().subscribe(onNext: { subjectCharactersCount = $0 }).add(to: disposer)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -63,7 +63,7 @@ class VariableTests: XCTestCase {
         let subject = Unique("sameValue")
         var firedCount = 0
 
-        subject.asObservable().subscribe(onNext: { _ in
+        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
             firedCount += 1
         }).add(to: disposer)
 
@@ -76,13 +76,24 @@ class VariableTests: XCTestCase {
         let subject = Variable("sameValue")
         var firedCount = 0
 
-        subject.asObservable().subscribe(onNext: { _ in
+        subject.map { $0.count }.asObservable().subscribe(onNext: { _ in
             firedCount += 1
         }).add(to: disposer)
 
         subject.value = "sameValue"
 
         XCTAssertEqual(firedCount, 2)
+    }
+
+    func testMapToVoid() {
+        let subject = Variable("initial")
+        var fired = false
+
+        subject.map { _ in return () }.asObservable().subscribe(onNext: { _ in
+            fired = true
+        }).add(to: disposer)
+
+        XCTAssertTrue(fired)
     }
 
     func testBindToOtherVariable() {
