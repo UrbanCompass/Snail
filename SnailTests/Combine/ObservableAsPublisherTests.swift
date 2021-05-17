@@ -2,7 +2,6 @@
 
 // swiftlint:disable file_length
 
-#if canImport(Combine)
 import Combine
 import Foundation
 @testable import Snail
@@ -1129,4 +1128,3 @@ class ObservableAsPublisherTests: XCTestCase {
         XCTAssertTrue(isDone)
     }
 }
-#endif
