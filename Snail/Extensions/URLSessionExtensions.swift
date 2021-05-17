@@ -20,8 +20,8 @@ extension URLSession {
     }
 
     private static var disposerKey = "com.compass.Snail.URLSession.Disposer"
-    
-    var disposer: Disposer {
+
+    public var disposer: Disposer {
         if let disposer = objc_getAssociatedObject(self, &URLSession.disposerKey) as? Disposer {
             return disposer
         }

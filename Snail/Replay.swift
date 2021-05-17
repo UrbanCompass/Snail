@@ -40,8 +40,8 @@ public class Replay<T>: Observable<T> {
 
     private func replay(queue: DispatchQueue?, handler: @escaping (Event<T>) -> Void) {
         eventsQueue.sync {
-            self.events.forEach {
-                event in notify(subscriber: Subscriber(queue: queue, observable: self, handler: handler), event: event)
+            self.events.forEach { event in
+                notify(subscriber: Subscriber(queue: queue, observable: self, handler: handler), event: event)
             }
         }
     }
