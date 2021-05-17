@@ -1,6 +1,5 @@
 //  Copyright © 2021 Compass. All rights reserved.
 
-#if canImport(Combine)
 import Combine
 import Foundation
 
@@ -36,4 +35,3 @@ class SnailSubscription<Upstream: ObservableType, Downstream: Combine.Subscriber
         disposable = nil
     }
 }
-#endif
