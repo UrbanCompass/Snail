@@ -19,6 +19,7 @@
 		2E53BDEC264ECC940030B9FB /* Observable+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E53BDEB264ECC940030B9FB /* Observable+Combine.swift */; };
 		2E53BDEE264ED4C70030B9FB /* SnailSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E53BDED264ED4C70030B9FB /* SnailSubscription.swift */; };
 		2E53BE072651F2990030B9FB /* ObservableAsPublisherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E53BE062651F2990030B9FB /* ObservableAsPublisherTests.swift */; };
+		2E53BE092652B6D60030B9FB /* DemandBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E53BE082652B6D60030B9FB /* DemandBuffer.swift */; };
 		CB2936771DFE151B00792E6B /* Just.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2936761DFE151B00792E6B /* Just.swift */; };
 		CB2936791DFEF77500792E6B /* JustTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2936781DFEF77500792E6B /* JustTests.swift */; };
 		CBE54A7A1E5A16AC00971F74 /* Subscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54A791E5A16AC00971F74 /* Subscriber.swift */; };
@@ -65,6 +66,7 @@
 		2E53BDEB264ECC940030B9FB /* Observable+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Combine.swift"; sourceTree = "<group>"; };
 		2E53BDED264ED4C70030B9FB /* SnailSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnailSubscription.swift; sourceTree = "<group>"; };
 		2E53BE062651F2990030B9FB /* ObservableAsPublisherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableAsPublisherTests.swift; sourceTree = "<group>"; };
+		2E53BE082652B6D60030B9FB /* DemandBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemandBuffer.swift; sourceTree = "<group>"; };
 		CB2936761DFE151B00792E6B /* Just.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Just.swift; sourceTree = "<group>"; };
 		CB2936781DFEF77500792E6B /* JustTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JustTests.swift; sourceTree = "<group>"; };
 		CBE54A791E5A16AC00971F74 /* Subscriber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subscriber.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			children = (
 				2E53BDEB264ECC940030B9FB /* Observable+Combine.swift */,
 				2E53BDED264ED4C70030B9FB /* SnailSubscription.swift */,
+				2E53BE082652B6D60030B9FB /* DemandBuffer.swift */,
 			);
 			path = "Snail+Combine";
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				CB2936771DFE151B00792E6B /* Just.swift in Sources */,
 				241F15581E03124600DD70A2 /* UIBarButtonItemExtensions.swift in Sources */,
 				24CF1FA81EF875A400F34234 /* URLSessionExtensions.swift in Sources */,
+				2E53BE092652B6D60030B9FB /* DemandBuffer.swift in Sources */,
 				2408FA902112A15900B9F59E /* Scheduler.swift in Sources */,
 				CBE54E601DFB39510008DD64 /* Event.swift in Sources */,
 				2E53BDEE264ED4C70030B9FB /* SnailSubscription.swift in Sources */,

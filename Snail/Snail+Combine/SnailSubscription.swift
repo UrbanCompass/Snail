@@ -7,23 +7,29 @@ import Foundation
 @available(iOS 13.0, *)
 class SnailSubscription<Upstream: ObservableType, Downstream: Combine.Subscriber>: Combine.Subscription where Downstream.Input == Upstream.T, Downstream.Failure == Error {
     private var disposable: Subscriber<Upstream.T>?
+    private let buffer: DemandBuffer<Downstream>
 
     init(upstream: Upstream,
          downstream: Downstream) {
+        buffer = DemandBuffer(subscriber: downstream)
         disposable = upstream.subscribe(queue: nil,
-                                        onNext: { value in
-                                            _ = downstream.receive(value)
+                                        onNext: { [weak self] value in
+                                            guard let self = self else { return }
+
+                                            _ = self.buffer.buffer(value: value)
                                         },
-                                        onError: { error in
-                                            downstream.receive(completion: .failure(error))
+                                        onError: { [weak self] error in
+                                            guard let self = self else { return }
+                                            self.buffer.complete(completion: .failure(error))
                                         },
-                                        onDone: {
-                                            downstream.receive(completion: .finished)
+                                        onDone: { [weak self] in
+                                            guard let self = self else { return }
+                                            self.buffer.complete(completion: .finished)
                                         })
     }
 
     func request(_ demand: Subscribers.Demand) {
-        // For now, not supporting changing any kind of demand
+        _ = self.buffer.demand(demand)
     }
 
     func cancel() {
