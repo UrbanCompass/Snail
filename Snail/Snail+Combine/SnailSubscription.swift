@@ -15,7 +15,6 @@ class SnailSubscription<Upstream: ObservableType, Downstream: Combine.Subscriber
         disposable = upstream.subscribe(queue: nil,
                                         onNext: { [weak self] value in
                                             guard let self = self else { return }
-
                                             _ = self.buffer.buffer(value: value)
                                         },
                                         onError: { [weak self] error in
