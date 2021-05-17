@@ -16,6 +16,8 @@
 		24FABD581DFEF7EC005CF84E /* FailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD571DFEF7EC005CF84E /* FailTests.swift */; };
 		24FABD5A1DFF0B48005CF84E /* Replay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD591DFF0B48005CF84E /* Replay.swift */; };
 		24FABD5C1DFF0BAF005CF84E /* ReplayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */; };
+		2E53BDEC264ECC940030B9FB /* Observable+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E53BDEB264ECC940030B9FB /* Observable+Combine.swift */; };
+		2E53BDEE264ED4C70030B9FB /* SnailSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E53BDED264ED4C70030B9FB /* SnailSubscription.swift */; };
 		CB2936771DFE151B00792E6B /* Just.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2936761DFE151B00792E6B /* Just.swift */; };
 		CB2936791DFEF77500792E6B /* JustTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2936781DFEF77500792E6B /* JustTests.swift */; };
 		CBE54A7A1E5A16AC00971F74 /* Subscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54A791E5A16AC00971F74 /* Subscriber.swift */; };
@@ -59,6 +61,8 @@
 		24FABD571DFEF7EC005CF84E /* FailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailTests.swift; sourceTree = "<group>"; };
 		24FABD591DFF0B48005CF84E /* Replay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Replay.swift; sourceTree = "<group>"; };
 		24FABD5B1DFF0BAF005CF84E /* ReplayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplayTests.swift; sourceTree = "<group>"; };
+		2E53BDEB264ECC940030B9FB /* Observable+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Combine.swift"; sourceTree = "<group>"; };
+		2E53BDED264ED4C70030B9FB /* SnailSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnailSubscription.swift; sourceTree = "<group>"; };
 		CB2936761DFE151B00792E6B /* Just.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Just.swift; sourceTree = "<group>"; };
 		CB2936781DFEF77500792E6B /* JustTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JustTests.swift; sourceTree = "<group>"; };
 		CBE54A791E5A16AC00971F74 /* Subscriber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subscriber.swift; sourceTree = "<group>"; };
@@ -112,6 +116,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		2E53BDEA264ECC770030B9FB /* Snail+Combine */ = {
+			isa = PBXGroup;
+			children = (
+				2E53BDEB264ECC940030B9FB /* Observable+Combine.swift */,
+				2E53BDED264ED4C70030B9FB /* SnailSubscription.swift */,
+			);
+			path = "Snail+Combine";
+			sourceTree = "<group>";
+		};
 		CBE54E371DFB36DF0008DD64 = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +146,7 @@
 		CBE54E431DFB36DF0008DD64 /* Snail */ = {
 			isa = PBXGroup;
 			children = (
+				2E53BDEA264ECC770030B9FB /* Snail+Combine */,
 				F569538B2320476100D35C80 /* Closure.swift */,
 				CBE54E441DFB36DF0008DD64 /* Snail.h */,
 				CBE54E451DFB36DF0008DD64 /* Info.plist */,
@@ -314,6 +328,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E53BDEC264ECC940030B9FB /* Observable+Combine.swift in Sources */,
 				CBE54E621DFB39510008DD64 /* ObservableType.swift in Sources */,
 				CBE54A7A1E5A16AC00971F74 /* Subscriber.swift in Sources */,
 				2421BA721E09801000EA9064 /* UIGestureRecognizerExtensions.swift in Sources */,
@@ -327,6 +342,7 @@
 				24CF1FA81EF875A400F34234 /* URLSessionExtensions.swift in Sources */,
 				2408FA902112A15900B9F59E /* Scheduler.swift in Sources */,
 				CBE54E601DFB39510008DD64 /* Event.swift in Sources */,
+				2E53BDEE264ED4C70030B9FB /* SnailSubscription.swift in Sources */,
 				F5C973A622F20C86003DB42C /* Disposer.swift in Sources */,
 				CBE54E631DFB39510008DD64 /* Variable.swift in Sources */,
 				CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */,
