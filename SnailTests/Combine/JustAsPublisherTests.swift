@@ -7,10 +7,14 @@ import XCTest
 
 @available(iOS 13.0, *)
 class JustAsPublisherTests: XCTestCase {
-    private var subscription: AnyCancellable?
+    private var subscriptions: Set<AnyCancellable>!
+
+    override func setUp() {
+        subscriptions = Set<AnyCancellable>()
+    }
 
     override func tearDown() {
-        subscription = nil
+        subscriptions = nil
         super.tearDown()
     }
 
@@ -18,13 +22,15 @@ class JustAsPublisherTests: XCTestCase {
         var result: Int?
         var done = false
 
-        subscription = Just(1).asPublisher()
+        Just(1).asPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     done = true
                 }
             },
             receiveValue: { result = $0 })
+            .store(in: &subscriptions)
+
         XCTAssertEqual(1, result)
         XCTAssertTrue(done)
     }

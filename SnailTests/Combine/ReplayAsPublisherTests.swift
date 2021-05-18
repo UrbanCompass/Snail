@@ -8,16 +8,17 @@ import XCTest
 @available(iOS 13.0, *)
 class ReplayAsPublisherTests: XCTestCase {
     private var subject: Replay<String>!
-    private var subscription: AnyCancellable?
+    private var subscriptions: Set<AnyCancellable>!
 
     override func setUp() {
         super.setUp()
         subject = Replay(2)
+        subscriptions = Set<AnyCancellable>()
     }
 
     override func tearDown() {
         subject = nil
-        subscription = nil
+        subscriptions = nil
         super.tearDown()
     }
 
@@ -27,9 +28,10 @@ class ReplayAsPublisherTests: XCTestCase {
         subject?.on(.next("2"))
         subject?.on(.done)
 
-        subscription = subject.asPublisher()
+        subject.asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { strings.append($0) })
+            .store(in: &subscriptions)
 
         XCTAssertEqual(strings[0], "1")
         XCTAssertEqual(strings[1], "2")

@@ -14,12 +14,13 @@ class FailAsPublisherTests: XCTestCase {
     private var subject: Observable<String>!
     private var strings: [String]!
     private var error: Error?
-    private var subscription: AnyCancellable?
+    private var subscriptions: Set<AnyCancellable>!
 
     override func setUp() {
         super.setUp()
         subject = Fail(TestError.test)
         strings = []
+        subscriptions = Set<AnyCancellable>()
         error = nil
     }
 
@@ -27,25 +28,27 @@ class FailAsPublisherTests: XCTestCase {
         subject = nil
         strings = nil
         error = nil
-        subscription = nil
+        subscriptions = nil
     }
 
     func testOnErrorIsRun() {
-        subscription = subject.asPublisher()
+        subject.asPublisher()
             .sink(receiveCompletion: { [unowned self] completion in
                 if case let .failure(underlying) = completion {
                     self.error = underlying as? TestError
                 }
             },
             receiveValue: { _ in })
+            .store(in: &subscriptions)
 
         XCTAssertEqual((error as? TestError), TestError.test)
     }
 
     func testOnNextIsNotRun() {
-        subscription = subject.asPublisher()
+        subject.asPublisher()
             .sink(receiveCompletion: { _ in },
-                  receiveValue: { [unowned self] in strings.append($0) })
+                  receiveValue: { [unowned self] in self.strings.append($0) })
+            .store(in: &subscriptions)
         subject?.on(.next("1"))
 
         XCTAssertEqual(strings?.count, 0)

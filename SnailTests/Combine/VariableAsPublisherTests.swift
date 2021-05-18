@@ -7,19 +7,24 @@ import XCTest
 
 @available(iOS 13.0, *)
 class VariableAsPublisherTests: XCTestCase {
-    private var subscription: AnyCancellable?
+    private var subscriptions: Set<AnyCancellable>!
+    
+    override func setUp() {
+        subscriptions = Set<AnyCancellable>()
+    }
 
     override func tearDown() {
-        subscription = nil
+        subscriptions = nil
     }
 
     func testVariableChanges() {
         var events: [String?] = []
         let subject = Variable<String?>(nil)
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
+            .store(in: &subscriptions)
         subject.value = "1"
         subject.value = "2"
         XCTAssertEqual(events[0], nil)
@@ -33,10 +38,11 @@ class VariableAsPublisherTests: XCTestCase {
         subject.value = "new"
         var result: String?
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
+            .store(in: &subscriptions)
 
         XCTAssertEqual("new", result)
     }
@@ -45,10 +51,11 @@ class VariableAsPublisherTests: XCTestCase {
         let subject = Variable("initial")
         var result: String?
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
+            .store(in: &subscriptions)
 
         XCTAssertEqual("initial", result)
     }
@@ -58,10 +65,11 @@ class VariableAsPublisherTests: XCTestCase {
         subject.value = "new"
         var subjectCharactersCount: Int?
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { subjectCharactersCount = $0.count })
+            .store(in: &subscriptions)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -70,10 +78,11 @@ class VariableAsPublisherTests: XCTestCase {
         let subject = Variable("initial")
         var subjectCharactersCount: Int?
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { subjectCharactersCount = $0.count })
+            .store(in: &subscriptions)
 
         XCTAssertEqual(subject.value.count, subjectCharactersCount)
     }
@@ -82,10 +91,11 @@ class VariableAsPublisherTests: XCTestCase {
         let subject = Unique("sameValue")
         var firedCount = 0
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { _ in firedCount += 1 })
+            .store(in: &subscriptions)
 
         subject.value = "sameValue"
 
@@ -96,10 +106,11 @@ class VariableAsPublisherTests: XCTestCase {
         let subject = Variable("sameValue")
         var firedCount = 0
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { _ in firedCount += 1 })
+            .store(in: &subscriptions)
 
         subject.value = "sameValue"
 

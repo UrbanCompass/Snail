@@ -7,19 +7,24 @@ import XCTest
 
 @available(iOS 13.0, *)
 class UniqueAsPublisherTests: XCTestCase {
-    private var subscription: AnyCancellable?
+    private var subscriptions: Set<AnyCancellable>!
+    
+    override func setUp() {
+        subscriptions = Set<AnyCancellable>()
+    }
 
     override func tearDown() {
-        subscription = nil
+        subscriptions = nil
     }
 
     func testVariableChanges() {
         var events: [String?] = []
         let subject = Unique<String?>(nil)
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
+            .store(in: &subscriptions)
 
         subject.value = nil
         subject.value = "1"
@@ -38,10 +43,11 @@ class UniqueAsPublisherTests: XCTestCase {
         subject.value = "new"
         var result: String?
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
+            .store(in: &subscriptions)
 
         XCTAssertEqual("new", result)
     }
@@ -50,10 +56,11 @@ class UniqueAsPublisherTests: XCTestCase {
         let subject = Unique("initial")
         var result: String?
 
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
+            .store(in: &subscriptions)
 
         XCTAssertEqual("initial", result)
     }
@@ -61,10 +68,11 @@ class UniqueAsPublisherTests: XCTestCase {
     func testVariableHandlesEquatableArrays() {
         var events: [[String]] = []
         let subject = Unique<[String]>(["1", "2"])
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
+            .store(in: &subscriptions)
 
         subject.value = ["1", "2"]
         subject.value = ["2", "1"]
@@ -78,10 +86,11 @@ class UniqueAsPublisherTests: XCTestCase {
     func testVariableHandlesOptionalArrays() {
         var events: [[String]?] = []
         let subject = Unique<[String]?>(nil)
-        subscription = subject.asObservable()
+        subject.asObservable()
             .asPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
+            .store(in: &subscriptions)
         subject.value = ["1", "2"]
         subject.value = nil
         subject.value = nil
