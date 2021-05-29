@@ -44,24 +44,14 @@ let observable = Observable<thing>()
 ```
 
 ## Disposer
-### What the Disposer IS
 
-The disposer is used to maintain reference to many subscriptions in a single location. When a disposer is deinitialized, it removes all of its referenced subscriptions from memory. A disposer is usually located in a centralized place where most of the subscriptions happen (ie: UIViewController in an MVVM architecture). Since most of the subscriptions are to different observables, and those observables are tied to type, all the things that are going to be disposed need to comform to `Disposable`. 
+A disposer is in charge of removing all the subscriptions. A disposer is usually located in a centralized place where most of the subscriptions happen (ie: UIViewController in an MVVM architecture). Since most of the subscriptions are to different observables, and those observables are tied to type, all the things that are going to be disposed need to comform to `Disposable`. 
 
-### What the Disposer IS NOT
-
-The disposer is not meant to prevent retain cycles. A common example is a `UIViewController` that has reference to a `Disposer` object. A subscription definition might look something like this:
+If the `Disposer` helps get rid of the closures and prevent retention cycles (see weak self section). For the sake of all the examples, let's have a disposer created:
 
 ```swift
-extension MyViewController {
-  button.tap.subscribe(onNext: { [weak self] in
-    self?.navigationController.push(newVc)
-  }).add(to: disposer)
-}
+let disposer = Disposer()
 ```
-Without specifying a `[weak self]` capture list in a scenario like this, a retain cycle is created between the subscriber and the view controller. In this example, without the capture list, the view controller will not be deallocated as expected, causing its disposer object to stay in memory as well. Since the `Disposer` removes its referenced subscribers when it is deinitialized, these subscribers will stay in memory as well.
-
-See [https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html](https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html) for more details on memory management in Swift.
 
 ## Closure Wrapper
 
@@ -227,6 +217,26 @@ Subscribing on `DispatchQueue.main`
 observable.subscribe(queue: .main,
     onNext: { thing in ... }
 ).add(to: disposer)
+```
+
+## Weak self is optional
+
+You can use `[weak self]`  if you want, but with the introduction of `Disposer`, retention cycles are destroyed when calling `disposer.disposeAll()`. 
+
+One idea would be to call `disposer.disposeAll()` when you pop a view controller from the navigation stack.
+
+```swift
+protocol HasDisposer {
+    var disposer: Disposer
+}
+
+class NavigationController: UINavigationController {
+    public override func popViewController(animated: Bool) -> UIViewController? {
+        let viewController = super.popViewController(animated: animated)
+        (viewController as? HasDisposer).disposer.disposeAll()
+        return viewController
+    }
+}
 ```
 
 # In Practice

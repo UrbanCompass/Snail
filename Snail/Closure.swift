@@ -9,10 +9,6 @@ public class Closure<T>: DisposableType {
         self.closure = closure
     }
 
-    deinit {
-        dispose()
-    }
-
     public func dispose() {
         closure = nil
     }
