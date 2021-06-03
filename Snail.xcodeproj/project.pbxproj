@@ -29,6 +29,7 @@
 		CBE54E671DFB4F3F0008DD64 /* VariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */; };
 		CBE54E6D1DFB6A910008DD64 /* UIControlExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */; };
 		CBE54E6F1DFB797F0008DD64 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */; };
+		D2538A672669952000197A09 /* TwoWayBind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2538A662669952000197A09 /* TwoWayBind.swift */; };
 		DEEDA8EB2051BCB4000FE578 /* NotificationCenterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */; };
 		DEF9B98D1FD5D8FD00F8514E /* UniqueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */; };
 		DEF9B98F1FD5FE5800F8514E /* Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF9B98E1FD5FE5800F8514E /* Unique.swift */; };
@@ -75,6 +76,7 @@
 		CBE54E661DFB4F3F0008DD64 /* VariableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableTests.swift; sourceTree = "<group>"; };
 		CBE54E6C1DFB6A910008DD64 /* UIControlExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControlExtensions.swift; sourceTree = "<group>"; };
 		CBE54E6E1DFB797F0008DD64 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		D2538A662669952000197A09 /* TwoWayBind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoWayBind.swift; sourceTree = "<group>"; };
 		DEEDA8EA2051BCB4000FE578 /* NotificationCenterExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenterExtensions.swift; sourceTree = "<group>"; };
 		DEF9B98C1FD5D8FD00F8514E /* UniqueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueTests.swift; sourceTree = "<group>"; };
 		DEF9B98E1FD5FE5800F8514E /* Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unique.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				24FABD591DFF0B48005CF84E /* Replay.swift */,
 				2408FA8F2112A15900B9F59E /* Scheduler.swift */,
 				CBE54A791E5A16AC00971F74 /* Subscriber.swift */,
+				D2538A662669952000197A09 /* TwoWayBind.swift */,
 				DEF9B98E1FD5FE5800F8514E /* Unique.swift */,
 				CBE54E5F1DFB39510008DD64 /* Variable.swift */,
 				CBE54E5C1DFB39510008DD64 /* Extensions */,
@@ -333,6 +336,7 @@
 				24FABD5A1DFF0B48005CF84E /* Replay.swift in Sources */,
 				DEF9B98F1FD5FE5800F8514E /* Unique.swift in Sources */,
 				CBE54E6F1DFB797F0008DD64 /* UIViewExtensions.swift in Sources */,
+				D2538A672669952000197A09 /* TwoWayBind.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

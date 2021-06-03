@@ -43,30 +43,35 @@ public class Variable<T> {
         return newVariable
     }
 
-    public func twoWayBind(with: Variable<T>) {
-        self.value = with.value
-        var skipSelfEmission: Bool = false
-        var skipWithEmission: Bool = false
-
-        self.asObservable().subscribe(onNext: { [weak with] value in
-            guard !skipWithEmission else {
-                skipWithEmission = false
-                return
-            }
-            skipSelfEmission = true
-            with?.value = value
-        })
-        with.asObservable().subscribe(onNext: { [weak self] value in
-            guard !skipSelfEmission else {
-                skipSelfEmission = false
-                return
-            }
-            skipWithEmission = true
-            self?.value = value
-        })
-    }
-
     deinit {
         subject.on(.done)
+    }
+}
+
+extension Variable: TwoWayBind {
+    private struct Emission<T> {
+        let value: T
+        let direction: Direction
+    }
+
+    private enum Direction {
+        case leftToRight
+        case rightToLeft
+    }
+
+    public func twoWayBind(with: Variable<T>) {
+        let left: Observable<Emission<T>> = self.asObservable().map { Emission(value: $0, direction: .leftToRight) }
+        let right: Observable<Emission<T>> = with.asObservable().map { Emission(value: $0, direction: .rightToLeft) }
+
+        Observable.merge([left, right]).subscribe(onNext: { element in
+            switch element.direction {
+            case .leftToRight:
+                with.currentValue = element.value
+            case .rightToLeft:
+                self.currentValue = element.value
+            }
+        })
+
+        left.on(.next(Emission(value: with.value, direction: .rightToLeft)))
     }
 }
