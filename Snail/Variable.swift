@@ -49,6 +49,8 @@ public class Variable<T> {
 }
 
 extension Variable: TwoWayBind {
+    public typealias BindableType = Variable<T>
+
     private struct Emission<T> {
         let value: T
         let direction: Direction
@@ -59,11 +61,11 @@ extension Variable: TwoWayBind {
         case rightToLeft
     }
 
-    public func twoWayBind(with: Variable<T>) {
-        let left: Observable<Emission<T>> = self.asObservable().map { Emission(value: $0, direction: .leftToRight) }
-        let right: Observable<Emission<T>> = with.asObservable().map { Emission(value: $0, direction: .rightToLeft) }
+    public func twoWayBind(with: BindableType) {
+        let leftEmitter: Observable<Emission<T>> = self.asObservable().map { Emission(value: $0, direction: .leftToRight) }
+        let rightEmitter: Observable<Emission<T>> = with.asObservable().map { Emission(value: $0, direction: .rightToLeft) }
 
-        Observable.merge([left, right]).subscribe(onNext: { element in
+        Observable.merge([leftEmitter, rightEmitter]).subscribe(onNext: { element in
             switch element.direction {
             case .leftToRight:
                 with.currentValue = element.value
@@ -72,6 +74,6 @@ extension Variable: TwoWayBind {
             }
         })
 
-        left.on(.next(Emission(value: with.value, direction: .rightToLeft)))
+        leftEmitter.on(.next(Emission(value: with.value, direction: .rightToLeft)))
     }
 }

@@ -3,6 +3,6 @@
 import Foundation
 
 protocol TwoWayBind {
-    associatedtype T
-    func twoWayBind(with: Variable<T>)
+    associatedtype BindableType
+    func twoWayBind(with: BindableType)
 }
