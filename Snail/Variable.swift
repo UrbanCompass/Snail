@@ -43,6 +43,29 @@ public class Variable<T> {
         return newVariable
     }
 
+    public func twoWayBind(with: Variable<T>) {
+        self.value = with.value
+        var skipSelfEmission: Bool = false
+        var skipWithEmission: Bool = false
+
+        self.asObservable().subscribe(onNext: { [weak with] value in
+            guard !skipWithEmission else {
+                skipWithEmission = false
+                return
+            }
+            skipSelfEmission = true
+            with?.value = value
+        })
+        with.asObservable().subscribe(onNext: { [weak self] value in
+            guard !skipSelfEmission else {
+                skipSelfEmission = false
+                return
+            }
+            skipWithEmission = true
+            self?.value = value
+        })
+    }
+
     deinit {
         subject.on(.done)
     }

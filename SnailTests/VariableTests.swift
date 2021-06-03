@@ -104,4 +104,36 @@ class VariableTests: XCTestCase {
         observedVariable.value = "three"
         XCTAssertEqual(subject.value, "three")
     }
+
+    func testTwoWayBindWitheOtherVariable() {
+        let subject = Variable("one")
+        let otherSubject = Variable("two")
+
+        subject.twoWayBind(with: otherSubject)
+        XCTAssertEqual(subject.value, "two")
+
+        subject.value = "three"
+        XCTAssertEqual(subject.value, "three")
+        XCTAssertEqual(otherSubject.value, "three")
+
+        subject.value = "four"
+        XCTAssertEqual(subject.value, "four")
+        XCTAssertEqual(otherSubject.value, "four")
+
+        otherSubject.value = "five"
+        XCTAssertEqual(subject.value, "five")
+        XCTAssertEqual(otherSubject.value, "five")
+
+        otherSubject.value = "six"
+        XCTAssertEqual(subject.value, "six")
+        XCTAssertEqual(otherSubject.value, "six")
+
+        subject.value = "seven"
+        XCTAssertEqual(subject.value, "seven")
+        XCTAssertEqual(otherSubject.value, "seven")
+
+        otherSubject.value = "eight"
+        XCTAssertEqual(subject.value, "eight")
+        XCTAssertEqual(otherSubject.value, "eight")
+    }
 }
