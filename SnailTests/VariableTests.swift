@@ -136,4 +136,33 @@ class VariableTests: XCTestCase {
         XCTAssertEqual(subject.value, "eight")
         XCTAssertEqual(otherSubject.value, "eight")
     }
+
+    func testTwoWayBindWithOtherVariableSubscriptionsCounts() {
+        let subject = Variable(0)
+        let otherSubject = Variable(0)
+
+        var subjectCount = 0
+        var otherSubjectCount = 0
+
+        subject.twoWayBind(with: otherSubject)
+
+        subject.asObservable().subscribe(onNext: { _ in
+            subjectCount += 1
+        })
+        otherSubject.asObservable().subscribe(onNext: { _ in
+            otherSubjectCount += 1
+        })
+
+        for number in 1...9 {
+            if number.isMultiple(of: 2) {
+                otherSubject.value = number
+            } else {
+                subject.value = number
+            }
+        }
+
+        XCTAssertEqual(subjectCount, otherSubjectCount)
+        XCTAssertEqual(subjectCount, 10)
+        XCTAssertEqual(otherSubjectCount, 10)
+    }
 }
