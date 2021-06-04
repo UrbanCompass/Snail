@@ -62,11 +62,11 @@ extension Variable: TwoWayBind {
     }
 
     public func twoWayBind(with: BindableType) {
-        var updatingLeft: Bool = false
-        var updatingRight: Bool = false
-
         let leftEmitter: Observable<Emission<T>> = self.asObservable().map { Emission(value: $0, direction: .leftToRight) }
         let rightEmitter: Observable<Emission<T>> = with.asObservable().map { Emission(value: $0, direction: .rightToLeft) }
+
+        var updatingLeft: Bool = false
+        var updatingRight: Bool = false
 
         Observable.merge([leftEmitter, rightEmitter]).subscribe(onNext: { element in
             switch element.direction {

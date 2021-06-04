@@ -137,20 +137,20 @@ class VariableTests: XCTestCase {
         XCTAssertEqual(otherSubject.value, "eight")
     }
 
-    func testTwoWayBindWithOtherVariableSubscriptionsCounts() {
+    func testTwoWayBindWithOtherVariableFireCounts() {
         let subject = Variable(0)
         let otherSubject = Variable(0)
 
-        var subjectCount = 0
-        var otherSubjectCount = 0
+        var subjectFireCount = 0
+        var otherSubjectFireCount = 0
 
         subject.twoWayBind(with: otherSubject)
 
         subject.asObservable().subscribe(onNext: { _ in
-            subjectCount += 1
+            subjectFireCount += 1
         })
         otherSubject.asObservable().subscribe(onNext: { _ in
-            otherSubjectCount += 1
+            otherSubjectFireCount += 1
         })
 
         for number in 1...9 {
@@ -161,8 +161,49 @@ class VariableTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(subjectCount, otherSubjectCount)
-        XCTAssertEqual(subjectCount, 10)
-        XCTAssertEqual(otherSubjectCount, 10)
+        XCTAssertEqual(subjectFireCount, otherSubjectFireCount)
+        XCTAssertEqual(subjectFireCount, 10)
+        XCTAssertEqual(otherSubjectFireCount, 10)
+    }
+
+    func testTwoWayBindWithUniques() {
+        let subject = Unique("one")
+        let otherSubject = Unique("two")
+
+        var subjectFireCount = 0
+        var otherSubjectFireCount = 0
+
+        subject.twoWayBind(with: otherSubject)
+
+        subject.asObservable().subscribe(onNext: { _ in
+            subjectFireCount += 1
+        })
+        otherSubject.asObservable().subscribe(onNext: { _ in
+            otherSubjectFireCount += 1
+        })
+
+        XCTAssertEqual(subject.value, "two")
+
+        subject.value = "three"
+        XCTAssertEqual(subject.value, "three")
+        XCTAssertEqual(otherSubject.value, "three")
+
+        otherSubject.value = "four"
+        XCTAssertEqual(subject.value, "four")
+        XCTAssertEqual(otherSubject.value, "four")
+
+        for _ in 1...10 {
+            subject.value = "four"
+            XCTAssertEqual(subject.value, "four")
+            XCTAssertEqual(otherSubject.value, "four")
+
+            otherSubject.value = "four"
+            XCTAssertEqual(subject.value, "four")
+            XCTAssertEqual(otherSubject.value, "four")
+        }
+
+        XCTAssertEqual(subjectFireCount, otherSubjectFireCount)
+        XCTAssertEqual(subjectFireCount, 3)
+        XCTAssertEqual(otherSubjectFireCount, 3)
     }
 }
