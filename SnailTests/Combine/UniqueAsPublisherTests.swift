@@ -8,7 +8,7 @@ import XCTest
 @available(iOS 13.0, *)
 class UniqueAsPublisherTests: XCTestCase {
     private var subscriptions: Set<AnyCancellable>!
-    
+
     override func setUp() {
         subscriptions = Set<AnyCancellable>()
     }
