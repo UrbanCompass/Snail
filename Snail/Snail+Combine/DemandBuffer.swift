@@ -1,29 +1,47 @@
-//  Copyright © 2021 Compass. All rights reserved.
+//
+//  DemandBuffer.swift
+//  RxCombine
+//
+//  Created by Shai Mishali on 21/02/2020.
+//  Copyright © 2020 Combine Community. All rights reserved.
+//
 
 import Combine
-import Foundation
+import Darwin
 
+/// A buffer responsible for managing the demand of a downstream
+/// subscriber for an upstream publisher
+///
+/// It buffers values and completion events and forwards them dynamically
+/// according to the demand requested by the downstream
+///
+/// In a sense, the subscription only relays the requests for demand, as well
+/// the events emitted by the upstream — to this buffer, which manages
+/// the entire behavior and backpressure contract
 @available(iOS 13.0, *)
 class DemandBuffer<S: Combine.Subscriber> {
-    private struct Demand {
-        var processed: Subscribers.Demand = .none
-        var requested: Subscribers.Demand = .none
-        var sent: Subscribers.Demand = .none
-    }
-
     private let lock = NSRecursiveLock()
-    private var buffer: [S.Input] = []
+    private var buffer = [S.Input]()
     private let subscriber: S
     private var completion: Subscribers.Completion<S.Failure>?
     private var demandState = Demand()
 
+    /// Initialize a new demand buffer for a provided downstream subscriber
+    ///
+    /// - parameter subscriber: The downstream subscriber demanding events
     init(subscriber: S) {
         self.subscriber = subscriber
     }
 
+    /// Buffer an upstream value to later be forwarded to
+    /// the downstream subscriber, once it demands it
+    ///
+    /// - parameter value: Upstream value to buffer
+    ///
+    /// - returns: The demand fulfilled by the bufferr
     func buffer(value: S.Input) -> Subscribers.Demand {
         precondition(self.completion == nil,
-                     "Completed publisher should not be able to send values")
+                     "How could a completed publisher sent values?! Beats me 🤷‍♂️")
 
         switch demandState.requested {
         case .unlimited:
@@ -34,18 +52,38 @@ class DemandBuffer<S: Combine.Subscriber> {
         }
     }
 
+    /// Complete the demand buffer with an upstream completion event
+    ///
+    /// This method will deplete the buffer immediately,
+    /// based on the currently accumulated demand, and relay the
+    /// completion event down as soon as demand is fulfilled
+    ///
+    /// - parameter completion: Completion event
     func complete(completion: Subscribers.Completion<S.Failure>) {
         precondition(self.completion == nil,
-                     "Completion should not be completed at this point")
+                     "Completion have already occured, which is quite awkward 🥺")
 
         self.completion = completion
         _ = flush()
     }
 
+    /// Signal to the buffer that the downstream requested new demand
+    ///
+    /// - note: The buffer will attempt to flush as many events rqeuested
+    ///         by the downstream at this point
     func demand(_ demand: Subscribers.Demand) -> Subscribers.Demand {
         flush(adding: demand)
     }
 
+    /// Flush buffered events to the downstream based on the current
+    /// state of the downstream's demand
+    ///
+    /// - parameter newDemand: The new demand to add. If `nil`, the flush isn't the
+    ///                        result of an explicit demand change
+    ///
+    /// - note: After fulfilling the downstream's request, if completion
+    ///         has already occured, the buffer will be cleared and the
+    ///         completion event will be sent to the downstream subscriber
     private func flush(adding newDemand: Subscribers.Demand? = nil) -> Subscribers.Demand {
         lock.lock()
         defer { lock.unlock() }
@@ -54,6 +92,7 @@ class DemandBuffer<S: Combine.Subscriber> {
             demandState.requested += newDemand
         }
 
+        // If buffer isn't ready for flushing, return immediately
         guard demandState.requested > 0 || newDemand == Subscribers.Demand.none else { return .none }
 
         while !buffer.isEmpty && demandState.processed < demandState.requested {
@@ -62,6 +101,7 @@ class DemandBuffer<S: Combine.Subscriber> {
         }
 
         if let completion = completion {
+            // Completion event was already sent
             buffer = []
             demandState = .init()
             self.completion = nil
@@ -72,5 +112,17 @@ class DemandBuffer<S: Combine.Subscriber> {
         let sentDemand = demandState.requested - demandState.sent
         demandState.sent += sentDemand
         return sentDemand
+    }
+}
+
+// MARK: - Private Helpers
+@available(iOS 13.0, *)
+private extension DemandBuffer {
+    /// A model that tracks the downstream's
+    /// accumulated demand state
+    struct Demand {
+        var processed: Subscribers.Demand = .none
+        var requested: Subscribers.Demand = .none
+        var sent: Subscribers.Demand = .none
     }
 }
