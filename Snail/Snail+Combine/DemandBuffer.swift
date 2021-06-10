@@ -8,6 +8,7 @@
 
 import Combine
 import Darwin
+import Foundation
 
 /// A buffer responsible for managing the demand of a downstream
 /// subscriber for an upstream publisher
