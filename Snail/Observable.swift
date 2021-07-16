@@ -87,7 +87,7 @@ public class Observable<T>: ObservableType {
     }
 
     public func map<U>(_ transform: @escaping (T) -> U) -> Observable<U> {
-        let transformed = Observable<U>()
+        let transformed = Replay<U>(1)
 
         subscribe(
             onNext: { value in
@@ -105,7 +105,7 @@ public class Observable<T>: ObservableType {
     }
 
     public func flatMap<U>( _ transform: @escaping (T) -> Observable<U>) -> Observable<U> {
-        let flatMapped = Observable<U>()
+        let flatMapped = Replay<U>(1)
 
         subscribe(
             onNext: { value in
@@ -124,7 +124,7 @@ public class Observable<T>: ObservableType {
     }
 
     public func filter(_ isIncluded: @escaping (T) -> Bool) -> Observable<T> {
-        let filtered = Observable<T>()
+        let filtered = Replay<T>(1)
 
         subscribe(
             onNext: { value in
@@ -221,7 +221,7 @@ public class Observable<T>: ObservableType {
     }
 
     public func skip(first: UInt) -> Observable<T> {
-        let observable = Observable<T>()
+        let observable = Replay<T>(1)
         var count = first
 
         subscribe(onNext: {
@@ -238,7 +238,7 @@ public class Observable<T>: ObservableType {
     }
 
     public func take(first count: UInt) -> Observable<T> {
-        let observable = Observable<T>()
+        let observable = Replay<T>(1)
         var taken = 0
 
         subscribe(onNext: {
@@ -285,7 +285,7 @@ public class Observable<T>: ObservableType {
     }
 
     public static func merge(_ observables: [Observable<T>]) -> Observable<T> {
-        let latest = Observable<T>()
+        let latest = Replay<T>(1)
         observables.forEach { $0.forward(to: latest) }
         return latest
     }
@@ -295,7 +295,7 @@ public class Observable<T>: ObservableType {
     }
 
     public static func combineLatest<U>(_ input1: Observable<T>, _ input2: Observable<U>) -> Observable<(T, U)> {
-        let combined = Observable<(T, U)>()
+        let combined = Replay<(T, U)>(1)
 
         var input1Result: (value: T?, isComplete: Bool) = (nil, false)
         var input2Result: (value: U?, isComplete: Bool) = (nil, false)
@@ -339,7 +339,7 @@ public class Observable<T>: ObservableType {
     public static func combineLatest<U, V>(_ input1: Observable<T>,
                                            _ input2: Observable<U>,
                                            _ input3: Observable<V>) -> Observable<(T, U, V)> {
-        let combined = Observable<(T, U, V)>()
+        let combined = Replay<(T, U, V)>(1)
 
         var input1Result: (value: T?, isComplete: Bool) = (nil, false)
         var input2Result: (value: U?, isComplete: Bool) = (nil, false)
@@ -396,7 +396,7 @@ public class Observable<T>: ObservableType {
                                               _ input2: Observable<U>,
                                               _ input3: Observable<V>,
                                               _ input4: Observable<K>) -> Observable<(T, U, V, K)> {
-        let combined = Observable<(T, U, V, K)>()
+        let combined = Replay<(T, U, V, K)>(1)
 
         var input1Result: (value: T?, isComplete: Bool) = (nil, false)
         var input2Result: (value: U?, isComplete: Bool) = (nil, false)
