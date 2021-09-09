@@ -15,6 +15,7 @@ class ObservableTests: XCTestCase {
     private var strings: [String]?
     private var error: Error?
     private var done: Bool?
+    private let disposer = Disposer()
 
     override func setUp() {
         super.setUp()
@@ -25,7 +26,7 @@ class ObservableTests: XCTestCase {
         subject?.subscribe(
             onNext: { string in self.strings?.append(string) },
             onError: { error in self.error = error },
-            onDone: { self.done = true })
+            onDone: { self.done = true }).add(to: disposer)
     }
 
     override func tearDown() {
@@ -65,7 +66,7 @@ class ObservableTests: XCTestCase {
         var more: [String] = []
         subject?.subscribe(onNext: { string in
             more.append(string)
-        })
+        }).add(to: disposer)
         subject?.on(.next("1"))
         XCTAssertEqual(strings?.first, more.first)
     }
@@ -74,7 +75,7 @@ class ObservableTests: XCTestCase {
         subject?.on(.error(TestError.test))
 
         var oldError: TestError?
-        subject?.subscribe(onError: { error in oldError = error as? TestError })
+        subject?.subscribe(onError: { error in oldError = error as? TestError }).add(to: disposer)
         XCTAssertEqual(oldError, .test)
     }
 
@@ -86,7 +87,7 @@ class ObservableTests: XCTestCase {
             self.subject?.subscribe(queue: .main, onNext: { _ in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
-            })
+            }).add(to: self.disposer)
             self.subject?.on(.next("1"))
         }
 
@@ -104,7 +105,7 @@ class ObservableTests: XCTestCase {
             self.subject?.subscribe(queue: .main, onNext: { _ in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
-            })
+            }).add(to: self.disposer)
             DispatchQueue.main.async {
                 self.subject?.on(.next("1"))
             }
@@ -124,7 +125,7 @@ class ObservableTests: XCTestCase {
             self.subject?.on(.main).subscribe(onNext: { _ in
                 exp.fulfill()
                 isMainQueue = Thread.isMainThread
-            })
+            }).add(to: self.disposer)
             self.subject?.on(.next("1"))
         }
 
@@ -244,7 +245,7 @@ class ObservableTests: XCTestCase {
 
         observable.throttle(delay).subscribe(onNext: {
             received.append($0)
-        })
+        }).add(to: disposer)
         observable.on(.next("1"))
         observable.on(.next("2"))
         waitForExpectations(timeout: delay*2) { _ in
@@ -270,7 +271,7 @@ class ObservableTests: XCTestCase {
 
         observable.throttle(delay).subscribe(onNext: {
             received.append($0)
-        })
+        }).add(to: disposer)
 
         observable.on(.next("1"))
 
@@ -300,7 +301,7 @@ class ObservableTests: XCTestCase {
 
         observable.debounce(delay).subscribe(onNext: {
             received.append($0)
-        })
+        }).add(to: disposer)
 
         observable.on(.next("1"))
 
@@ -314,7 +315,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
         var received: [String] = []
 
-        observable.skip(first: 2).subscribe(onNext: { received.append($0) })
+        observable.skip(first: 2).subscribe(onNext: { received.append($0) }).add(to: disposer)
 
         observable.on(.next("1"))
         observable.on(.next("2"))
@@ -327,7 +328,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
 
         var error: TestError?
-        observable.skip(first: 2).subscribe(onError: { error = $0 as? TestError })
+        observable.skip(first: 2).subscribe(onError: { error = $0 as? TestError }).add(to: disposer)
         observable.on(.error(TestError.test))
 
         XCTAssertEqual(error, .test)
@@ -337,7 +338,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
         var done = false
 
-        observable.skip(first: 2).subscribe(onDone: { done = true })
+        observable.skip(first: 2).subscribe(onDone: { done = true }).add(to: disposer)
         observable.on(.done)
 
         XCTAssertEqual(done, true)
@@ -347,7 +348,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
         var received: [String] = []
 
-        observable.take(first: 2).subscribe(onNext: { received.append($0) })
+        observable.take(first: 2).subscribe(onNext: { received.append($0) }).add(to: disposer)
 
         observable.on(.next("1"))
         observable.on(.next("2"))
@@ -360,7 +361,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
 
         var error: TestError?
-        observable.take(first: 2).subscribe(onError: { error = $0 as? TestError })
+        observable.take(first: 2).subscribe(onError: { error = $0 as? TestError }).add(to: disposer)
         observable.on(.error(TestError.test))
 
         XCTAssertEqual(error, .test)
@@ -370,7 +371,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
         var done = false
 
-        observable.take(first: 2).subscribe(onDone: { done = true })
+        observable.take(first: 2).subscribe(onDone: { done = true }).add(to: disposer)
         observable.on(.done)
 
         XCTAssertEqual(done, true)
@@ -380,7 +381,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
         var done = false
 
-        observable.take(first: 2).subscribe(onDone: { done = true })
+        observable.take(first: 2).subscribe(onDone: { done = true }).add(to: disposer)
         observable.on(.next("1"))
         observable.on(.next("2"))
 
@@ -399,7 +400,7 @@ class ObservableTests: XCTestCase {
             received.append(string)
         }, onError: { error in
             receivedError = error as? TestError
-        })
+        }).add(to: disposer)
 
         observable.on(.next("1"))
         observable.on(.error(TestError.test))
@@ -416,7 +417,7 @@ class ObservableTests: XCTestCase {
         let observable = Observable<String>()
         observable.forward(to: subject)
 
-        subject.subscribe(onNext: { received.append($0)})
+        subject.subscribe(onNext: { received.append($0)}).add(to: disposer)
 
         observable.on(.next("1"))
         observable.on(.done)
@@ -435,7 +436,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: { string in
             received.append(string)
-        })
+        }).add(to: disposer)
 
         a.on(.next("1"))
         b.on(.next("2"))
@@ -456,7 +457,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: { string in
             received.append(string)
-        })
+        }).add(to: disposer)
 
         a.on(.next("1"))
         b.on(.next("2"))
@@ -477,7 +478,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: { string, int in
             received.append("\(string): \(int)")
-        })
+        }).add(to: disposer)
 
         string.on(.next("The value"))
         string.on(.next("The number"))
@@ -504,7 +505,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: { string, int in
             received.append("\(string ?? "<no title>"): \(int ?? 0)")
-        })
+        }).add(to: disposer)
 
         string.on(.next("The value"))
         string.on(.next("The number"))
@@ -533,7 +534,7 @@ class ObservableTests: XCTestCase {
             received.append("\(string): \(int)")
         }, onError: { _ in
             received.append("ERROR")
-        })
+        }).add(to: disposer)
 
         string.on(.next("The number"))
         int.on(.next(1))
@@ -558,7 +559,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onError: { _ in
             received.append("ERROR")
-        })
+        }).add(to: disposer)
 
         int.on(.error(TestError.test))
         int.on(.next(1))
@@ -572,7 +573,7 @@ class ObservableTests: XCTestCase {
         let obs2 = Observable<Int>()
 
         var isDone = false
-        Observable.combineLatest(obs1, obs2).subscribe(onDone: { isDone = true })
+        Observable.combineLatest(obs1, obs2).subscribe(onDone: { isDone = true }).add(to: disposer)
 
         obs1.on(.done)
         XCTAssertFalse(isDone)
@@ -591,7 +592,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: {
             received.append($0)
-        })
+        }).add(to: disposer)
 
         one.on(.next("The string"))
         XCTAssertTrue(received.isEmpty)
@@ -612,7 +613,7 @@ class ObservableTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three)
 
         let exp = expectation(description: "combineLatest3 forwards error from observable")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         two.on(.error(TestError.test))
         waitForExpectations(timeout: 1)
     }
@@ -624,7 +625,7 @@ class ObservableTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three)
 
         let exp = expectation(description: "combineLatest3 forwards error from observable")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         three.on(.error(TestError.test))
         waitForExpectations(timeout: 1)
     }
@@ -635,7 +636,7 @@ class ObservableTests: XCTestCase {
         let obs3 = Observable<Double>()
 
         var isDone = false
-        Observable.combineLatest(obs1, obs2, obs3).subscribe(onDone: { isDone = true })
+        Observable.combineLatest(obs1, obs2, obs3).subscribe(onDone: { isDone = true }).add(to: disposer)
 
         obs1.on(.done)
         XCTAssertFalse(isDone)
@@ -657,7 +658,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: {
             received.append($0)
-        })
+        }).add(to: disposer)
 
         one.on(.next("The string"))
         XCTAssertTrue(received.isEmpty)
@@ -682,7 +683,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: {
             received.append($0)
-        })
+        }).add(to: disposer)
 
         one.on(.next("The string"))
         XCTAssertTrue(received.isEmpty)
@@ -708,7 +709,7 @@ class ObservableTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         one.on(.error(TestError.test))
         waitForExpectations(timeout: 1)
     }
@@ -721,7 +722,7 @@ class ObservableTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         two.on(.error(TestError.test))
         waitForExpectations(timeout: 1)
     }
@@ -734,7 +735,7 @@ class ObservableTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         three.on(.error(TestError.test))
         waitForExpectations(timeout: 1)
     }
@@ -747,7 +748,7 @@ class ObservableTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         four.on(.error(TestError.test))
         waitForExpectations(timeout: 1)
     }
@@ -759,7 +760,7 @@ class ObservableTests: XCTestCase {
         let obs4 = Observable<Float>()
 
         var isDone = false
-        Observable.combineLatest(obs1, obs2, obs3, obs4).subscribe(onDone: { isDone = true })
+        Observable.combineLatest(obs1, obs2, obs3, obs4).subscribe(onDone: { isDone = true }).add(to: disposer)
 
         obs1.on(.done)
         XCTAssertFalse(isDone)
@@ -785,7 +786,7 @@ class ObservableTests: XCTestCase {
 
         subject.subscribe(onNext: {
             received.append($0)
-        })
+        }).add(to: disposer)
 
         one.on(.next("The string"))
         XCTAssertTrue(received.isEmpty)
@@ -808,7 +809,7 @@ class ObservableTests: XCTestCase {
         let subject = observable.map { "Number: \($0)" }
         var received = [String]()
 
-        subject.subscribe(onNext: { received.append($0) })
+        subject.subscribe(onNext: { received.append($0) }).add(to: disposer)
 
         observable.on(.next(1))
         observable.on(.next(10))
@@ -821,7 +822,7 @@ class ObservableTests: XCTestCase {
         let subject = observable.map { "Number: \($0)" }
 
         let exp = expectation(description: "observable map forwards error")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
 
         observable.on(.error(TestError.test))
 
@@ -833,7 +834,7 @@ class ObservableTests: XCTestCase {
         let subject = observable.map { "Number: \($0)" }
 
         let exp = expectation(description: "observable map forwards done")
-        subject.subscribe(onDone: { exp.fulfill() })
+        subject.subscribe(onDone: { exp.fulfill() }).add(to: disposer)
 
         observable.on(.done)
 
@@ -845,7 +846,7 @@ class ObservableTests: XCTestCase {
         let subject = observable.filter { $0 % 2 == 0 }
         var received = [Int]()
 
-        subject.subscribe(onNext: { received.append($0) })
+        subject.subscribe(onNext: { received.append($0) }).add(to: disposer)
 
         observable.on(.next(1))
         observable.on(.next(2))
@@ -860,7 +861,7 @@ class ObservableTests: XCTestCase {
         let subject = observable.filter { $0 % 2 == 0 }
 
         let exp = expectation(description: "observable filter forwards error")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
 
         observable.on(.error(TestError.test))
 
@@ -872,7 +873,7 @@ class ObservableTests: XCTestCase {
         let subject = observable.filter { $0 % 2 == 0 }
 
         let exp = expectation(description: "observable filter forwards done")
-        subject.subscribe(onDone: { exp.fulfill() })
+        subject.subscribe(onDone: { exp.fulfill() }).add(to: disposer)
 
         observable.on(.done)
 
@@ -884,7 +885,7 @@ class ObservableTests: XCTestCase {
         let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
         var received = [Int]()
 
-        subject.subscribe(onNext: { received.append($0) })
+        subject.subscribe(onNext: { received.append($0) }).add(to: disposer)
         fetchTrigger.on(.next(()))
 
         XCTAssertEqual(received, [100])
@@ -895,7 +896,7 @@ class ObservableTests: XCTestCase {
         let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
 
         let exp = expectation(description: "observable flatMap forwards error")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         fetchTrigger.on(.error(TestError.test))
 
         waitForExpectations(timeout: 1)
@@ -906,7 +907,7 @@ class ObservableTests: XCTestCase {
         let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
 
         let exp = expectation(description: "observable flatMap forwards done")
-        subject.subscribe(onDone: { exp.fulfill() })
+        subject.subscribe(onDone: { exp.fulfill() }).add(to: disposer)
         fetchTrigger.on(.done)
 
         waitForExpectations(timeout: 1)
@@ -936,6 +937,7 @@ class ObservableTests: XCTestCase {
         subject.subscribe(onNext: { string, int in
             received.append("\(string): \(int)")
         })
+        .add(to: disposer)
 
         string.on(.next("The value"))
         string.on(.next("The number"))
@@ -962,6 +964,7 @@ class ObservableTests: XCTestCase {
         subject.subscribe(onNext: { string, int in
             received.append("\(string ?? "<no title>"): \(int ?? 0)")
         })
+        .add(to: disposer)
 
         string.on(.next("The value"))
         string.on(.next("The number"))
@@ -988,6 +991,7 @@ class ObservableTests: XCTestCase {
         subject.subscribe(onNext: { string, int in
             received.append("\(string): \(int)")
         })
+        .add(to: disposer)
 
         string.on(.next("The value"))
         string.on(.next("The number"))
@@ -1013,7 +1017,7 @@ class ObservableTests: XCTestCase {
         let subject = Observable.zip(one, two)
 
         let exp = expectation(description: "zip forwards error from observable")
-        subject.subscribe(onError: { _ in exp.fulfill() })
+        subject.subscribe(onError: { _ in exp.fulfill() }).add(to: disposer)
         one.on(.error(TestError.test))
 
         waitForExpectations(timeout: 1)
@@ -1024,9 +1028,30 @@ class ObservableTests: XCTestCase {
         let two = Observable<Int>()
 
         var isDone = false
-        Observable.zip(one, two).subscribe(onDone: { isDone = true })
+        Observable.zip(one, two).subscribe(onDone: { isDone = true }).add(to: disposer)
 
         one.on(.done)
         XCTAssertTrue(isDone)
+    }
+
+    func testNoDeadlock() {
+        class TestObject {
+            let disposer = Disposer()
+
+            init(variable: Variable<Bool>) {
+                variable.asObservable().subscribe()
+                .add(to: disposer)
+            }
+        }
+
+        let subject = Variable(true)
+        let disposer = Disposer()
+
+        subject.asObservable().subscribe(onNext: { _ in
+            _ = TestObject(variable: subject)
+        })
+        .add(to: disposer)
+
+        subject.value = true
     }
 }
