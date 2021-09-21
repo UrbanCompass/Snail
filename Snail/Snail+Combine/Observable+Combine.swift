@@ -5,7 +5,7 @@ import Foundation
 
 @available(iOS 13.0, *)
 public extension ObservableType {
-    func asPublisher() -> AnyPublisher<T, Error> {
+    func asAnyPublisher() -> AnyPublisher<T, Error> {
         return SnailPublisher(upstream: self).eraseToAnyPublisher()
     }
 }

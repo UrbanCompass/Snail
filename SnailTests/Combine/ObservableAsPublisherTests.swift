@@ -42,7 +42,7 @@ class ObservableAsPublisherTests: XCTestCase {
     }
 
     func testNext() {
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { [unowned self] completion in
                 switch completion {
                 case .finished:
@@ -60,7 +60,7 @@ class ObservableAsPublisherTests: XCTestCase {
     }
 
     func testOnDone() {
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { [unowned self] completion in
                 switch completion {
                 case .finished:
@@ -84,7 +84,7 @@ class ObservableAsPublisherTests: XCTestCase {
     }
 
     func testOnError() {
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { [unowned self] completion in
                 switch completion {
                 case .finished:
@@ -111,7 +111,7 @@ class ObservableAsPublisherTests: XCTestCase {
         subject.subscribe(onNext: { string in
             more.append(string)
         }).add(to: disposer)
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [unowned self] string in
                     self.strings?.append(string)
@@ -127,7 +127,7 @@ class ObservableAsPublisherTests: XCTestCase {
         subject?.on(.error(TestError.test))
 
         var oldError: TestError?
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case let .failure(underlying) = completion {
                     oldError = underlying as? TestError
@@ -143,7 +143,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let exp = expectation(description: "queue")
 
         DispatchQueue.global().async {
-            self.subject.asPublisher()
+            self.subject.asAnyPublisher()
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { _ in },
                       receiveValue: { _ in
@@ -166,7 +166,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         DispatchQueue.global().async {
             self.subject.on(.main)
-                .asPublisher()
+                .asAnyPublisher()
                 .sink(receiveCompletion: { _ in },
                       receiveValue: { _ in
                         exp.fulfill()
@@ -187,7 +187,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let exp = expectation(description: "queue")
 
         self.subject.on(.global())
-            .asPublisher()
+            .asAnyPublisher()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { _ in
@@ -204,7 +204,7 @@ class ObservableAsPublisherTests: XCTestCase {
     }
 
     func testRemovingSubscribers() {
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [unowned self] str in
                     self.strings.append(str)
@@ -223,7 +223,7 @@ class ObservableAsPublisherTests: XCTestCase {
             onError: { error in self.error = error },
             onDone: { self.done = true })
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [unowned self] str in
                     self.strings.append(str)
@@ -261,7 +261,7 @@ class ObservableAsPublisherTests: XCTestCase {
         }
 
         observable.throttle(delay)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -290,7 +290,7 @@ class ObservableAsPublisherTests: XCTestCase {
         }
 
         observable.throttle(delay)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -322,7 +322,7 @@ class ObservableAsPublisherTests: XCTestCase {
         }
 
         observable.debounce(delay)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -340,7 +340,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var received: [String] = []
 
         observable.skip(first: 2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -357,7 +357,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         var error: TestError?
         observable.skip(first: 2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case let .failure(underlying) = completion {
                     error = underlying as? TestError
@@ -375,7 +375,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var done = false
 
         observable.skip(first: 2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     done = true
@@ -394,7 +394,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var received: [String] = []
 
         observable.take(first: 2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -411,7 +411,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         var error: TestError?
         observable.take(first: 2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case let .failure(underlying) = completion {
                     error = underlying as? TestError
@@ -430,7 +430,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var done = false
 
         observable.take(first: 2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     done = true
@@ -449,7 +449,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var done = false
 
         observable.take(first: 2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     done = true
@@ -472,7 +472,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let observable = Observable<String>()
         observable.forward(to: subject)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case let .failure(underlying) = completion {
                     receivedError = underlying as? TestError
@@ -496,7 +496,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let observable = Observable<String>()
         observable.forward(to: subject)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -516,7 +516,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.merge([a, b])
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -538,7 +538,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.merge(a, b)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -560,7 +560,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.combineLatest(string, int)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { string, int in
                     received.append(("\(string): \(int)"))
@@ -590,7 +590,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.combineLatest(string, int)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { string, int in
                     received.append(("\(string ?? "<no title>"): \(int ?? 0)"))
@@ -620,7 +620,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.combineLatest(string, int)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     received.append("ERROR")
@@ -652,7 +652,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.combineLatest(string, int)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     received.append("ERROR")
@@ -674,7 +674,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         var isDone = false
         Observable.combineLatest(obs1, obs2)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     isDone = true
@@ -698,7 +698,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var received = [(String, Int, Double)]()
         let subject = Observable.combineLatest(one, two, three)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -722,7 +722,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three)
 
         let exp = expectation(description: "combineLatest3 forwards error from observable")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -741,7 +741,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three)
 
         let exp = expectation(description: "combineLatest3 forwards error from observable")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -760,7 +760,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         var isDone = false
         Observable.combineLatest(obs1, obs2, obs3)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     isDone = true
@@ -787,7 +787,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var received = [(String, Int?, Double)]()
         let subject = Observable.combineLatest(one, two, three)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -813,7 +813,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var received = [(String, Int, Double, String)]()
         let subject = Observable.combineLatest(one, two, three, four)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -842,7 +842,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -862,7 +862,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -882,7 +882,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -902,7 +902,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = Observable.combineLatest(one, two, three, four)
 
         let exp = expectation(description: "combineLatest4 forwards error from observable")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -922,7 +922,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         var isDone = false
         Observable.combineLatest(obs1, obs2, obs3, obs4)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     isDone = true
@@ -953,7 +953,7 @@ class ObservableAsPublisherTests: XCTestCase {
         var received = [(String, Int?, Double, String?)]()
         let subject = Observable.combineLatest(one, two, three, four)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -979,7 +979,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = observable.map { "Number: \($0)" }
         var received = [String]()
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -995,7 +995,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = observable.map { "Number: \($0)" }
 
         let exp = expectation(description: "observable map forwards error")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -1014,7 +1014,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = observable.map { "Number: \($0)" }
 
         let exp = expectation(description: "observable map forwards done")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     exp.fulfill()
@@ -1033,7 +1033,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = observable.filter { $0 % 2 == 0 }
         var received = [Int]()
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -1051,7 +1051,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = observable.filter { $0 % 2 == 0 }
 
         let exp = expectation(description: "observable filter forwards error")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -1070,7 +1070,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = observable.filter { $0 % 2 == 0 }
 
         let exp = expectation(description: "observable filter forwards done")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     exp.fulfill()
@@ -1089,7 +1089,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
         var received = [Int]()
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { received.append($0) })
             .store(in: &subscriptions)
@@ -1103,7 +1103,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
 
         let exp = expectation(description: "observable flatMap forwards error")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -1121,7 +1121,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = fetchTrigger.flatMap { Variable(100).asObservable() }
 
         let exp = expectation(description: "observable flatMap forwards done")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     exp.fulfill()
@@ -1142,7 +1142,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.zip(string, int)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { string, int in
                     received.append("\(string): \(int)")
@@ -1171,7 +1171,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.zip(string, int)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { string, int in
                     received.append("\(string ?? "<no title>"): \(int ?? 0)")
@@ -1200,7 +1200,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         let subject = Observable.zip(string, int)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { string, int in
                     received.append("\(string): \(int)")
@@ -1231,7 +1231,7 @@ class ObservableAsPublisherTests: XCTestCase {
         let subject = Observable.zip(one, two)
 
         let exp = expectation(description: "zip forwards error from observable")
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     exp.fulfill()
@@ -1250,7 +1250,7 @@ class ObservableAsPublisherTests: XCTestCase {
 
         var isDone = false
         Observable.zip(one, two)
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     isDone = true

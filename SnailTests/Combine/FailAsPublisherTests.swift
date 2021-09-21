@@ -32,7 +32,7 @@ class FailAsPublisherTests: XCTestCase {
     }
 
     func testOnErrorIsRun() {
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { [unowned self] completion in
                 if case let .failure(underlying) = completion {
                     self.error = underlying as? TestError
@@ -45,7 +45,7 @@ class FailAsPublisherTests: XCTestCase {
     }
 
     func testOnNextIsNotRun() {
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [unowned self] in self.strings.append($0) })
             .store(in: &subscriptions)

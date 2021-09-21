@@ -28,7 +28,7 @@ class ReplayAsPublisherTests: XCTestCase {
         subject?.on(.next("2"))
         subject?.on(.done)
 
-        subject.asPublisher()
+        subject.asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { strings.append($0) })
             .store(in: &subscriptions)

@@ -21,7 +21,7 @@ class UniqueAsPublisherTests: XCTestCase {
         var events: [String?] = []
         let subject = Unique<String?>(nil)
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
             .store(in: &subscriptions)
@@ -44,7 +44,7 @@ class UniqueAsPublisherTests: XCTestCase {
         var result: String?
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
             .store(in: &subscriptions)
@@ -57,7 +57,7 @@ class UniqueAsPublisherTests: XCTestCase {
         var result: String?
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
             .store(in: &subscriptions)
@@ -69,7 +69,7 @@ class UniqueAsPublisherTests: XCTestCase {
         var events: [[String]] = []
         let subject = Unique<[String]>(["1", "2"])
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
             .store(in: &subscriptions)
@@ -87,7 +87,7 @@ class UniqueAsPublisherTests: XCTestCase {
         var events: [[String]?] = []
         let subject = Unique<[String]?>(nil)
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
             .store(in: &subscriptions)

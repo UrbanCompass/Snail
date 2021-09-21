@@ -22,7 +22,7 @@ class JustAsPublisherTests: XCTestCase {
         var result: Int?
         var done = false
 
-        Just(1).asPublisher()
+        Just(1).asAnyPublisher()
             .sink(receiveCompletion: { completion in
                 if case .finished = completion {
                     done = true

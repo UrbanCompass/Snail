@@ -21,7 +21,7 @@ class VariableAsPublisherTests: XCTestCase {
         var events: [String?] = []
         let subject = Variable<String?>(nil)
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { events.append($0) })
             .store(in: &subscriptions)
@@ -39,7 +39,7 @@ class VariableAsPublisherTests: XCTestCase {
         var result: String?
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
             .store(in: &subscriptions)
@@ -52,7 +52,7 @@ class VariableAsPublisherTests: XCTestCase {
         var result: String?
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { result = $0 })
             .store(in: &subscriptions)
@@ -66,7 +66,7 @@ class VariableAsPublisherTests: XCTestCase {
         var subjectCharactersCount: Int?
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { subjectCharactersCount = $0.count })
             .store(in: &subscriptions)
@@ -79,7 +79,7 @@ class VariableAsPublisherTests: XCTestCase {
         var subjectCharactersCount: Int?
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { subjectCharactersCount = $0.count })
             .store(in: &subscriptions)
@@ -92,7 +92,7 @@ class VariableAsPublisherTests: XCTestCase {
         var firedCount = 0
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { _ in firedCount += 1 })
             .store(in: &subscriptions)
@@ -107,7 +107,7 @@ class VariableAsPublisherTests: XCTestCase {
         var firedCount = 0
 
         subject.asObservable()
-            .asPublisher()
+            .asAnyPublisher()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { _ in firedCount += 1 })
             .store(in: &subscriptions)
