@@ -1262,4 +1262,27 @@ class ObservableAsPublisherTests: XCTestCase {
         one.on(.done)
         XCTAssertTrue(isDone)
     }
+
+    func testNoDeadLock() {
+        class TestObject {
+            let disposer = Disposer()
+
+            init(variable: Variable<Bool>) {
+                variable.asObservable().subscribe()
+                .add(to: disposer)
+            }
+        }
+
+        let subject = Variable(true)
+
+        subject.asObservable()
+            .asAnyPublisher()
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { _ in
+                    _ = TestObject(variable: subject)
+            })
+            .store(in: &subscriptions)
+
+        subject.value = true
+    }
 }
