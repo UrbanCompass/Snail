@@ -1054,4 +1054,63 @@ class ObservableTests: XCTestCase {
 
         subject.value = true
     }
+
+    func testRemovingFirstSubscriberWithinSubscription_NoDeadlock() {
+        class TestObject {
+            let disposer = Disposer()
+            private let variable: Variable<Bool>
+
+            init(variable: Variable<Bool>) {
+                self.variable = variable
+
+                self.variable.asObservable().subscribe(onNext: { _ in
+                    if let firstSubscriber = variable.subject.subscribers.first {
+                        self.variable.subject.removeSubscriber(subscriber: firstSubscriber)
+                    }
+                })
+                .add(to: disposer)
+            }
+        }
+
+        let subject = Variable(true)
+        let disposer = Disposer()
+
+        subject.asObservable().subscribe(onNext: { _ in
+            _ = TestObject(variable: subject)
+        })
+        .add(to: disposer)
+
+        subject.value = true
+    }
+
+    func testDisposerRemovesSubscriptionFromObserverOnDeinit() {
+        class TestOwner {
+            let disposer = Disposer()
+
+            func bind(observable: Observable<Int>) {
+                observable
+                    .subscribe(queue: .main, onNext: { _ in })
+                    .add(to: disposer)
+            }
+        }
+
+        let observable = Observable<Int>()
+
+        var owner: TestOwner! = TestOwner()
+        owner.bind(observable: observable)
+
+        let isDone = expectation(description: "Disposes")
+
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
+            owner = nil
+        }
+
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+            isDone.fulfill()
+        }
+
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssertEqual(observable.subscribers.count, 0)
+        }
+    }
 }
