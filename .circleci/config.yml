@@ -1,0 +1,28 @@
+orbs:
+    security-scan: compass/security-scan@1
+workflows:
+    security:
+        description: PR security scans
+        jobs:
+            - security-scan/changes:
+                context:
+                    - security-scan
+                filters:
+                    branches:
+                        ignore:
+                            - main
+                            - master
+    security_full:
+        description: Weekly run of security scans
+        jobs:
+            - security-scan/all:
+                context:
+                    - security-scan
+        triggers:
+            - schedule:
+                cron: 0 3 * * 0,3
+                filters:
+                    branches:
+                        only:
+                            - main
+                            - master
