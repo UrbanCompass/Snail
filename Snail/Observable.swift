@@ -6,8 +6,8 @@ import Dispatch
 public class Observable<T>: ObservableType {
     private var isStopped: Int32 = 0
     private var stoppedEvent: Event<T>?
-    private var subscribers: [Subscriber<T>] = []
-    private let subscribersQueue = DispatchQueue(label: "snail-observable-queue", attributes: .concurrent)
+    private(set) var subscribers: [Subscriber<T>] = []
+    private let recursiveLock = NSRecursiveLock()
 
     public init() {}
 
@@ -28,31 +28,27 @@ public class Observable<T>: ObservableType {
             return subscriber
         }
 
-        subscribersQueue.async(flags: .barrier) {
-            self.subscribers.append(subscriber)
-        }
+        recursiveLock.lock(); defer { recursiveLock.unlock() }
+        subscribers.append(subscriber)
 
         return subscriber
     }
 
     public func on(_ event: Event<T>) {
+        recursiveLock.lock(); defer { recursiveLock.unlock() }
         switch event {
         case .next:
             guard isStopped == 0 else {
                 return
             }
 
-            subscribersQueue.sync {
-                self.subscribers.forEach {
-                    notify(subscriber: $0, event: event)
-                }
+            subscribers.forEach {
+                notify(subscriber: $0, event: event)
             }
         case .error, .done:
             if OSAtomicCompareAndSwap32Barrier(0, 1, &isStopped) {
-                subscribersQueue.sync {
-                    self.subscribers.forEach {
-                        notify(subscriber: $0, event: event)
-                    }
+                subscribers.forEach {
+                    notify(subscriber: $0, event: event)
                 }
                 stoppedEvent = event
             }
@@ -69,21 +65,18 @@ public class Observable<T>: ObservableType {
     }
 
     public func removeSubscribers() {
-        subscribersQueue.async(flags: .barrier) {
-            self.subscribers.removeAll()
-        }
+        recursiveLock.lock(); defer { recursiveLock.unlock() }
+        subscribers.removeAll()
     }
 
     public func removeSubscriber(subscriber: Subscriber<T>) {
-        subscribersQueue.sync {
-            guard let index = self.subscribers.enumerated().first(where: { $0.element === subscriber })?.offset else {
-                return
-            }
-
-            subscribersQueue.async(flags: .barrier) {
-                self.subscribers.remove(at: index)
-            }
+        recursiveLock.lock(); defer { recursiveLock.unlock() }
+        
+        guard let index = subscribers.enumerated().first(where: { $0.element === subscriber })?.offset else {
+            return
         }
+
+        subscribers.remove(at: index)
     }
 
     public func map<U>(_ transform: @escaping (T) -> U) -> Observable<U> {
